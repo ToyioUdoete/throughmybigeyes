@@ -49,6 +49,9 @@
     /* ---------- top bar ---------- */
     .bar { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
     .handle { font-family: var(--script); font-size: 54px; line-height: .9; text-decoration: none; padding-top: 6px; }
+    .handle { display: inline-flex; align-items: flex-start; gap: 2px; }
+    .handle .star { width: 22px; height: 22px; flex: 0 0 auto; margin-top: -4px; animation: twinkle 2.8s ease-in-out infinite; transform-origin: 50% 50%; }
+    @keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(.78) rotate(18deg); } }
     .bar nav { display: flex; gap: 10px; }
 
     /* ---------- hero ---------- */
@@ -332,7 +335,7 @@
   <a class="skip" href="#gallery">Skip to the photos</a>
 
   <header class="bar">
-    <a class="handle" href="#top">twiiinklle</a>
+    <a class="handle" href="#top">twiiinklle<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.1l7.1-.7z" fill="#c9f45b" stroke="#161616" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
     <button class="tune" data-song type="button" aria-pressed="false" aria-label="Play Carmen by Olivia Dean">
       <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="tune-txt"><b>Carmen</b><span>Olivia Dean</span></span>
