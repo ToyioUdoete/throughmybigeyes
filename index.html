@@ -121,7 +121,7 @@
     .music iframe { display: block; width: 100%; height: 450px; margin-top: 18px; border: 0; border-radius: 14px; }
 
     /* ---------- the gallery: prints coming out of the camera ---------- */
-    .feed { --camL: clamp(14px, 5vw, 70px); --camW: clamp(190px, 27vw, 380px); --pw: clamp(118px, 13vw, 176px); position: relative; padding: 0 0 50px; overflow: hidden; }
+    .feed { --camL: clamp(14px, 5vw, 70px); --camW: clamp(200px, 30vw, 440px); --pw: clamp(118px, 13vw, 176px); position: relative; padding: 0 0 50px; overflow: hidden; }
     .feed .arrow { position: relative; z-index: 2; display: block; width: 420px; max-width: 70vw; margin: 0 0 6px calc(var(--camL) + var(--camW) * .5 - 39px); }
     .feed .arrow path { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
     .feed .arrow .shaft { stroke-dasharray: 520; stroke-dashoffset: 520; transition: stroke-dashoffset 1.1s ease .3s; }
@@ -246,6 +246,8 @@
       .bar nav .pill:not(.lime) { display: none; }
       .shall { font-size: 22vw; }
       .tune-txt { display: none; }
+      .feed { --camL: 6px; --camW: 150px; --pw: 104px; }
+      .feed .garden { display: none; }
       .tune { padding: 6px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -803,7 +805,7 @@
         const x = mx - pw * .5 + d, y = my - ph * sc / 2 + k * 20 * Math.sin(d / 170 + p.ph1);
         p.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${(k * 7 * Math.sin(d / 230 + p.ph2)).toFixed(2)}deg) scale(${sc.toFixed(3)})`;
       };
-      const gap = () => geo.pw + 34;
+      const gap = () => geo.pw + 26;
       const fill = () => {
         box.innerHTML = ""; prints = []; measure();
         for (let d = geo.w - geo.mx + 40; d >= 0; d -= gap()) make(d);
