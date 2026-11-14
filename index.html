@@ -27,8 +27,9 @@
     body {
       margin: 0; color: var(--ink); font: 17px/1.55 var(--body); background-color: var(--pink);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      -webkit-font-smoothing: antialiased; overflow-x: clip;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-x: clip;
     }
+    html { overflow-x: hidden; }
     img { display: block; max-width: 100%; }
     a { color: inherit; }
     button { font: inherit; color: inherit; }
@@ -208,7 +209,7 @@
     .soon { position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
     .soon.show { opacity: 1; }
 
-    .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
     .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
     @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
