@@ -218,9 +218,10 @@
     .face { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 6px; border: 2px solid var(--ink); box-shadow: 4px 5px 0 var(--ink); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
     .face.front { padding: 7px; background: var(--paper); }
     .face.front img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; background: var(--c, #ddd); }
-    .face.back { display: grid; place-items: center; align-content: center; gap: 10px; background: var(--pink-deep); transform: rotateY(180deg); }
-    .face.back img { width: 82%; height: auto; rotate: -4deg; filter: drop-shadow(3px 4px 0 rgba(22, 22, 22, .35)); }
-    .face.back i { font: normal clamp(26px, 3vw, 36px)/1 var(--script); color: var(--ink); }
+    .face.back { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 8px 9px; text-align: center; background: var(--pink-deep); transform: rotateY(180deg); }
+    .face.back img { width: 64%; height: auto; rotate: -4deg; filter: drop-shadow(2px 3px 0 rgba(22, 22, 22, .35)); }
+    .face.back i { font: normal calc(var(--cw) * .15)/1 var(--script); color: var(--ink); margin-top: 2px; }
+    .face.back span { font: 600 max(11px, calc(var(--cw) * .072))/1.28 var(--body); color: var(--ink); }
     .feed-foot { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 20px; margin-top: 26px; padding: 0 20px; }
     .feed-foot p { margin: 0; color: var(--muted); font-size: 15px; }
     .see-all { font-size: 17px; padding: 13px 24px; }
@@ -374,7 +375,7 @@
         <div class="row rev" style="--dur: 72s"><div class="track" id="rowB"></div></div>
       </div>
       <div class="feed-foot">
-        <p>Tap a photo to flip it.</p>
+        <p>Tap a photo to flip it for a fun fact about me.</p>
         <a class="pill lime see-all" href="gallery.html">See all my photos</a>
       </div>
     </section>
@@ -641,23 +642,39 @@
     // ---------- the gallery: two rows of photos drifting opposite ways; tap to flip ----------
     (() => {
       const eyes = "img/my-big-eyes.webp";
-      const card = (p) => {
+      // fun facts on the back of the photos (they repeat if there are more photos than facts)
+      const FACTS = [
+        "I'm the only person in the world with the name spelling Toyio. It should be Toyo, but my parents have two heads.",
+        "I ate rat poison when I was about 3. Yes, I'm fine.",
+        "I love to draw too, but I only do it once a year.",
+        "I love to dream. Not the MLK kind, I mean dinosaurs chasing cockroaches in Disneyland.",
+        "I've been doing makeup since I was about 12.",
+        "I'm afraid of heights and snakes.",
+        "Pet peeves: men peeing on the road, manspreading, and Lagos men catcalling me. PTSD.",
+        "I used to run my school's debate back in Primary 4, at Monef Kiddies School."
+      ];
+      const card = (p, fact) => {
         const b = document.createElement("button");
-        b.type = "button"; b.className = "flip"; b.setAttribute("aria-pressed", "false");
-        b.setAttribute("aria-label", "Flip photo" + (p.desc ? ": " + p.desc : ""));
+        const front = "Flip this photo for a fun fact about me";
+        b.type = "button"; b.className = "flip"; b.setAttribute("aria-pressed", "false"); b.setAttribute("aria-label", front);
         b.innerHTML = '<span class="flip-in"><span class="face front" style="--c:' + p.color + '"><img alt="" decoding="async" width="' + p.w + '" height="' + p.h + '"></span>'
-          + '<span class="face back" aria-hidden="true"><img src="' + eyes + '" alt="" width="634" height="280"><i>through my big eyes</i></span></span>';
+          + '<span class="face back" aria-hidden="true"><img src="' + eyes + '" alt="" width="634" height="280"><i>fun fact</i><span></span></span></span>';
         b.querySelector(".front img").src = p.src;
-        b.addEventListener("click", () => { const on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+        b.querySelector(".back span").textContent = fact;
+        b.addEventListener("click", () => { const on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); b.setAttribute("aria-label", on ? "Fun fact: " + fact : front); });
         return b;
       };
-      const fill = (el, list) => {
+      const fill = (el, list, start) => {
         // the list three times, so the row can loop without a gap on wide screens
-        [...list, ...list, ...list].forEach((p, i) => { const c = card(p); if (i >= list.length) { c.tabIndex = -1; c.setAttribute("aria-hidden", "true"); } el.appendChild(c); });
+        [...list, ...list, ...list].forEach((p, i) => {
+          const c = card(p, FACTS[(start + (i % list.length)) % FACTS.length]);
+          if (i >= list.length) { c.tabIndex = -1; c.setAttribute("aria-hidden", "true"); }
+          el.appendChild(c);
+        });
       };
       const half = Math.ceil(PHOTOS.length / 2);
-      fill(document.getElementById("rowA"), PHOTOS.slice(0, half));
-      fill(document.getElementById("rowB"), PHOTOS.slice(half));
+      fill(document.getElementById("rowA"), PHOTOS.slice(0, half), 0);
+      fill(document.getElementById("rowB"), PHOTOS.slice(half), 4);
       const sec = document.getElementById("gallery");
       if (reduce || !("IntersectionObserver" in window)) { sec.classList.add("on"); document.querySelectorAll(".row").forEach((r) => { r.style.overflowX = "auto"; }); document.querySelectorAll(".track").forEach((t) => { t.style.animation = "none"; }); return; }
       let hinted = false;
