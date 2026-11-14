@@ -120,34 +120,37 @@
     .music p { margin: 12px 0 16px; color: var(--muted); font-size: 15px; }
     .music iframe { display: block; width: 100%; height: 450px; margin-top: 18px; border: 0; border-radius: 14px; }
 
-    /* ---------- app icons ---------- */
-    .apps { position: relative; display: grid; place-items: center; overflow: hidden; padding: 10px 20px 30px; }
-    .apps-inner { position: relative; z-index: 2; display: grid; justify-items: center; gap: 30px; }
-    .row-apps { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(22px, 5vw, 64px); }
-    .app { position: relative; display: grid; justify-items: center; gap: 12px; text-decoration: none; color: var(--ink); border: 0; background: none; padding: 0; cursor: pointer; font: inherit; }
-    .app .tile { position: relative; display: grid; place-items: center; width: clamp(96px, 11vw, 140px); aspect-ratio: 1; border-radius: 24%; overflow: hidden;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 16px 30px -14px rgba(22, 22, 22, .5); transition: transform .35s cubic-bezier(.2, 1.4, .4, 1); }
-    .app:hover .tile, .app:focus-visible .tile { transform: translateY(-8px) rotate(-3deg); }
-    .app:active .tile { transform: scale(.94); }
-    .app .tile img.glyph { width: 52%; height: 52%; }
-    .app .name { font-weight: 700; font-size: 16px; }
-    .tile.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
-    .tile.tt { background: #111; }
-    .tile.pin { background: #e60023; }
-    .tile.gal { background: linear-gradient(160deg, #ffffff, #f4f1ea); }
-    .tile.gal img { width: 100%; height: 100%; object-fit: cover; }
-    .app.main .tile { animation: bob 3.4s ease-in-out infinite; }
-    .app.main:hover .tile { animation: none; }
-    .app .badge { position: absolute; top: -9px; right: -9px; z-index: 2; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; display: grid; place-items: center; background: var(--pink-deep); color: #fff; font: 700 15px var(--body); border: 3px solid var(--pink); }
-    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
-    .apps-hint { margin: 0; color: var(--muted); font-size: 15px; }
-    .arrow { width: 100%; height: auto; margin: 0 0 -4px; overflow: visible; }
-    .arrow path { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
-    .arrow .shaft { stroke-dasharray: 520; stroke-dashoffset: 520; transition: stroke-dashoffset 1.1s ease .3s; }
-    .arrow .head { stroke-dasharray: 80; stroke-dashoffset: 80; transition: stroke-dashoffset .3s ease 1.35s; }
-    .apps.on .arrow .shaft, .apps.on .arrow .head { stroke-dashoffset: 0; }
-    .apps.on .app.main .tile { animation: bob 3.4s ease-in-out infinite, glowpulse 2s ease 1.6s 2; }
-    @keyframes glowpulse { 50% { box-shadow: 0 0 0 10px rgba(201, 244, 91, .9), 0 16px 30px -14px rgba(22, 22, 22, .5); } }
+    /* ---------- the gallery: prints coming out of the camera ---------- */
+    .feed { --camL: clamp(14px, 5vw, 70px); --camW: clamp(190px, 27vw, 380px); --pw: clamp(118px, 13vw, 176px); position: relative; padding: 0 0 50px; overflow: hidden; }
+    .feed .arrow { position: relative; z-index: 2; display: block; width: 420px; max-width: 70vw; margin: 0 0 6px calc(var(--camL) + var(--camW) * .5 - 39px); }
+    .feed .arrow path { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    .feed .arrow .shaft { stroke-dasharray: 520; stroke-dashoffset: 520; transition: stroke-dashoffset 1.1s ease .3s; }
+    .feed .arrow .head { stroke-dasharray: 80; stroke-dashoffset: 80; transition: stroke-dashoffset .3s ease 1.35s; }
+    .feed.on .arrow .shaft, .feed.on .arrow .head { stroke-dashoffset: 0; }
+    .feed-stage { position: relative; height: calc(var(--pw) * 1.75 + 70px); }
+    .feed-cam { position: absolute; left: var(--camL); top: 50%; width: var(--camW); translate: 0 -50%; z-index: 3; mix-blend-mode: multiply; pointer-events: none; }
+    .feed-cam img { width: 100%; height: auto; filter: brightness(1.08) contrast(1.05); }
+    .feed-cam.kick { animation: kick .35s ease; }
+    @keyframes kick { 40% { transform: translateX(-4px) rotate(-1deg); } }
+    .feed-prints { position: absolute; inset: 0; z-index: 2; }
+    .fp { position: absolute; left: 0; top: 0; width: var(--pw); padding: 7px 7px 26px; border: 0; background: var(--paper); box-shadow: 0 1px 0 rgba(22, 22, 22, .12), 4px 6px 0 rgba(22, 22, 22, .18); cursor: pointer; transform-origin: 0 50%; will-change: transform; }
+    .fp img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--c, #ddd); }
+    .fp:hover, .fp:focus-visible { box-shadow: 0 1px 0 rgba(22, 22, 22, .12), 8px 12px 0 rgba(22, 22, 22, .22); z-index: 1; }
+    .feed-foot { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 20px; padding: 0 20px; }
+    .feed-foot p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    /* ---------- background song ---------- */
+    .tune { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border: 2px solid var(--ink); border-radius: 16px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; text-align: left; }
+    .tune:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+    .tune .eq { display: flex; align-items: flex-end; gap: 3px; width: 26px; height: 26px; padding: 5px; border-radius: 8px; background: var(--pink); }
+    .tune .eq i { flex: 1; height: 30%; border-radius: 2px; background: var(--ink); }
+    .tune.playing .eq i { animation: eq 1s ease-in-out infinite; }
+    .tune.playing .eq i:nth-child(2) { animation-delay: -.35s; }
+    .tune.playing .eq i:nth-child(3) { animation-delay: -.7s; }
+    @keyframes eq { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+    .tune-txt { display: grid; line-height: 1.15; font-size: 13px; }
+    .tune-txt span { color: var(--muted); font-size: 12px; }
+    .tune:not(.playing) .tune-txt b::after { content: " (off)"; font-weight: 400; color: var(--muted); }
     .soon { position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
     .soon.show { opacity: 1; }
 
@@ -242,11 +245,8 @@
     @media (max-width: 520px) {
       .bar nav .pill:not(.lime) { display: none; }
       .shall { font-size: 22vw; }
-      .row-apps { flex-wrap: nowrap; gap: 14px; }
-      .app .tile { width: 72px; }
-      .app .name { font-size: 13px; }
-      .app .badge { min-width: 26px; height: 26px; font-size: 12px; top: -7px; right: -7px; }
-      .apps .garden { display: none; }
+      .tune-txt { display: none; }
+      .tune { padding: 6px; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -257,7 +257,7 @@
   </style>
 </head>
 <body>
-  <a class="skip" href="#walk">Skip to the photos</a>
+  <a class="skip" href="#gallery">Skip to the photos</a>
 
   <header class="bar">
     <a class="handle" href="#top">twiiinklle</a>
@@ -296,6 +296,20 @@
       </div>
     </section>
 
+    <section class="feed" id="gallery" aria-labelledby="feedTitle">
+      <h2 class="sr" id="feedTitle">Gallery</h2>
+      <div class="garden" id="garden" aria-hidden="true"></div>
+      <svg class="arrow" id="arrow" viewBox="0 0 600 190" aria-hidden="true"><path class="shaft" d="M318 6 C 350 66, 300 116, 200 116 C 112 116, 64 128, 56 176" /><path class="head" d="M34 152 L 56 181 L 82 158" /></svg>
+      <div class="feed-stage" id="feedStage">
+        <div class="feed-prints" id="feedPrints"></div>
+        <div class="feed-cam" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kodak_Pixpro.jpg/1280px-Kodak_Pixpro.jpg" alt="" width="1280" height="887" /></div>
+      </div>
+      <div class="feed-foot">
+        <p>Tap a print to look closer.</p>
+        <button class="pill lime" id="galleryBtn" type="button" aria-haspopup="dialog" aria-controls="phoneLayer">See all <span id="galBadge">137</span></button>
+      </div>
+    </section>
+
     <section class="about" id="about" aria-labelledby="aboutTitle">
       <figure class="me-print">
         <span class="tape" aria-hidden="true"></span>
@@ -321,23 +335,6 @@
       </div>
     </section>
 
-    <section class="apps" id="walk" aria-label="Gallery and links">
-      <div class="garden" id="garden" aria-hidden="true"></div>
-      <div class="apps-inner">
-        <svg class="arrow" id="arrow" viewBox="0 0 600 190" aria-hidden="true"><path class="shaft" d="M318 6 C 350 66, 300 116, 200 116 C 112 116, 64 128, 56 176" /><path class="head" d="M34 152 L 56 181 L 82 158" /></svg>
-        <div class="row-apps">
-          <button class="app main" id="galleryBtn" type="button" aria-haspopup="dialog" aria-controls="phoneLayer">
-            <span class="badge" id="galBadge" aria-hidden="true">16</span>
-            <span class="tile gal" aria-hidden="true"><img src="img/gallery-icon.png" alt="" width="280" height="280" /></span>
-            <span class="name">Gallery</span>
-          </button>
-          <a class="app" id="igLink" href="#" rel="noopener"><span class="tile ig"><img class="glyph" src="https://cdn.simpleicons.org/instagram/ffffff" alt="" width="60" height="60" /></span><span class="name">Instagram</span><span class="soon" id="igSoon">Link coming soon</span></a>
-          <a class="app" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener"><span class="tile tt"><img class="glyph" src="https://cdn.simpleicons.org/tiktok/ffffff" alt="" width="60" height="60" /></span><span class="name">TikTok</span></a>
-          <a class="app" href="https://www.pinterest.com/twiiinklle/" rel="noopener"><span class="tile pin"><img class="glyph" src="https://cdn.simpleicons.org/pinterest/ffffff" alt="" width="60" height="60" /></span><span class="name">Pinterest</span></a>
-        </div>
-        <p class="apps-hint">Tap the Gallery to see everything.</p>
-      </div>
-    </section>
 
     <div class="phone-layer" id="phoneLayer" role="dialog" aria-modal="true" aria-label="Gallery" hidden>
       <button class="pill phone-close" id="phoneClose" type="button">Close</button>
@@ -374,6 +371,11 @@
       </div>
     </div>
   </main>
+
+  <button class="tune" id="tune" type="button" aria-pressed="false" aria-label="Play Carmen by Olivia Dean, quietly">
+    <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="tune-txt"><b>Carmen</b><span>Olivia Dean</span></span>
+  </button>
 
   <footer>
     <p class="sign">see you soon</p>
@@ -508,10 +510,8 @@
     // garden around the glass: [kind, colour, left%, top%, size px, rotation, parallax speed]
     const garden = document.getElementById("garden");
     plant(garden, [
-      ["daisy", "#ffffff", 4, 8, 150, -14, 60], ["tulip", "#ff6fae", 13, 52, 120, 8, 120], ["sprig", "", 2, 62, 140, -6, 40],
-      ["bud", "#c9f45b", 22, 18, 54, 0, 150], ["cosmos", "#ff8fc0", 6, 30, 110, 10, 90], ["bud", "#ffffff", 26, 78, 46, 0, 70],
-      ["cosmos", "#f06292", 82, 10, 130, -8, 100], ["daisy", "#ffffff", 86, 54, 160, 12, 50], ["sprig", "", 92, 30, 130, 8, 130],
-      ["tulip", "#ff6fae", 74, 70, 110, -10, 80], ["bud", "#ff8fc0", 76, 34, 50, 0, 160], ["bud", "#c9f45b", 70, 88, 44, 0, 60]
+      ["daisy", "#ffffff", 86, 2, 130, 12, 50], ["sprig", "", 93, 64, 120, 8, 80], ["bud", "#c9f45b", 72, 4, 46, 0, 120],
+      ["cosmos", "#ff8fc0", 2, 82, 100, 10, 90], ["bud", "#ffffff", 34, 90, 40, 0, 70], ["tulip", "#ff6fae", 60, 86, 100, -10, 60]
     ]);
     // a few in the hero and the invite, for personality
     const heroGarden = document.createElement("div"); heroGarden.className = "garden"; heroGarden.setAttribute("aria-hidden", "true");
@@ -546,7 +546,6 @@
     })();
 
     // ---------- app icons ----------
-    const INSTAGRAM = "";   // put your Instagram handle here, e.g. "yourhandle"
     // TikTok posts from @throughmybigeyes: [v = video or p = photo post, post number from its link, caption]
     // To add one, paste a new line at the top, e.g. ["v", "7301234567890123456", "caption"],
     const TIKTOKS = [
@@ -672,9 +671,6 @@
       ["p", "7431293468133117189", "Last slide 🫠"],
       ["p", "7431292404499483910", ""]
     ];
-    const igLink = document.getElementById("igLink"), igSoon = document.getElementById("igSoon");
-    if (INSTAGRAM) igLink.href = "https://www.instagram.com/" + INSTAGRAM + "/";
-    else igLink.addEventListener("click", (e) => { e.preventDefault(); igSoon.classList.add("show"); setTimeout(() => igSoon.classList.remove("show"), 1800); });
 
     // ---------- the phone gallery ----------
     const ITEMS = PHOTOS.map((p) => ({ source: "pinterest", type: "photo", ...p }))
@@ -762,25 +758,79 @@
     vMedia.addEventListener("pointerup", (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) showItem(vi + (e.clientX < sx ? 1 : -1)); sx = null; });
     function tick() { const d = new Date(); document.getElementById("clock").textContent = (d.getHours() % 12 || 12) + ":" + String(d.getMinutes()).padStart(2, "0"); }
 
-    function openPhone() {
+    let opener = null;
+    function openPhone(from, item) {
+      opener = from && from.focus ? from : galleryBtn;
+      filter = "all"; document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.filter === "all")));
       renderGrid(); tick();
-      const r = galleryBtn.querySelector(".tile").getBoundingClientRect();
+      const r = opener.getBoundingClientRect();
       phone.style.setProperty("--dx", (r.left + r.width / 2 - innerWidth / 2) + "px");
       phone.style.setProperty("--dy", (r.top + r.height / 2 - innerHeight / 2) + "px");
       layer.hidden = false; document.body.style.overflow = "hidden";
       if (!reduce) { layer.classList.remove("closing"); layer.classList.add("opening"); }
-      document.getElementById("phoneClose").focus();
+      if (item) openViewer(Math.max(0, list.indexOf(item))); else document.getElementById("phoneClose").focus();
     }
     function closePhone() {
-      const done = () => { layer.hidden = true; layer.classList.remove("closing", "opening"); closeViewer(); document.body.style.overflow = ""; galleryBtn.focus(); };
+      const done = () => { layer.hidden = true; layer.classList.remove("closing", "opening"); closeViewer(); document.body.style.overflow = ""; if (opener) opener.focus(); };
       if (reduce) return done();
       layer.classList.remove("opening"); layer.classList.add("closing");
       layer.addEventListener("animationend", done, { once: true });
     }
-    galleryBtn.addEventListener("click", openPhone);
-    const appsSec = document.getElementById("walk");
-    if ("IntersectionObserver" in window && !reduce) new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) appsSec.classList.add("on"); }), { threshold: 0.4 }).observe(appsSec);
-    else appsSec.classList.add("on");
+    galleryBtn.addEventListener("click", () => openPhone(galleryBtn));
+
+    // ---------- prints coming out of the camera, drifting across ----------
+    (() => {
+      const sec = document.getElementById("gallery"), stage = document.getElementById("feedStage"), box = document.getElementById("feedPrints");
+      const cam = stage.querySelector(".feed-cam"), pics = ITEMS.filter((x) => x.source === "pinterest");
+      let next = 0, prints = [], speed = 0, target = 46, visible = false, last = 0, geo = null;
+      const measure = () => {
+        const sr = stage.getBoundingClientRect(), cr = cam.getBoundingClientRect(), pw = parseFloat(getComputedStyle(sec).getPropertyValue("--pw")) || 160;
+        geo = { w: sr.width, pw, ph: pw * 1.25 + 33, mx: cr.left - sr.left + cr.width * .78, my: cr.top - sr.top + cr.height * .5 };
+      };
+      const make = (d) => {
+        const it = pics[next++ % pics.length], b = document.createElement("button");
+        b.type = "button"; b.className = "fp"; b.style.setProperty("--c", it.color);
+        b.setAttribute("aria-label", "Open photo" + (it.caption ? ": " + it.caption : ""));
+        const img = document.createElement("img"); img.src = it.src; img.alt = ""; img.decoding = "async"; b.appendChild(img);
+        b.addEventListener("click", () => openPhone(b, it));
+        box.prepend(b);
+        const p = { el: b, d, ph1: Math.random() * 6.3, ph2: Math.random() * 6.3 };
+        prints.push(p); place(p); return p;
+      };
+      const place = (p) => {
+        const { pw, ph, mx, my } = geo, d = p.d, k = Math.min(1, d / 320);
+        const sc = .5 + .5 * Math.min(1, d / 360);
+        const x = mx - pw * .5 + d, y = my - ph * sc / 2 + k * 20 * Math.sin(d / 170 + p.ph1);
+        p.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${(k * 7 * Math.sin(d / 230 + p.ph2)).toFixed(2)}deg) scale(${sc.toFixed(3)})`;
+      };
+      const gap = () => geo.pw + 34;
+      const fill = () => {
+        box.innerHTML = ""; prints = []; measure();
+        for (let d = geo.w - geo.mx + 40; d >= 0; d -= gap()) make(d);
+      };
+      fill();
+      if (reduce) { sec.classList.add("on"); return; }
+      const step = (t) => {
+        const dt = Math.min(.05, (t - last) / 1000 || 0); last = t;
+        speed += (target - speed) * Math.min(1, dt * 4);
+        const move = speed * dt;
+        prints.forEach((p) => { p.d += move; place(p); });
+        prints = prints.filter((p) => { if (geo.mx - geo.pw * .5 + p.d > geo.w + 30) { p.el.remove(); return false; } return true; });
+        const newest = prints[prints.length - 1];
+        if (!newest || newest.d >= gap()) { make(newest ? newest.d - gap() : 0); cam.classList.remove("kick"); void cam.offsetWidth; cam.classList.add("kick"); }
+        if (visible && !document.hidden) requestAnimationFrame(step); else last = 0;
+      };
+      const run = () => { if (!visible) { visible = true; last = performance.now(); requestAnimationFrame(step); } };
+      stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") target = 0; });
+      stage.addEventListener("pointerleave", () => { target = 46; });
+      stage.addEventListener("focusin", () => { target = 0; });
+      stage.addEventListener("focusout", () => { target = 46; });
+      new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting) { sec.classList.add("on"); run(); } else visible = false;
+      }), { threshold: 0.15 }).observe(sec);
+      document.addEventListener("visibilitychange", () => { if (!document.hidden && visible) { visible = false; run(); } });
+      let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const w = geo.w; measure(); if (Math.abs(w - geo.w) > 40) fill(); }, 200); });
+    })();
     document.getElementById("phoneClose").addEventListener("click", closePhone);
     layer.addEventListener("click", (e) => { if (e.target === layer) closePhone(); });
     layer.addEventListener("keydown", (e) => {
@@ -790,7 +840,7 @@
     });
 
     // flowers drift a little as the page scrolls
-    const walk = document.getElementById("walk");
+    const walk = document.getElementById("gallery");
     let ticking = false;
     function drift() {
       const r = walk.getBoundingClientRect();
@@ -799,6 +849,55 @@
     }
     addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { drift(); ticking = false; }); } }, { passive: true });
     if (!reduce) drift();
+
+    // ---------- background song: Carmen by Olivia Dean, quietly ----------
+    // Apple Music's 30-second preview, looped at a low volume. Browsers only allow sound after the
+    // visitor's first tap, click or key press, so it starts then. The button turns it off (and remembers).
+    (() => {
+      const SONG = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/09/70/bd/0970bdb8-15c0-38c1-0435-4141a8fc7e44/mzaf_4185929247297700535.plus.aac.p.m4a";
+      // Full song: https://music.apple.com/us/album/carmen/1676252821?i=1676253112
+      const VOL = 0.12;
+      const btn = document.getElementById("tune");
+      let off = false; try { off = localStorage.getItem("tmbe-song") === "off"; } catch (_) {}
+      const audio = new Audio(); audio.crossOrigin = "anonymous"; audio.src = SONG; audio.loop = true; audio.preload = "none";
+      let ctx = null, gain = null;
+      const level = (v, secs) => {
+        if (gain) { gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime); gain.gain.linearRampToValueAtTime(v, ctx.currentTime + secs); }
+        else audio.volume = v;
+      };
+      const setUi = (on) => { btn.classList.toggle("playing", on); btn.setAttribute("aria-pressed", String(on)); btn.setAttribute("aria-label", (on ? "Stop" : "Play") + " Carmen by Olivia Dean"); };
+      const start = () => {
+        if (!ctx && window.AudioContext) {
+          try { ctx = new AudioContext(); gain = ctx.createGain(); gain.gain.value = 0; ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination); } catch (_) { ctx = null; gain = null; }
+        }
+        if (ctx && ctx.state === "suspended") ctx.resume();
+        if (!gain) audio.volume = 0;
+        audio.play().then(() => { level(VOL, 2.5); setUi(true); }).catch(() => setUi(false));
+      };
+      const stop = () => { level(0, .6); setTimeout(() => audio.pause(), 650); setUi(false); };
+      // soften the jump where the 30-second clip loops
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.duration || audio.paused || !btn.classList.contains("playing")) return;
+        const left = audio.duration - audio.currentTime;
+        if (left < 1.6 && !audio.dataset.fading) { audio.dataset.fading = "1"; level(0, Math.max(.2, left - .1)); }
+        if (audio.currentTime < 1 && audio.dataset.fading) { delete audio.dataset.fading; level(VOL, 1.5); }
+      });
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const on = !btn.classList.contains("playing");
+        try { localStorage.setItem("tmbe-song", on ? "on" : "off"); } catch (_) {}
+        on ? start() : stop();
+      });
+      setUi(false);
+      if (off) return;
+      const first = (e) => {
+        if (e.target.closest && e.target.closest("#tune")) return;
+        ["pointerdown", "keydown", "touchstart"].forEach((t) => removeEventListener(t, first, true));
+        start();
+      };
+      ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, first, true));
+      start(); // works straight away where the browser allows it
+    })();
   </script>
 </body>
 </html>
