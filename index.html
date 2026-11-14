@@ -166,24 +166,32 @@
     .shelf-row span { color: var(--muted); }
     .author { font-weight: 700; font-size: 18px; text-decoration-color: var(--pink-deep); text-decoration-thickness: 3px; text-underline-offset: 4px; }
 
-    /* ---------- the gallery: prints coming out of the camera ---------- */
-    .feed { --camL: clamp(14px, 5vw, 70px); --camW: clamp(200px, 30vw, 440px); --pw: clamp(118px, 13vw, 176px); position: relative; padding: 0 0 50px; overflow: hidden; }
-    .feed .arrow { position: relative; z-index: 2; display: block; width: 420px; max-width: 70vw; margin: 0 0 6px calc(var(--camL) + var(--camW) * .5 - 39px); }
+    /* ---------- the gallery: two rows of photos drifting opposite ways ---------- */
+    .feed { --cw: clamp(136px, 15vw, 210px); position: relative; padding: 0 0 56px; overflow: hidden; }
+    .feed .arrow { position: relative; z-index: 2; display: block; width: 380px; max-width: 64vw; margin: 0 0 4px max(8px, 14vw); }
     .feed .arrow path { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
     .feed .arrow .shaft { stroke-dasharray: 520; stroke-dashoffset: 520; transition: stroke-dashoffset 1.1s ease .3s; }
     .feed .arrow .head { stroke-dasharray: 80; stroke-dashoffset: 80; transition: stroke-dashoffset .3s ease 1.35s; }
     .feed.on .arrow .shaft, .feed.on .arrow .head { stroke-dashoffset: 0; }
-    .feed-stage { position: relative; height: calc(var(--pw) * 1.75 + 70px); }
-    .feed-cam { position: absolute; left: var(--camL); top: 50%; width: var(--camW); translate: 0 -50%; z-index: 3; mix-blend-mode: multiply; pointer-events: none; }
-    .feed-cam img { width: 100%; height: auto; filter: brightness(1.08) contrast(1.05); }
-    .feed-cam.kick { animation: kick .35s ease; }
-    @keyframes kick { 40% { transform: translateX(-4px) rotate(-1deg); } }
-    .feed-prints { position: absolute; inset: 0; z-index: 2; }
-    .fp { position: absolute; left: 0; top: 0; width: var(--pw); padding: 7px 7px 26px; border: 0; background: var(--paper); box-shadow: 0 1px 0 rgba(22, 22, 22, .12), 4px 6px 0 rgba(22, 22, 22, .18); cursor: pointer; transform-origin: 0 50%; will-change: transform; }
-    .fp img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--c, #ddd); }
-    .fp:hover, .fp:focus-visible { box-shadow: 0 1px 0 rgba(22, 22, 22, .12), 8px 12px 0 rgba(22, 22, 22, .22); z-index: 1; }
-    .feed-foot { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 20px; padding: 0 20px; }
+    .rows { position: relative; z-index: 2; display: grid; gap: clamp(14px, 2vw, 24px); }
+    .row { overflow: hidden; padding: 10px 0 14px; }
+    .track { display: flex; gap: clamp(14px, 2vw, 24px); width: max-content; animation: slide var(--dur, 60s) linear infinite; }
+    .row.rev .track { animation-direction: reverse; }
+    .row:hover .track, .row:focus-within .track { animation-play-state: paused; }
+    @keyframes slide { to { transform: translateX(calc(-100% / 3)); } }
+    .flip { flex: 0 0 auto; width: var(--cw); aspect-ratio: 4 / 5; padding: 0; border: 0; background: none; perspective: 900px; cursor: pointer; }
+    .flip:nth-child(odd) { rotate: -1.5deg; } .flip:nth-child(even) { rotate: 1.5deg; }
+    .flip-in { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.3, .5, 1); }
+    .flip.on .flip-in { transform: rotateY(180deg); }
+    .face { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 6px; border: 2px solid var(--ink); box-shadow: 4px 5px 0 var(--ink); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+    .face.front { padding: 7px; background: var(--paper); }
+    .face.front img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; background: var(--c, #ddd); }
+    .face.back { display: grid; place-items: center; align-content: center; gap: 10px; background: var(--pink-deep); transform: rotateY(180deg); }
+    .face.back img { width: 82%; rotate: -4deg; filter: drop-shadow(3px 4px 0 rgba(22, 22, 22, .35)); }
+    .face.back i { font: normal clamp(26px, 3vw, 36px)/1 var(--script); color: var(--ink); }
+    .feed-foot { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 20px; margin-top: 26px; padding: 0 20px; }
     .feed-foot p { margin: 0; color: var(--muted); font-size: 15px; }
+    .see-all { font-size: 17px; padding: 13px 24px; }
 
     /* ---------- background song ---------- */
     .tune { margin-right: auto; display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border: 2px solid var(--ink); border-radius: 16px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; text-align: left; }
@@ -199,66 +207,6 @@
     .tune .tune-state { margin-left: 4px; }
     .soon { position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
     .soon.show { opacity: 1; }
-
-    /* ---------- the phone (opens from the Gallery icon) ---------- */
-    .phone-layer { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(22, 22, 22, .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-    .phone-layer[hidden] { display: none; }
-    .phone { position: relative; width: min(390px, 92vw, calc((100svh - 32px) * .49)); aspect-ratio: 9 / 19.5; border-radius: 56px; padding: 12px; background: linear-gradient(145deg, #3b3b3d, #0d0d0e 40%, #262628); box-shadow: inset 0 0 0 2px #5a5a5d, 0 40px 80px -20px rgba(0, 0, 0, .6); transform-origin: var(--ox, 50%) var(--oy, 50%); }
-    .phone::before { content: ""; position: absolute; left: -4px; top: 22%; width: 4px; height: 9%; border-radius: 3px 0 0 3px; background: #2a2a2c; box-shadow: 0 90px 0 #2a2a2c; }
-    .phone::after { content: ""; position: absolute; right: -4px; top: 27%; width: 4px; height: 14%; border-radius: 0 3px 3px 0; background: #2a2a2c; }
-    .phone-layer.opening .phone { animation: p-open .5s cubic-bezier(.2, .9, .3, 1); }
-    .phone-layer.opening { animation: fade-in .3s ease; }
-    .phone-layer.closing .phone { animation: p-close .3s ease-in forwards; }
-    .phone-layer.closing { animation: fade-out .3s ease-in forwards; }
-    @keyframes p-open { from { transform: translate(var(--dx, 0), var(--dy, 0)) scale(.25); opacity: 0; } to { transform: none; opacity: 1; } }
-    @keyframes p-close { to { transform: translate(var(--dx, 0), var(--dy, 0)) scale(.25); opacity: 0; } }
-    @keyframes fade-in { from { opacity: 0; } } @keyframes fade-out { to { opacity: 0; } }
-    .screen { position: relative; height: 100%; border-radius: 44px; overflow: hidden; background: #000; color: #fff; font-family: -apple-system, "SF Pro Text", var(--body); }
-    .island { position: absolute; z-index: 5; top: 11px; left: 50%; translate: -50% 0; width: 31%; height: 30px; border-radius: 20px; background: #000; }
-    .status { position: absolute; z-index: 4; top: 0; left: 0; right: 0; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 6px 28px 0 34px; font-weight: 600; font-size: 15px; pointer-events: none; }
-    .status svg { display: block; }
-    .library { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
-    .library::-webkit-scrollbar { display: none; }
-    .lib-head { position: sticky; top: 0; z-index: 3; padding: 56px 16px 12px; display: flex; align-items: end; justify-content: space-between; background: linear-gradient(180deg, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0)); }
-    .lib-head h3 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
-    .lib-head small { display: block; font-size: 13px; font-weight: 500; opacity: .75; margin-top: 2px; }
-    .chip { border: 0; border-radius: 999px; padding: 6px 13px; background: rgba(120, 120, 128, .45); color: #fff; font: 600 13px -apple-system, var(--body); cursor: pointer; }
-    .lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: -56px; padding-bottom: 110px; }
-    .lib-grid button { position: relative; aspect-ratio: 1; padding: 0; border: 0; background: var(--c, #222); cursor: pointer; overflow: hidden; }
-    .lib-grid img { width: 100%; height: 100%; object-fit: cover; }
-    .lib-grid .dur { position: absolute; right: 5px; bottom: 4px; display: flex; align-items: center; gap: 3px; font: 600 11px -apple-system, var(--body); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
-    .lib-grid .tt-tile { background: #1b1719; }
-    .lib-grid .tt-tile iframe { position: absolute; left: 50%; top: 50%; width: 150%; height: 267%; translate: -50% -50%; border: 0; pointer-events: none; }
-    .lib-grid .dur { z-index: 1; }
-    .tabs { position: absolute; z-index: 4; left: 12px; right: 12px; bottom: 26px; display: flex; justify-content: space-between; gap: 4px; padding: 5px; border-radius: 999px; background: rgba(60, 60, 64, .72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-    .tabs button { flex: 1; border: 0; border-radius: 999px; padding: 8px 6px; background: none; color: rgba(255, 255, 255, .8); font: 600 13px -apple-system, var(--body); cursor: pointer; }
-    .tabs button[aria-pressed="true"] { background: rgba(255, 255, 255, .22); color: #fff; }
-    .home-bar { position: absolute; z-index: 6; left: 50%; bottom: 8px; translate: -50% 0; width: 36%; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, .8); }
-    .viewer { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: #000; }
-    .viewer[hidden] { display: none; }
-    .viewer.in { animation: v-in .3s ease; }
-    @keyframes v-in { from { opacity: 0; transform: scale(.96); } }
-    .v-top { display: flex; align-items: center; justify-content: space-between; padding: 54px 14px 8px; }
-    .v-top button { border: 0; background: none; color: #fff; font: 600 16px -apple-system, var(--body); cursor: pointer; padding: 6px; }
-    .v-top span { font: 600 14px -apple-system, var(--body); opacity: .8; }
-    .v-media { flex: 1; display: grid; place-items: center; min-height: 0; position: relative; touch-action: pan-y; }
-    .v-media img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .v-media iframe { width: 100%; height: 100%; border: 0; }
-    .v-nav { position: absolute; top: 50%; translate: 0 -50%; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(60, 60, 64, .6); color: #fff; font-size: 20px; cursor: pointer; }
-    .v-prev { left: 8px; } .v-next { right: 8px; }
-    .v-cap { min-height: 64px; padding: 10px 16px 40px; font-size: 14px; text-align: center; opacity: .9; }
-    .phone-close { position: absolute; top: 18px; right: 18px; }
-    .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-    .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
-    .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
-    @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
-    .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); pointer-events: none; }
-    .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; margin: 0; }
-    .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
-    .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; margin: 0; }
-    .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
-    .room-title { position: absolute; top: 34px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
-
 
     /* ---------- lightbox ---------- */
     dialog.lb { padding: 0; border: 0; background: transparent; max-width: min(92vw, 720px); max-height: 94vh; overflow: visible; }
@@ -292,8 +240,8 @@
     @media (max-width: 520px) {
       .bar nav .pill:not(.lime) { display: none; }
       .shall { font-size: 22vw; }
-      .feed { --camL: 6px; --camW: 150px; --pw: 104px; }
       .feed .garden { display: none; }
+      .feed .arrow { margin-left: 4px; }
       .bar nav { display: none; }
       .handle { font-size: 44px; }
     }
@@ -354,13 +302,13 @@
       <h2 class="sr" id="feedTitle">Gallery</h2>
       <div class="garden" id="garden" aria-hidden="true"></div>
       <svg class="arrow" id="arrow" viewBox="0 0 600 190" aria-hidden="true"><path class="shaft" d="M318 6 C 350 66, 300 116, 200 116 C 112 116, 64 128, 56 176" /><path class="head" d="M34 152 L 56 181 L 82 158" /></svg>
-      <div class="feed-stage" id="feedStage">
-        <div class="feed-prints" id="feedPrints"></div>
-        <div class="feed-cam" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kodak_Pixpro.jpg/1280px-Kodak_Pixpro.jpg" alt="" width="1280" height="887" /></div>
+      <div class="rows" id="rows">
+        <div class="row" style="--dur: 64s"><div class="track" id="rowA"></div></div>
+        <div class="row rev" style="--dur: 72s"><div class="track" id="rowB"></div></div>
       </div>
       <div class="feed-foot">
-        <p>Tap a print to look closer.</p>
-        <button class="pill lime" id="galleryBtn" type="button" aria-haspopup="dialog" aria-controls="phoneLayer">See all <span id="galBadge">137</span></button>
+        <p>Tap a photo to flip it.</p>
+        <a class="pill lime see-all" href="gallery.html">See all my photos</a>
       </div>
     </section>
 
@@ -435,40 +383,6 @@
     </section>
 
 
-    <div class="phone-layer" id="phoneLayer" role="dialog" aria-modal="true" aria-label="Gallery" hidden>
-      <button class="pill phone-close" id="phoneClose" type="button">Close</button>
-      <div class="phone" id="phone">
-        <div class="screen">
-          <div class="island" aria-hidden="true"></div>
-          <div class="status" aria-hidden="true">
-            <span id="clock">9:41</span>
-            <span style="display:flex;gap:6px;align-items:center">
-              <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>
-              <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0z M3.6 7a6.2 6.2 0 0 1 8.8 0l-1.3 1.3a4.4 4.4 0 0 0-6.2 0z M1.4 4.8a9.3 9.3 0 0 1 13.2 0L13.3 6.1a7.5 7.5 0 0 0-10.6 0z" fill="#fff"/></svg>
-              <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#fff"/><rect x="24.5" y="4.5" width="2" height="4" rx="1" fill="#fff" opacity=".5"/></svg>
-            </span>
-          </div>
-          <div class="library" id="library">
-            <div class="lib-head"><div><h3 id="libTitle">All Photos</h3><small id="libCount"></small></div></div>
-            <div class="lib-grid" id="libGrid"></div>
-          </div>
-          <div class="tabs" role="group" aria-label="Show">
-            <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="photo" aria-pressed="false">Photos</button>
-            <button type="button" data-filter="video" aria-pressed="false">Videos</button>
-          </div>
-          <div class="viewer" id="viewer" hidden>
-            <div class="v-top"><button type="button" id="vBack">‹ Back</button><span id="vCount"></span><a class="chip" id="vOpen" href="#" rel="noopener" style="text-decoration:none">Open</a></div>
-            <div class="v-media" id="vMedia">
-              <button class="v-nav v-prev" type="button" id="vPrev" aria-label="Previous">‹</button>
-              <button class="v-nav v-next" type="button" id="vNext" aria-label="Next">›</button>
-            </div>
-            <p class="v-cap" id="vCap"></p>
-          </div>
-          <div class="home-bar" aria-hidden="true"></div>
-        </div>
-      </div>
-    </div>
   </main>
 
   <footer>
@@ -490,28 +404,13 @@
     </div>
   </dialog>
 
+  <script src="data.js"></script>
+  <script src="song.js"></script>
   <script>
-    // Photos uploaded to Pinterest by twiiinklle (newest first).
-    const PHOTOS = [
-      ["790cc92616081c1facc024b3ba28a599", 736, 1308, "#e3dcc0", "1098245059170556417", "", 1794175102],
-      ["2a7da9c7b433db7aeb856c875b4c349e", 736, 1308, "#e9eed9", "1098245059170539696", "", 1794162085],
-      ["857d449168e7757872977533f2aa1957", 736, 1308, "#293219", "1098245059168343963", "summer in greece 🇬🇷", 1792084767],
-      ["cd403efb77f2f4acd5210f16494d8b88", 736, 1308, "#68533a", "1098245059168343917", "", 1792084732],
-      ["a3c3b30598138af41efcb4eb97db8ed4", 736, 1308, "#967c64", "1098245059165836788", "", 1789532101],
-      ["b63d3cea22f7dac3c702c8006566617c", 736, 1308, "#3a2729", "1098245059163748951", "", 1787283626],
-      ["5c49b92e712648536c69f84bc0b800e6", 736, 552,  "#456479", "1098245059163748912", "", 1787283587],
-      ["1039824240f88684a2ea2daffe458ee2", 736, 981,  "#846c51", "1098245059163744388", "", 1787277312],
-      ["3601af6e0f72e666f663f653d400ab27", 736, 981,  "#85919f", "1098245059163744354", "", 1787277251],
-      ["690b24fa7f637923b03c961827220f42", 736, 1308, "#464440", "1098245059161252833", "", 1784611122],
-      ["941f712928a8e3d1f28184b67c514fad", 736, 1308, "#e1e79e", "1098245059161252821", "", 1784611086],
-      ["38da99a19ab8f79d44a756a36136f435", 736, 981,  "#79756c", "1098245059146638237", "", 1763447032],
-      ["5ec3d7bf5c3aefcf1d8bb371f6cfaedf", 736, 981,  "#55591c", "1098245059146638232", "", 1763447026],
-      ["faf729dc48fbc5aa088f05a51506459a", 736, 981,  "#040605", "1098245059146638228", "", 1763447017],
-      ["15045dc7b83f597b6c590c8be6773d51", 736, 981,  "#141916", "1098245059146638223", "", 1763447003],
-      ["769968bda9a168089821cc7bba592173", 736, 981,  "#73423d", "1098245059146638222", "", 1763446998]
-    ].map(([hash, w, h, color, pin, caption, t]) => ({
+    // Photos uploaded to Pinterest by twiiinklle (newest first). The list lives in data.js.
+    const PHOTOS = TMBE.photos.map(([hash, w, h, color, pin, caption, t, desc]) => ({
       src: `https://i.pinimg.com/736x/${hash.slice(0, 2)}/${hash.slice(2, 4)}/${hash.slice(4, 6)}/${hash}.jpg`,
-      w, h, color, caption, t, pin: `https://www.pinterest.com/pin/${pin}/`
+      w, h, color, caption, t, desc, pin: `https://www.pinterest.com/pin/${pin}/`
     }));
     const N = PHOTOS.length;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -640,299 +539,39 @@
       }), { threshold: 0.25 }).observe(about);
     })();
 
-    // ---------- app icons ----------
-    // TikTok posts from @throughmybigeyes: [v = video or p = photo post, post number from its link, caption]
-    // To add one, paste a new line at the top, e.g. ["v", "7301234567890123456", "caption"],
-    const TIKTOKS = [
-      ["p", "7707485528450436370", ""],
-      ["p", "7704754563559083272", "Folaholic😚"],
-      ["v", "7704534972052393217", ""],
-      ["p", "7702887641364040968", ""],
-      ["v", "7702729192168787218", "No fake fangs needed 🧛‍♀️"],
-      ["v", "7700259102642982151", ""],
-      ["v", "7699987060349750536", "Spooky season 🎃"],
-      ["v", "7698490621509569799", "Eat work repeat"],
-      ["p", "7696694990373653767", ""],
-      ["p", "7695215061974994183", ""],
-      ["p", "7685966640659467528", ""],
-      ["p", "7684696037906599188", "People , places, memories"],
-      ["v", "7683741329821535509", ""],
-      ["p", "7683167241818393876", ""],
-      ["v", "7676931975436848404", ""],
-      ["p", "7676070164831489300", ""],
-      ["v", "7668708762621988117", ""],
-      ["v", "7667574398815079700", "Live laugh love Dean🤭🤍"],
-      ["p", "7661842089465990420", "Fml"],
-      ["v", "7659034036525927701", ""],
-      ["p", "7657758997742685460", ""],
-      ["v", "7657019017743420693", "Dinner on the mountains?"],
-      ["p", "7651741779145886996", "🤍 u all"],
-      ["v", "7650303042012663061", "Truly the Denver Way☺️"],
-      ["p", "7649109421355748629", ""],
-      ["v", "7648378650261441813", "Finally met Mj🤭"],
-      ["p", "7645507405089885460", ""],
-      ["p", "7643830218649570580", ""],
-      ["p", "7640943660519017749", ""],
-      ["v", "7639913670444715284", ""],
-      ["p", "7638471307746741524", ""],
-      ["v", "7636815916403051796", ""],
-      ["p", "7635362748917976340", ""],
-      ["p", "7633865522202807573", ""],
-      ["v", "7632675558886886677", ""],
-      ["p", "7631351659297262868", ""],
-      ["p", "7629949327460650260", ""],
-      ["p", "7627351506131422485", ""],
-      ["v", "7625745736516259092", ""],
-      ["p", "7624913879843278100", ""],
-      ["p", "7623146593604095252", ""],
-      ["p", "7621469269431209236", ""],
-      ["p", "7618925018910575893", ""],
-      ["p", "7617567172063251733", ""],
-      ["p", "7614700010902392084", ""],
-      ["p", "7612748319424580884", ""],
-      ["p", "7604608959181262101", ""],
-      ["p", "7600971237921164564", ""],
-      ["v", "7598754676196035861", ""],
-      ["p", "7596715219515165973", ""],
-      ["p", "7595207903712283924", ""],
-      ["p", "7593435649215155477", ""],
-      ["v", "7591965729721715988", ""],
-      ["p", "7591890458083593492", ""],
-      ["p", "7590889374263299348", ""],
-      ["p", "7590288330722528533", ""],
-      ["v", "7589138473106361620", "To the very best carousels of ‘25☺️💐"],
-      ["p", "7587235881459715349", ""],
-      ["p", "7585772075361635604", ""],
-      ["p", "7584057513318862101", ""],
-      ["v", "7582014745520180501", ""],
-      ["p", "7578625166062767380", ""],
-      ["p", "7577608537862376724", ""],
-      ["p", "7573849410191346964", ""],
-      ["p", "7570533737155300629", ""],
-      ["p", "7563826927488830741", ""],
-      ["v", "7558126979002813714", "Fall🍂"],
-      ["p", "7556088645602561287", ""],
-      ["p", "7546764584661650695", ""],
-      ["p", "7544127807845092616", ""],
-      ["v", "7541782353287433480", "Pilates x park 🍃"],
-      ["v", "7540771155276320007", "20.08"],
-      ["p", "7540624464870968594", ""],
-      ["p", "7539188422498372872", ""],
-      ["p", "7537710547962301702", ""],
-      ["p", "7536581185225477381", ""],
-      ["p", "7535560288624512262", ""],
-      ["v", "7534722343369772294", "🌅⛅️"],
-      ["p", "7533253569399606584", ""],
-      ["p", "7532250819253620024", ""],
-      ["v", "7531734790261722424", "Shall we??? Take a peak into the ocean 🌊"],
-      ["p", "7530995929797692678", ""],
-      ["v", "7530309641071348997", "First video??🙈☺️"],
-      ["p", "7530043737519443201", ""],
-      ["p", "7528858607056588048", ""],
-      ["p", "7522096571727531280", ""],
-      ["p", "7519973191058558209", ""],
-      ["p", "7518502298687999233", ""],
-      ["p", "7515019772740799761", ""],
-      ["p", "7513832830422633784", "@Sheep Feed x 3 days of praise"],
-      ["p", "7513198268969389317", ""],
-      ["p", "7512497176405232912", ""],
-      ["p", "7511640979019975941", ""],
-      ["p", "7510977701499391288", ""],
-      ["p", "7510510203956235526", "We are on 1k🤭🤭🎉"],
-      ["p", "7509398879587060997", ""],
-      ["p", "7508661279658183942", ""],
-      ["p", "7508088698383142150", "@Sharon ♡ Kai popupLagos"],
-      ["p", "7502755397476896006", ""],
-      ["p", "7500550459367705911", "Last part of my throughmyBigeyes mini series 🥹💐. To more adventures with the best girl"],
-      ["p", "7500120146275601669", "Part 2 : Through my Big eyes mini series💐"],
-      ["p", "7499529843567119621", "Starting the month right with my best girl @Sharon ♡ ❤️💐"],
-      ["p", "7489891590526258487", "❤️💡"],
-      ["p", "7477168358895521030", ""],
-      ["p", "7454972227402927366", ""],
-      ["p", "7453885370573376774", ""],
-      ["p", "7452375175120702725", "But enjoy my photos ❤️🤗and merry Christmas🎄"],
-      ["p", "7451181645920832773", ""],
-      ["p", "7450846449555737862", ""],
-      ["p", "7448585754848070918", ""],
-      ["p", "7442062675867323703", ""],
-      ["p", "7440099778102381879", ""],
-      ["p", "7439374249086766392", ""],
-      ["p", "7437251799200976183", "A week’s worth ❤️"],
-      ["p", "7436029300094143800", "Lately …"],
-      ["p", "7431298287275199750", "Hobbies 🎀"],
-      ["p", "7431295934321020166", ""],
-      ["p", "7431295142591565062", "It all started here 😀"],
-      ["p", "7431294351164165382", "Drafts…"],
-      ["p", "7431293468133117189", "Last slide 🫠"],
-      ["p", "7431292404499483910", ""]
-    ];
-
-    // ---------- the phone gallery ----------
-    const ITEMS = PHOTOS.map((p) => ({ source: "pinterest", type: "photo", ...p }))
-      .concat(TIKTOKS.map(([k, id, cap]) => ({
-        source: "tiktok", type: k === "v" ? "video" : "photo", id, caption: cap, color: "#2a2328",
-        t: Number(BigInt(id) >> 32n), pin: `https://www.tiktok.com/@throughmybigeyes/${k === "v" ? "video" : "photo"}/${id}`
-      })))
-      .sort((a, b) => b.t - a.t);
-    document.getElementById("galBadge").textContent = ITEMS.length;
-    const layer = document.getElementById("phoneLayer"), phone = document.getElementById("phone"), libGrid = document.getElementById("libGrid");
-    const viewer = document.getElementById("viewer"), vMedia = document.getElementById("vMedia"), vCap = document.getElementById("vCap"), vCount = document.getElementById("vCount"), vOpen = document.getElementById("vOpen");
-    const galleryBtn = document.getElementById("galleryBtn");
-    let filter = "all", list = ITEMS, vi = 0;
-    const playSvg = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="#fff"/></svg>';
-    // TikTok thumbnails: TikTok's own player, mounted only when a tile scrolls into view
-    let tileIO = null;
-    function mountTiles() {
-      if (tileIO) tileIO.disconnect();
-      const root = document.getElementById("library");
-      const mount = (b) => {
-        if (b.querySelector("iframe")) return;
-        const f = document.createElement("iframe");
-        f.src = "https://www.tiktok.com/player/v1/" + b.dataset.tt + "?controls=0&play_button=0&progress_bar=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&native_context_menu=0&autoplay=1";
-        f.title = ""; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
-        b.prepend(f);
-      };
-      if (!("IntersectionObserver" in window)) return libGrid.querySelectorAll(".tt-tile").forEach(mount);
-      tileIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { mount(e.target); tileIO.unobserve(e.target); } }), { root, rootMargin: "120px 0px" });
-      libGrid.querySelectorAll(".tt-tile").forEach((b) => tileIO.observe(b));
-    }
-    // grid players start muted and stop on their first frame, so tiles look like still thumbnails
-    const ttSend = (w, type) => w.postMessage({ type, "x-tiktok-player": true }, "*");
-    addEventListener("message", (e) => {
-      if (!/tiktok\.com$/.test(new URL(e.origin).hostname)) return;
-      let d = e.data; if (typeof d === "string") { try { d = JSON.parse(d); } catch (_) { return; } }
-      if (!d || !d["x-tiktok-player"]) return;
-      const tile = [...libGrid.querySelectorAll(".tt-tile iframe")].find((f) => f.contentWindow === e.source);
-      if (!tile) return;
-      if (d.type === "onPlayerReady") ttSend(e.source, "mute");
-      if ((d.type === "onStateChange" && d.value === 1) || d.type === "onCurrentTime") {
-        if (tile.dataset.held) return; tile.dataset.held = "1";
-        ttSend(e.source, "mute"); setTimeout(() => ttSend(e.source, "pause"), 250);
-      }
-    });
-    function renderGrid() {
-      list = ITEMS.filter((it) => filter === "all" || it.type === filter);
-      libGrid.innerHTML = "";
-      list.forEach((it, i) => {
-        const b = document.createElement("button");
-        b.type = "button"; b.style.setProperty("--c", it.color);
-        b.setAttribute("aria-label", (it.type === "video" ? "Play video " : "Open photo ") + (i + 1) + (it.caption ? ": " + it.caption : ""));
-        if (it.source === "pinterest") b.appendChild(makeImg(it, "", i > 14));
-        else { b.classList.add("tt-tile"); b.dataset.tt = it.id; }
-        if (it.type === "video") b.insertAdjacentHTML("beforeend", '<span class="dur">' + playSvg + "</span>");
-        else if (it.source === "tiktok") b.insertAdjacentHTML("beforeend", '<span class="dur"><svg width="13" height="13" viewBox="0 0 14 14"><rect x="1" y="3" width="9" height="10" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M4 1h7a2 2 0 0 1 2 2v8" fill="none" stroke="#fff" stroke-width="1.6"/></svg></span>');
-        b.onclick = () => openViewer(i);
-        libGrid.appendChild(b);
-      });
-      mountTiles();
-      const nP = ITEMS.filter((x) => x.type === "photo").length, nV = ITEMS.length - nP;
-      document.getElementById("libTitle").textContent = filter === "video" ? "Videos" : filter === "photo" ? "Photos" : "All Photos";
-      document.getElementById("libCount").textContent = filter === "video" ? nV + " videos" : filter === "photo" ? nP + " photos" : nP + " photos, " + nV + " videos";
-    }
-    document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
-      filter = b.dataset.filter;
-      document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-      renderGrid(); document.getElementById("library").scrollTop = 0;
-    }));
-    function showItem(i) {
-      vi = (i + list.length) % list.length; const it = list[vi];
-      vMedia.querySelectorAll("img, iframe").forEach((n) => n.remove());
-      if (it.source === "pinterest") { const img = makeImg(it, it.caption || "Photo", false); vMedia.prepend(img); }
-      else { const f = document.createElement("iframe"); f.src = "https://www.tiktok.com/player/v1/" + it.id + "?autoplay=1&rel=0&description=0"; f.allow = "autoplay; encrypted-media; fullscreen"; f.title = it.caption || "TikTok post"; vMedia.prepend(f); }
-      vCap.textContent = it.caption || "";
-      vCount.textContent = (vi + 1) + " of " + list.length;
-      vOpen.href = it.pin; vOpen.textContent = it.source === "tiktok" ? "TikTok" : "Pinterest";
-    }
-    function openViewer(i) { showItem(i); viewer.hidden = false; viewer.classList.remove("in"); void viewer.offsetWidth; viewer.classList.add("in"); document.getElementById("vBack").focus(); }
-    function closeViewer() { viewer.hidden = true; vMedia.querySelectorAll("iframe").forEach((n) => n.remove()); }
-    document.getElementById("vBack").onclick = closeViewer;
-    document.getElementById("vPrev").onclick = () => showItem(vi - 1);
-    document.getElementById("vNext").onclick = () => showItem(vi + 1);
-    let sx = null;
-    vMedia.addEventListener("pointerdown", (e) => { sx = e.clientX; });
-    vMedia.addEventListener("pointerup", (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) showItem(vi + (e.clientX < sx ? 1 : -1)); sx = null; });
-    function tick() { const d = new Date(); document.getElementById("clock").textContent = (d.getHours() % 12 || 12) + ":" + String(d.getMinutes()).padStart(2, "0"); }
-
-    let opener = null;
-    function openPhone(from, item) {
-      opener = from && from.focus ? from : galleryBtn;
-      filter = "all"; document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.filter === "all")));
-      renderGrid(); tick();
-      const r = opener.getBoundingClientRect();
-      phone.style.setProperty("--dx", (r.left + r.width / 2 - innerWidth / 2) + "px");
-      phone.style.setProperty("--dy", (r.top + r.height / 2 - innerHeight / 2) + "px");
-      layer.hidden = false; document.body.style.overflow = "hidden";
-      if (!reduce) { layer.classList.remove("closing"); layer.classList.add("opening"); }
-      if (item) openViewer(Math.max(0, list.indexOf(item))); else document.getElementById("phoneClose").focus();
-    }
-    function closePhone() {
-      const done = () => { layer.hidden = true; layer.classList.remove("closing", "opening"); closeViewer(); document.body.style.overflow = ""; if (opener) opener.focus(); };
-      if (reduce) return done();
-      layer.classList.remove("opening"); layer.classList.add("closing");
-      layer.addEventListener("animationend", done, { once: true });
-    }
-    galleryBtn.addEventListener("click", () => openPhone(galleryBtn));
-
-    // ---------- prints coming out of the camera, drifting across ----------
+    // ---------- the gallery: two rows of photos drifting opposite ways; tap to flip ----------
     (() => {
-      const sec = document.getElementById("gallery"), stage = document.getElementById("feedStage"), box = document.getElementById("feedPrints");
-      const cam = stage.querySelector(".feed-cam"), pics = ITEMS.filter((x) => x.source === "pinterest");
-      let next = 0, prints = [], speed = 0, target = 46, visible = false, last = 0, geo = null;
-      const measure = () => {
-        const sr = stage.getBoundingClientRect(), cr = cam.getBoundingClientRect(), pw = parseFloat(getComputedStyle(sec).getPropertyValue("--pw")) || 160;
-        geo = { w: sr.width, pw, ph: pw * 1.25 + 33, mx: cr.left - sr.left + cr.width * .78, my: cr.top - sr.top + cr.height * .5 };
+      const eyes = "img/my-big-eyes.webp";
+      const card = (p) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "flip"; b.setAttribute("aria-pressed", "false");
+        b.setAttribute("aria-label", "Flip photo" + (p.desc ? ": " + p.desc : ""));
+        b.innerHTML = '<span class="flip-in"><span class="face front" style="--c:' + p.color + '"><img alt="" decoding="async" width="' + p.w + '" height="' + p.h + '"></span>'
+          + '<span class="face back" aria-hidden="true"><img src="' + eyes + '" alt="" width="634" height="280"><i>through my big eyes</i></span></span>';
+        b.querySelector(".front img").src = p.src;
+        b.addEventListener("click", () => { const on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+        return b;
       };
-      const make = (d) => {
-        const it = pics[next++ % pics.length], b = document.createElement("button");
-        b.type = "button"; b.className = "fp"; b.style.setProperty("--c", it.color);
-        b.setAttribute("aria-label", "Open photo" + (it.caption ? ": " + it.caption : ""));
-        const img = document.createElement("img"); img.src = it.src; img.alt = ""; img.decoding = "async"; b.appendChild(img);
-        b.addEventListener("click", () => openPhone(b, it));
-        box.prepend(b);
-        const p = { el: b, d, ph1: Math.random() * 6.3, ph2: Math.random() * 6.3 };
-        prints.push(p); place(p); return p;
+      const fill = (el, list) => {
+        // the list three times, so the row can loop without a gap on wide screens
+        [...list, ...list, ...list].forEach((p, i) => { const c = card(p); if (i >= list.length) { c.tabIndex = -1; c.setAttribute("aria-hidden", "true"); } el.appendChild(c); });
       };
-      const place = (p) => {
-        const { pw, ph, mx, my } = geo, d = p.d, k = Math.min(1, d / 320);
-        const sc = .5 + .5 * Math.min(1, d / 360);
-        const x = mx - pw * .5 + d, y = my - ph * sc / 2 + k * 20 * Math.sin(d / 170 + p.ph1);
-        p.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${(k * 7 * Math.sin(d / 230 + p.ph2)).toFixed(2)}deg) scale(${sc.toFixed(3)})`;
-      };
-      const gap = () => geo.pw + 26;
-      const fill = () => {
-        box.innerHTML = ""; prints = []; measure();
-        for (let d = geo.w - geo.mx + 40; d >= 0; d -= gap()) make(d);
-      };
-      fill();
-      if (reduce) { sec.classList.add("on"); return; }
-      const step = (t) => {
-        const dt = Math.min(.05, (t - last) / 1000 || 0); last = t;
-        speed += (target - speed) * Math.min(1, dt * 4);
-        const move = speed * dt;
-        prints.forEach((p) => { p.d += move; place(p); });
-        prints = prints.filter((p) => { if (geo.mx - geo.pw * .5 + p.d > geo.w + 30) { p.el.remove(); return false; } return true; });
-        const newest = prints[prints.length - 1];
-        if (!newest || newest.d >= gap()) { make(newest ? newest.d - gap() : 0); cam.classList.remove("kick"); void cam.offsetWidth; cam.classList.add("kick"); }
-        if (visible && !document.hidden) requestAnimationFrame(step); else last = 0;
-      };
-      const run = () => { if (!visible) { visible = true; last = performance.now(); requestAnimationFrame(step); } };
-      stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") target = 0; });
-      stage.addEventListener("pointerleave", () => { target = 46; });
-      stage.addEventListener("focusin", () => { target = 0; });
-      stage.addEventListener("focusout", () => { target = 46; });
+      const half = Math.ceil(PHOTOS.length / 2);
+      fill(document.getElementById("rowA"), PHOTOS.slice(0, half));
+      fill(document.getElementById("rowB"), PHOTOS.slice(half));
+      const sec = document.getElementById("gallery");
+      if (reduce || !("IntersectionObserver" in window)) { sec.classList.add("on"); document.querySelectorAll(".row").forEach((r) => { r.style.overflowX = "auto"; }); document.querySelectorAll(".track").forEach((t) => { t.style.animation = "none"; }); return; }
+      let hinted = false;
       new IntersectionObserver((es) => es.forEach((e) => {
-        if (e.isIntersecting) { sec.classList.add("on"); run(); } else visible = false;
-      }), { threshold: 0.15 }).observe(sec);
-      document.addEventListener("visibilitychange", () => { if (!document.hidden && visible) { visible = false; run(); } });
-      let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const w = geo.w; measure(); if (Math.abs(w - geo.w) > 40) fill(); }, 200); });
+        if (!e.isIntersecting) return;
+        sec.classList.add("on");
+        if (hinted) return; hinted = true;
+        // flip one photo by itself once, so people see the trick
+        const r = document.getElementById("rows").getBoundingClientRect();
+        const c = [...document.querySelectorAll("#rowA .flip")].find((x) => { const b = x.getBoundingClientRect(); return b.left > r.left + 40 && b.right < r.right - 40; });
+        if (c) { setTimeout(() => c.classList.add("on"), 1400); setTimeout(() => c.classList.remove("on"), 3400); }
+      }), { threshold: 0.3 }).observe(sec);
     })();
-    document.getElementById("phoneClose").addEventListener("click", closePhone);
-    layer.addEventListener("click", (e) => { if (e.target === layer) closePhone(); });
-    layer.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") { if (!viewer.hidden) closeViewer(); else closePhone(); }
-      if (!viewer.hidden && e.key === "ArrowRight") showItem(vi + 1);
-      if (!viewer.hidden && e.key === "ArrowLeft") showItem(vi - 1);
-    });
 
     // flowers drift a little as the page scrolls
     const walk = document.getElementById("gallery");
@@ -945,64 +584,6 @@
     addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { drift(); ticking = false; }); } }, { passive: true });
     if (!reduce) drift();
 
-    // ---------- background song: Carmen by Olivia Dean, quietly ----------
-    // Apple Music's 30-second preview, looped at a low volume. Browsers only allow sound after the
-    // visitor's first tap, click or key press, so it starts then. Any [data-song] button turns it on/off (and remembers).
-    const song = (() => {
-      const SONG = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/09/70/bd/0970bdb8-15c0-38c1-0435-4141a8fc7e44/mzaf_4185929247297700535.plus.aac.p.m4a";
-      // Full song: https://music.apple.com/us/album/carmen/1676252821?i=1676253112
-      const VOL = 0.12;
-      const btns = [...document.querySelectorAll("[data-song]")];
-      let off = false; try { off = localStorage.getItem("tmbe-song") === "off"; } catch (_) {}
-      const audio = new Audio(); audio.crossOrigin = "anonymous"; audio.src = SONG; audio.loop = true; audio.preload = "none";
-      let ctx = null, gain = null, playing = false, ducked = false, userOff = false;
-      const level = (v, secs) => {
-        if (gain) { gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime); gain.gain.linearRampToValueAtTime(v, ctx.currentTime + secs); }
-        else audio.volume = v;
-      };
-      const vol = () => (ducked ? VOL * .2 : VOL);
-      const setUi = (on) => { playing = on; btns.forEach((b) => { b.classList.toggle("playing", on); b.setAttribute("aria-pressed", String(on)); b.setAttribute("aria-label", (on ? "Pause" : "Play") + " Carmen by Olivia Dean"); }); };
-      let trying = false;
-      const start = () => {
-        if (trying) return; trying = true;
-        if (!ctx && window.AudioContext) {
-          try { ctx = new AudioContext(); gain = ctx.createGain(); gain.gain.value = 0; ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination); } catch (_) { ctx = null; gain = null; }
-        }
-        if (ctx && ctx.state === "suspended") ctx.resume();
-        if (!gain) audio.volume = 0;
-        audio.play().then(() => { level(vol(), 2.5); setUi(true); }).catch(() => setUi(false)).finally(() => { trying = false; });
-      };
-      const stop = () => { level(0, .6); setTimeout(() => { if (!playing) audio.pause(); }, 650); setUi(false); };
-      // soften the jump where the 30-second clip loops
-      audio.addEventListener("timeupdate", () => {
-        if (!audio.duration || audio.paused || !playing) return;
-        const left = audio.duration - audio.currentTime;
-        if (left < 1.6 && !audio.dataset.fading) { audio.dataset.fading = "1"; level(0, Math.max(.2, left - .1)); }
-        if (audio.currentTime < 1 && audio.dataset.fading) { delete audio.dataset.fading; level(vol(), 1.5); }
-      });
-      btns.forEach((b) => b.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const on = !playing; userOff = !on;
-        try { localStorage.setItem("tmbe-song", on ? "on" : "off"); } catch (_) {}
-        on ? start() : stop();
-      }));
-      setUi(false);
-      if (!off) {
-        // Plays as soon as the page opens wherever the browser allows it. Browsers that block sound
-        // until the visitor interacts get it on their very first tap, click, key press or swipe.
-        const kinds = ["pointerdown", "pointerup", "click", "keydown", "touchend", "mousedown"];
-        const done = () => kinds.forEach((t) => removeEventListener(t, first, true));
-        const first = (e) => {
-          if (ctx && ctx.state === "suspended") ctx.resume();
-          if (e.target.closest && e.target.closest("[data-song]")) return done();
-          if (userOff || (playing && (!ctx || ctx.state === "running"))) return done();
-          start();
-        };
-        kinds.forEach((t) => addEventListener(t, first, true));
-        start();
-      }
-      return { duck: (on) => { ducked = on; if (playing) level(vol(), .4); }, pause: () => { if (playing) stop(); } };
-    })();
 
     // ---------- favourite movie: the trailer loads only when pressed (and Carmen pauses) ----------
     (() => {
