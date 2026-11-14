@@ -2,7 +2,7 @@
 
 A Pinterest-style photo diary for [throughmybigeyes](https://www.pinterest.com/twiiinklle/).
 
-A real white compact digital camera prints photos when the page opens and every time you press it. Then an animated "shall we?" invites you in, and scrolling shows each photo through a round lens glass: it racks into focus, holds, then blurs away as the next one arrives, with flowers around the glass. Tap the glass to open the photo large. Visitors who set "reduce motion" get a simple photo grid instead.
+A real digital camera prints photos when the page opens and every time you press it. Then an animated "shall we?" invites you in, and your photos are shown through a pair of big glasses that blink on their own to change the photo (Back, Next and Pause buttons too; tap the glasses to open a photo large). Flowers drift around it all.
 
 - Live site: https://toyioudoete.github.io/throughmybigeyes/
 - `index.html` (no build step) plus `img/my-big-eyes` (the newspaper-style eyes clipping in the title)

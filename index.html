@@ -66,15 +66,15 @@
     .intro .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .hint { margin-top: 16px !important; font-size: 14px !important; color: var(--muted); }
 
-    .stage { position: relative; aspect-ratio: 1 / 1.05; max-height: 82vh; justify-self: center; width: 100%; }
-    .camera { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; mix-blend-mode: multiply; transition: transform .2s ease; }
+    .stage { position: relative; aspect-ratio: 1 / .95; width: 100%; }
+    .camera { position: absolute; inset: 0 0 auto 0; z-index: 1; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; mix-blend-mode: multiply; transition: transform .2s ease; }
     .camera:active { transform: scale(.985); }
-    .camera img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 58% 22%; filter: grayscale(.15) brightness(1.2) contrast(1.1); -webkit-mask-image: radial-gradient(70% 70% at 55% 50%, #000 55%, transparent 100%); mask-image: radial-gradient(70% 70% at 55% 50%, #000 55%, transparent 100%); }
+    .camera img { display: block; width: 100%; height: auto; filter: brightness(1.08) contrast(1.05); }
     .flashbulb { position: absolute; left: 4%; top: 2%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 4; }
     .flashbulb.go { animation: bulb .55s ease-out; }
     @keyframes bulb { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(2.2); } }
     .tray { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-    .print { position: absolute; left: 34%; top: 24%; width: 30%; padding: 3% 3% 9%; background: var(--paper); border-radius: 3px; box-shadow: 6px 9px 0 rgba(22, 22, 22, .2); transform-origin: 50% 0; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
+    .print { position: absolute; left: 36%; top: 34%; width: 30%; padding: 3% 3% 9%; background: var(--paper); border-radius: 3px; box-shadow: 6px 9px 0 rgba(22, 22, 22, .2); transform-origin: 50% 0; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
     .print .ph { aspect-ratio: 1; overflow: hidden; background: var(--grey); }
     .print img { width: 100%; height: 100%; object-fit: cover; }
     .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
@@ -98,23 +98,21 @@
     .cue svg { animation: nudge 1.6s ease-in-out infinite; }
     @keyframes nudge { 50% { transform: translateY(6px); } }
 
-    /* ---------- through the glass ---------- */
-    .lensview { position: relative; height: calc(var(--n) * 85vh + 100vh); }
-    .lens-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: grid; place-items: center;
+    /* ---------- through my glasses ---------- */
+    .lensview { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 110px 20px 120px;
       background: radial-gradient(90% 70% at 50% 55%, #ffe3ef 0%, var(--pink) 60%, #f9b6d2 100%); }
-    .glass { position: relative; z-index: 2; width: min(66vh, 84vw); aspect-ratio: 1; border-radius: 50%; cursor: zoom-in; border: 0; padding: 0; background: #f3efe8; overflow: hidden; isolation: isolate;
-      box-shadow: 0 0 0 10px #f3f1ec, 0 0 0 12px #cfcac1, 0 0 0 24px #e9e6df, 0 0 0 25px #bdb8ae, 18px 28px 0 26px rgba(22, 22, 22, .14); }
-    .glass .shot { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; opacity: 0; will-change: opacity, filter, transform; }
-    .glass .shot img { width: 100%; height: 100%; object-fit: cover; will-change: filter, transform; }
-    .glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
-      background:
-        radial-gradient(60% 40% at 30% 18%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 70%),
-        radial-gradient(18% 10% at 72% 80%, rgba(255, 255, 255, .25), rgba(255, 255, 255, 0) 70%),
-        radial-gradient(closest-side, rgba(0, 0, 0, 0) 72%, rgba(0, 0, 0, .35) 100%);
-      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .55), inset 0 0 40px rgba(0, 0, 0, .25); }
-    .glass .glint { position: absolute; z-index: 3; left: 18%; top: 10%; width: 46%; height: 18%; border-radius: 50%; border-top: 3px solid rgba(255, 255, 255, .7); transform: rotate(-22deg); pointer-events: none; }
-    .ticks { position: absolute; z-index: 1; width: calc(min(66vh, 84vw) + 96px); aspect-ratio: 1; border-radius: 50%; pointer-events: none; }
-    .ticks svg { width: 100%; height: 100%; }
+    .specs-wrap { position: relative; z-index: 2; width: min(1000px, 94vw); }
+    .specs { display: block; width: 100%; height: auto; cursor: zoom-in; overflow: visible; filter: drop-shadow(14px 20px 0 rgba(22, 22, 22, .14)); }
+    .specs .lid { transition: transform .17s cubic-bezier(.5, 0, .7, 1); transform-box: fill-box; }
+    .specs .lid.top { transform-origin: 50% 0; transform: scaleY(0); }
+    .specs .lid.bottom { transform-origin: 50% 100%; transform: scaleY(0); }
+    .specs.shut .lid.top, .specs.shut .lid.bottom { transform: scaleY(1.02); }
+    .specs .pic { transition: opacity .25s ease; }
+    .specs-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 34px; }
+    .specs-controls .pill { padding: 8px 14px; }
+    .specs-meta { text-align: center; margin: 18px 0 0; min-height: 1.5em; font-weight: 500; }
+    .counter { font-family: var(--display); font-size: 28px; line-height: 1; margin: 0 6px; min-width: 3.2em; text-align: center; }
+    .counter small { font: 700 13px var(--body); color: var(--muted); margin-left: 4px; }
     .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
     .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
     .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
@@ -124,12 +122,8 @@
     .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
     .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; margin: 0; }
     .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
-    .room-title { position: absolute; top: 14px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
+    .room-title { position: absolute; top: 34px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
 
-    /* fallback grid when motion is reduced */
-    .grid { display: none; columns: 3 220px; column-gap: 16px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-    .grid button { display: block; width: 100%; margin: 0 0 16px; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: var(--c, var(--grey)); cursor: zoom-in; break-inside: avoid; }
-    .grid img { width: 100%; height: auto; }
 
     /* ---------- lightbox ---------- */
     dialog.lb { padding: 0; border: 0; background: transparent; max-width: min(92vw, 720px); max-height: 94vh; overflow: visible; }
@@ -162,8 +156,6 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
-      .lensview { display: none; }
-      .grid { display: block; }
       .shall .ch, .invite p, .cue { opacity: 1 !important; transform: none !important; }
       .swash path { stroke-dashoffset: 0 !important; }
     }
@@ -194,7 +186,7 @@
 
       <div class="stage">
         <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
-          <img src="https://images.pexels.com/photos/15631397/pexels-photo-15631397/free-photo-of-hand-holding-digital-camera-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" width="1200" height="1800" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kodak_Pixpro.jpg/1280px-Kodak_Pixpro.jpg" alt="" width="1280" height="887" />
         </button>
         <span class="flashbulb" aria-hidden="true"></span>
         <div class="tray" id="tray" aria-hidden="true"></div>
@@ -205,25 +197,63 @@
       <div>
         <h2 class="shall" id="shall" aria-label="shall we?"></h2>
         <svg class="swash" viewBox="0 0 560 60" aria-hidden="true"><path d="M10 38 C 120 8, 220 56, 320 30 S 500 14, 550 34" fill="none" stroke="#c9f45b" stroke-width="14" stroke-linecap="round" /></svg>
-        <p>Come see the world through my eyes. Keep scrolling and walk through it with me.</p>
+        <p>Come see the world through my eyes.</p>
         <a class="cue" href="#walk">Step inside<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg></a>
       </div>
     </section>
 
-    <section class="lensview" id="walk" aria-label="The photos">
-      <div class="lens-stage" id="stage">
-        <div class="progress" id="progress" aria-hidden="true"></div>
-        <p class="room-title" aria-hidden="true">through my big eyes</p>
-        <div class="garden" id="garden" aria-hidden="true"></div>
-        <div class="ticks" id="ticks" aria-hidden="true"></div>
-        <button class="glass" id="glass" type="button" aria-label="Open this photo"><span class="glint" aria-hidden="true"></span></button>
-        <div class="hud" aria-hidden="true">
+    <section class="lensview" id="walk" aria-labelledby="specs-title">
+      <h2 class="room-title" id="specs-title">through my big eyes</h2>
+      <div class="garden" id="garden" aria-hidden="true"></div>
+      <div class="specs-wrap">
+        <svg class="specs" id="specs" viewBox="0 0 1000 440" role="button" tabindex="0" aria-label="Open this photo">
+          <defs>
+            <clipPath id="lensL"><rect x="70" y="70" width="380" height="300" rx="140" /></clipPath>
+            <clipPath id="lensR"><rect x="550" y="70" width="380" height="300" rx="140" /></clipPath>
+            <clipPath id="lenses"><rect x="70" y="70" width="380" height="300" rx="140" /><rect x="550" y="70" width="380" height="300" rx="140" /></clipPath>
+            <linearGradient id="acetate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a3a" /><stop offset=".18" stop-color="#121212" /><stop offset="1" stop-color="#050505" /></linearGradient>
+            <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55" /><stop offset=".45" stop-color="#fff" stop-opacity=".08" /><stop offset="1" stop-color="#fff" stop-opacity="0" /></linearGradient>
+            <linearGradient id="lidShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0d0d" /><stop offset="1" stop-color="#2a2226" /></linearGradient>
+          </defs>
+          <!-- what you see through the lenses -->
+          <g clip-path="url(#lenses)">
+            <rect x="60" y="60" width="880" height="320" fill="#f3efe8" />
+            <image class="pic" id="picA" x="60" y="40" width="880" height="360" preserveAspectRatio="xMidYMid slice" href="" />
+            <image class="pic" id="picB" x="60" y="40" width="880" height="360" preserveAspectRatio="xMidYMid slice" href="" opacity="0" />
+            <!-- eyelids for the blink -->
+            <g clip-path="url(#lensL)"><rect class="lid top" x="60" y="60" width="400" height="162" fill="url(#lidShade)" /><rect class="lid bottom" x="60" y="218" width="400" height="162" fill="url(#lidShade)" /></g>
+            <g clip-path="url(#lensR)"><rect class="lid top" x="540" y="60" width="400" height="162" fill="url(#lidShade)" /><rect class="lid bottom" x="540" y="218" width="400" height="162" fill="url(#lidShade)" /></g>
+            <!-- glass reflections -->
+            <path d="M110 150 C 140 100, 210 86, 290 92 L 270 118 C 210 116, 160 130, 132 168 Z" fill="url(#sheen)" />
+            <path d="M590 150 C 620 100, 690 86, 770 92 L 750 118 C 690 116, 640 130, 612 168 Z" fill="url(#sheen)" />
+            <path d="M380 330 C 410 316, 428 290, 434 262" stroke="#fff" stroke-opacity=".35" stroke-width="6" fill="none" stroke-linecap="round" />
+            <path d="M860 330 C 890 316, 908 290, 914 262" stroke="#fff" stroke-opacity=".35" stroke-width="6" fill="none" stroke-linecap="round" />
+          </g>
+          <!-- frame -->
+          <g fill="none" stroke="url(#acetate)" stroke-width="40">
+            <rect x="70" y="70" width="380" height="300" rx="140" />
+            <rect x="550" y="70" width="380" height="300" rx="140" />
+          </g>
+          <path d="M466 168 C 486 140, 514 140, 534 168" fill="none" stroke="url(#acetate)" stroke-width="30" stroke-linecap="round" />
+          <path d="M52 140 L 10 128" stroke="#111" stroke-width="22" stroke-linecap="round" />
+          <path d="M948 140 L 990 128" stroke="#111" stroke-width="22" stroke-linecap="round" />
+          <!-- highlights on the frame -->
+          <g fill="none" stroke="#fff" stroke-linecap="round" opacity=".55">
+            <path d="M120 74 C 160 58, 230 54, 300 58" stroke-width="4" />
+            <path d="M600 74 C 640 58, 710 54, 780 58" stroke-width="4" />
+            <path d="M478 156 C 492 142, 506 140, 520 146" stroke-width="3" />
+          </g>
+          <circle cx="62" cy="120" r="6" fill="#c9cdd2" /><circle cx="938" cy="120" r="6" fill="#c9cdd2" />
+        </svg>
+        <p class="specs-meta" id="caption" aria-live="polite"></p>
+        <div class="specs-controls">
+          <button class="pill" id="prevBtn" type="button" aria-label="Previous photo">Back</button>
           <p class="counter" id="counter">01<small>of 16</small></p>
-          <p class="caption" id="caption"></p>
+          <button class="pill" id="nextBtn" type="button" aria-label="Next photo">Next</button>
+          <button class="pill lime" id="playBtn" type="button" aria-pressed="true">Pause</button>
         </div>
       </div>
     </section>
-    <div class="grid" id="grid" aria-label="All photos"></div>
   </main>
 
   <footer>
@@ -232,7 +262,7 @@
       <a class="pill lime" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Pinterest @twiiinklle</a>
       <a class="pill" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener">TikTok</a>
     </div>
-    <small>All photos © throughmybigeyes. Camera photo from <a href="https://www.pexels.com/photo/hand-holding-digital-camera-on-white-background-15631397/" rel="noopener">Pexels</a>.</small>
+    <small>All photos © throughmybigeyes. Camera photo by Catboy69 on <a href="https://commons.wikimedia.org/wiki/File:Kodak_Pixpro.jpg" rel="noopener">Wikimedia Commons</a> (CC0).</small>
   </footer>
 
   <dialog class="lb" id="lb" aria-label="Photo viewer">
@@ -297,7 +327,7 @@
     // ---------- hero camera: prints come out of the front slot ----------
     const tray = document.getElementById("tray"), camera = document.getElementById("camera"), bulb = document.querySelector(".flashbulb");
     let printed = 0;
-    const slots = [{ x: -118, y: -6, r: -10 }, { x: -96, y: 52, r: 7 }, { x: -122, y: 108, r: -4 }];
+    const slots = [{ x: -86, y: 62, r: -11 }, { x: 0, y: 76, r: 4 }, { x: 86, y: 62, r: 12 }];
     function printPhoto(withFlash) {
       const p = PHOTOS[printed % N];
       const el = document.createElement("div");
@@ -331,14 +361,6 @@
     if ("IntersectionObserver" in window && !reduce) {
       new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) invite.classList.add("on"); }), { threshold: 0.35 }).observe(invite);
     } else invite.classList.add("on");
-
-    // ---------- fallback grid (reduced motion) ----------
-    const grid = document.getElementById("grid");
-    PHOTOS.forEach((p, i) => {
-      const b = document.createElement("button"); b.type = "button"; b.style.setProperty("--c", p.color);
-      b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
-      b.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), true)); b.onclick = () => openLb(i); grid.appendChild(b);
-    });
 
     // ---------- flowers ----------
     const FLOWERS = {
@@ -380,55 +402,64 @@
     document.getElementById("invite").prepend(inviteGarden);
     plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6]]);
 
-    // focus-ring ticks around the glass
-    document.getElementById("ticks").innerHTML = '<svg viewBox="-100 -100 200 200">' +
-      Array.from({ length: 60 }, (_, k) => `<line x1="0" y1="-97" x2="0" y2="${k % 5 ? -93 : -89}" stroke="#161616" stroke-width="${k % 5 ? .6 : 1.2}" opacity=".55" transform="rotate(${k * 6})"/>`).join("") + "</svg>";
-
-    // ---------- through the glass: each photo racks into focus, then out ----------
-    const walk = document.getElementById("walk"), glass = document.getElementById("glass"), ticks = document.getElementById("ticks");
-    const counter = document.getElementById("counter"), caption = document.getElementById("caption"), progress = document.getElementById("progress");
-    walk.style.setProperty("--n", N);
-    const shots = PHOTOS.map((p, i) => {
-      const s = document.createElement("span");
-      s.className = "shot"; s.style.background = p.color;
-      s.appendChild(makeImg(p, "", false));
-      glass.insertBefore(s, glass.firstChild);
-      return s;
-    });
-    let current = 0;
-    glass.addEventListener("click", () => openLb(current));
-    function update() {
-      const r = walk.getBoundingClientRect();
-      const total = walk.offsetHeight - innerHeight;
-      const t = Math.min(1, Math.max(0, -r.top / total));
-      const pos = t * N;                                   // 0..N
-      let best = Infinity;
-      shots.forEach((s, i) => {
-        const d = pos - (i + 0.5);                         // <0 coming, >0 leaving
-        const a = Math.abs(d);
-        // the incoming photo fades in on top of the one leaving, so the glass is never empty
-        const o = d < 0 ? Math.max(0, Math.min(1, (0.8 + d) / 0.5)) : (d < 0.85 || i === N - 1 ? 1 : 0);
-        const blur = d < 0 ? Math.max(0, -d - 0.1) * 34 : Math.max(0, d - 0.15) * 26;
-        const scale = d < 0 ? 1 + Math.min(0.3, -d * 0.35) : 1 - Math.min(0.1, d * 0.12);
-        s.style.opacity = o.toFixed(3);
-        s.style.visibility = o < 0.01 ? "hidden" : "visible";
-        const img = s.firstChild;
-        img.style.filter = blur > 0.3 ? `blur(${blur.toFixed(1)}px)` : "none";
-        img.style.transform = `scale(${(scale + blur * 0.004).toFixed(3)})`;
-        s.style.zIndex = String(i + 1);
-        if (a < best) { best = a; current = i; }
-      });
+    // ---------- through my glasses: blink to change the photo ----------
+    const specs = document.getElementById("specs"), picA = document.getElementById("picA"), picB = document.getElementById("picB");
+    const counter = document.getElementById("counter"), caption = document.getElementById("caption"), playBtn = document.getElementById("playBtn");
+    let current = 0, front = picA, back = picB, playing = !reduce, inView = false, timer = null, busy = false;
+    const cache = PHOTOS.map((p) => { const i = new Image(); i.decoding = "async"; return i; });
+    function preload(i) { const c = cache[(i + N) % N]; if (!c.src) c.src = PHOTOS[(i + N) % N].src; return c; }
+    function label() {
       counter.innerHTML = pad(current + 1) + "<small>of " + N + "</small>";
       caption.textContent = PHOTOS[current].caption;
-      glass.setAttribute("aria-label", "Open photo " + (current + 1) + (PHOTOS[current].caption ? ": " + PHOTOS[current].caption : ""));
-      progress.style.transform = "scaleX(" + t + ")";
-      ticks.style.transform = "rotate(" + (t * 300).toFixed(1) + "deg)";
-      garden.querySelectorAll(".flower").forEach((f) => { f.style.translate = "0 " + (-(t - 0.5) * f.dataset.speed * 2).toFixed(1) + "px"; });
+      specs.setAttribute("aria-label", "Open photo " + (current + 1) + (PHOTOS[current].caption ? ": " + PHOTOS[current].caption : ""));
     }
+    function setPic(el, i) { el.setAttribute("href", PHOTOS[i].src); }
+    setPic(front, 0); preload(0); preload(1); label();
+
+    function blinkTo(i) {
+      if (busy) return; busy = true;
+      const next = (i + N) % N;
+      const img = preload(next);
+      const swap = () => {
+        setPic(back, next);
+        back.setAttribute("opacity", "1"); front.setAttribute("opacity", "0");
+        [front, back] = [back, front];
+        current = next; label(); preload(next + 1);
+      };
+      if (reduce) { swap(); busy = false; return; }
+      specs.classList.add("shut");
+      setTimeout(() => {
+        const open = () => { swap(); specs.classList.remove("shut"); setTimeout(() => { busy = false; }, 200); };
+        if (img.complete) open(); else { img.onload = open; img.onerror = open; }
+      }, 190);
+    }
+    function schedule() {
+      clearTimeout(timer);
+      if (playing && inView && !document.hidden) timer = setTimeout(() => { blinkTo(current + 1); schedule(); }, 3200);
+    }
+    function setPlaying(v) { playing = v; playBtn.textContent = v ? "Pause" : "Play"; playBtn.setAttribute("aria-pressed", String(v)); schedule(); }
+    document.getElementById("nextBtn").onclick = () => { blinkTo(current + 1); schedule(); };
+    document.getElementById("prevBtn").onclick = () => { blinkTo(current - 1); schedule(); };
+    playBtn.onclick = () => setPlaying(!playing);
+    specs.addEventListener("click", () => openLb(current));
+    specs.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(current); } });
+    lb.addEventListener("close", schedule);
+    specs.addEventListener("pointerenter", () => clearTimeout(timer));
+    specs.addEventListener("pointerleave", schedule);
+    document.addEventListener("visibilitychange", schedule);
+    if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { inView = e.isIntersecting; schedule(); }, { threshold: 0.4 }).observe(specs);
+    if (reduce) setPlaying(false);
+
+    // flowers drift a little as the page scrolls
+    const walk = document.getElementById("walk");
     let ticking = false;
-    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(); ticking = false; }); } }, { passive: true });
-    addEventListener("resize", update);
-    if (!reduce) update();
+    function drift() {
+      const r = walk.getBoundingClientRect();
+      const t = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height)));
+      garden.querySelectorAll(".flower").forEach((f) => { f.style.translate = "0 " + (-(t - 0.5) * f.dataset.speed * 1.4).toFixed(1) + "px"; });
+    }
+    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { drift(); ticking = false; }); } }, { passive: true });
+    if (!reduce) drift();
   </script>
 </body>
 </html>
