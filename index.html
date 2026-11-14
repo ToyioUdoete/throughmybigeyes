@@ -221,6 +221,24 @@
     .room-title { position: absolute; top: 34px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
 
 
+    /* ---------- photo puzzle ---------- */
+    .puzzle { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 6vw, 80px); max-width: 1080px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 48px) 30px; }
+    .pz-text h2 { font: 400 clamp(52px, 7vw, 96px)/.9 var(--display); margin: 0 0 18px; }
+    .pz-text p { max-width: 34ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
+    .pz-text .pz-moves { font-weight: 700; font-size: 17px; }
+    .pz-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .pz-wrap { position: relative; justify-self: center; width: min(100%, 440px); }
+    .pz-board { position: relative; width: 100%; aspect-ratio: 1; padding: 0; background: var(--ink); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 7px 7px 0 var(--pink-deep); overflow: hidden; touch-action: manipulation; }
+    .pz-tile { position: absolute; left: 0; top: 0; width: calc(100% / 3); height: calc(100% / 3); padding: 0; border: 2px solid var(--ink); border-radius: 6px; background-color: var(--paper); background-repeat: no-repeat; cursor: pointer; transition: transform .18s ease; }
+    .pz-tile:focus-visible { outline: 3px solid var(--lime); outline-offset: -5px; }
+    .pz-tile.can { cursor: pointer; } .pz-tile:not(.can) { cursor: default; }
+    .pz-board.peek .pz-tile, .pz-board.done .pz-tile { border-color: transparent; border-radius: 0; }
+    .pz-board .pz-full { position: absolute; inset: 0; background-repeat: no-repeat; opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+    .pz-board.peek .pz-full, .pz-board.done .pz-full { opacity: 1; }
+    .pz-win { position: absolute; left: 50%; bottom: -26px; translate: -50% 0; display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 18px; background: var(--paper); border: 2px solid var(--ink); border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); white-space: nowrap; }
+    .pz-win[hidden] { display: none; }
+    .pz-win p { margin: 0; font-weight: 700; }
+
     /* ---------- lightbox ---------- */
     dialog.lb { padding: 0; border: 0; background: transparent; max-width: min(92vw, 720px); max-height: 94vh; overflow: visible; }
     dialog.lb::backdrop { background: rgba(22, 22, 22, .82); }
@@ -246,6 +264,8 @@
       .caption { display: none; }
     }
     @media (max-width: 760px) {
+      .puzzle { grid-template-columns: 1fr; padding-bottom: 50px; }
+      .pz-win { white-space: normal; width: max-content; max-width: 92%; }
       .about { grid-template-columns: 1fr; padding-top: 80px; }
       .about-cards { grid-template-columns: 1fr; grid-template-areas: "am" "movies" "shelf"; }
       .me-print { width: min(64%, 240px); }
@@ -394,7 +414,21 @@
       </div>
     </section>
 
-
+    <section class="puzzle" id="puzzle" aria-labelledby="puzzleTitle">
+      <div class="pz-text">
+        <h2 id="puzzleTitle">fix my photo</h2>
+        <p>I mixed one of my photos up. Tap a tile next to the gap to slide it, and put the picture back together.</p>
+        <p class="pz-moves" id="pzMoves" aria-live="polite">0 moves</p>
+        <div class="pz-buttons">
+          <button class="pill lime" id="pzNew" type="button">New photo</button>
+          <button class="pill" id="pzPeek" type="button">Peek</button>
+        </div>
+      </div>
+      <div class="pz-wrap">
+        <div class="pz-board" id="pzBoard" aria-label="Sliding photo puzzle"></div>
+        <div class="pz-win" id="pzWin" hidden><p id="pzWinText"></p><button class="pill lime" id="pzAgain" type="button">Play again</button></div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -610,6 +644,90 @@
         f.title = "Project Hail Mary trailer";
         t.appendChild(f); t.querySelector(".trailer-play").remove(); t.style.cursor = "default";
       });
+    })();
+
+    // ---------- photo puzzle: slide the tiles back into place ----------
+    (() => {
+      const N3 = 3, board = document.getElementById("pzBoard"), movesEl = document.getElementById("pzMoves");
+      const win = document.getElementById("pzWin"), winText = document.getElementById("pzWinText");
+      const picks = ["857d44", "769968", "cd403e", "690b24", "38da99", "941f71", "5ec3d7", "a3c3b3"]
+        .map((k) => PHOTOS.find((p) => p.src.includes("/" + k))).filter(Boolean);
+      let photo = 0, order = [], moves = 0, tiles = [], done = false;
+      const full = document.createElement("div"); full.className = "pz-full";
+      // position the photo so it fills the square board (like object-fit: cover)
+      const bg = (el, p, r, c) => {
+        const S = board.clientWidth, scale = Math.max(S / p.w, S / p.h), w = p.w * scale, h = p.h * scale;
+        const ox = (w - S) / 2, oy = (h - S) / 2, T = S / N3;
+        el.style.backgroundImage = "url(" + p.src + ")";
+        el.style.backgroundSize = w + "px " + h + "px";
+        el.style.backgroundPosition = (r === undefined) ? (-ox + "px " + -oy + "px") : (-(c * T + ox) + "px " + -(r * T + oy) + "px");
+      };
+      const place = () => {
+        const S = board.clientWidth, T = S / N3, gap = order.indexOf(N3 * N3 - 1);
+        order.forEach((tile, pos) => {
+          if (tile === N3 * N3 - 1) return;
+          const el = tiles[tile], r = Math.floor(pos / N3), c = pos % N3;
+          el.style.transform = "translate(" + c * T + "px, " + r * T + "px)";
+          const near = Math.abs(r - Math.floor(gap / N3)) + Math.abs(c - gap % N3) === 1;
+          el.classList.toggle("can", near && !done);
+          el.tabIndex = near && !done ? 0 : -1;
+        });
+      };
+      const paint = () => {
+        const p = picks[photo];
+        tiles.forEach((el, t) => bg(el, p, Math.floor(t / N3), t % N3));
+        bg(full, p);
+      };
+      const move = (pos) => {
+        if (done) return;
+        const gap = order.indexOf(N3 * N3 - 1);
+        if (Math.abs(Math.floor(pos / N3) - Math.floor(gap / N3)) + Math.abs(pos % N3 - gap % N3) !== 1) return;
+        [order[pos], order[gap]] = [order[gap], order[pos]];
+        moves++; movesEl.textContent = moves + (moves === 1 ? " move" : " moves");
+        place();
+        if (order.every((t, i) => t === i)) {
+          done = true; board.classList.add("done"); place();
+          winText.textContent = "You did it in " + moves + " moves!";
+          setTimeout(() => { win.hidden = false; }, 350);
+        }
+      };
+      const shuffle = () => {
+        order = [...Array(N3 * N3).keys()];
+        let gap = N3 * N3 - 1, prev = -1;
+        // only real slides from the solved picture, so it can always be solved
+        for (let i = 0; i < 120 || order.every((t, j) => t === j); i++) {
+          const r = Math.floor(gap / N3), c = gap % N3, opts = [];
+          if (r > 0) opts.push(gap - N3); if (r < N3 - 1) opts.push(gap + N3);
+          if (c > 0) opts.push(gap - 1); if (c < N3 - 1) opts.push(gap + 1);
+          const choices = opts.filter((o) => o !== prev), next = choices[Math.floor(Math.random() * choices.length)];
+          [order[next], order[gap]] = [order[gap], order[next]]; prev = gap; gap = next;
+        }
+      };
+      const start = (newPhoto) => {
+        if (newPhoto) photo = (photo + 1) % picks.length;
+        done = false; moves = 0; movesEl.textContent = "0 moves"; win.hidden = true; board.classList.remove("done", "peek");
+        shuffle(); paint(); place();
+      };
+      board.appendChild(full);
+      for (let t = 0; t < N3 * N3 - 1; t++) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "pz-tile"; b.setAttribute("aria-label", "Tile " + (t + 1));
+        b.addEventListener("click", () => move(order.indexOf(t)));
+        tiles.push(b); board.appendChild(b);
+      }
+      board.addEventListener("keydown", (e) => {
+        const gap = order.indexOf(N3 * N3 - 1), r = Math.floor(gap / N3), c = gap % N3;
+        const from = { ArrowUp: r < N3 - 1 ? gap + N3 : -1, ArrowDown: r > 0 ? gap - N3 : -1, ArrowLeft: c < N3 - 1 ? gap + 1 : -1, ArrowRight: c > 0 ? gap - 1 : -1 }[e.key];
+        if (from === undefined) return; e.preventDefault(); if (from >= 0) { move(from); const t = tiles[order[gap]]; if (t) t.focus(); }
+      });
+      document.getElementById("pzNew").addEventListener("click", () => start(true));
+      document.getElementById("pzAgain").addEventListener("click", () => start(false));
+      const peek = document.getElementById("pzPeek");
+      const on = () => board.classList.add("peek"), off = () => { if (!done) board.classList.remove("peek"); };
+      peek.addEventListener("pointerdown", on); peek.addEventListener("pointerup", off); peek.addEventListener("pointerleave", off);
+      peek.addEventListener("click", () => { on(); setTimeout(off, 1200); });
+      let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { paint(); place(); }, 120); });
+      start(false);
     })();
 
     // ---------- how to say my name (my own voice) ----------
