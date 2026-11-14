@@ -332,7 +332,7 @@
       b.type = "button"; b.className = "frame3d";
       b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
       const ph = document.createElement("div"); ph.className = "ph"; ph.style.setProperty("--c", p.color);
-      ph.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), i > 3)); b.appendChild(ph);
+      ph.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), false)); b.appendChild(ph);
       b.insertAdjacentHTML("beforeend", '<span class="tape" aria-hidden="true"></span><span class="no"><span>no. ' + pad(i + 1) + '</span><span>' + (p.caption || "") + "</span></span>");
       b.onclick = () => openLb(i);
       world.appendChild(b);
