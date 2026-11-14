@@ -98,6 +98,28 @@
     .cue svg { animation: nudge 1.6s ease-in-out infinite; }
     @keyframes nudge { 50% { transform: translateY(6px); } }
 
+
+    /* ---------- about me ---------- */
+    .about { position: relative; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(32px, 6vw, 88px); max-width: 1080px; margin: 0 auto; padding: 100px clamp(20px, 4vw, 48px) 70px; }
+    .me-print { position: relative; justify-self: center; width: min(100%, 330px); margin: 0; padding: 12px 12px 58px; background: var(--paper); border: 2px solid var(--ink); box-shadow: 7px 7px 0 var(--ink); rotate: -4deg; }
+    .me-print video { display: block; width: 100%; aspect-ratio: 480 / 854; object-fit: cover; background: #d9c9c0; }
+    .me-print .tape { position: absolute; top: -15px; left: 50%; width: 118px; height: 30px; translate: -50% 0; rotate: 4deg; background: rgba(201, 244, 91, .88); box-shadow: 0 1px 0 rgba(22, 22, 22, .15); }
+    .me-print figcaption { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: var(--script); font-size: 44px; line-height: 1; }
+    .about.on .me-print { animation: print-in .9s cubic-bezier(.2, 1.3, .4, 1) both; }
+    @keyframes print-in { from { opacity: 0; transform: translateY(40px) rotate(10deg); } }
+    .about-text h2 { font-family: var(--display); font-weight: 400; font-size: clamp(52px, 7vw, 100px); line-height: .9; margin: 0 0 24px; }
+    .about-text > p { max-width: 36ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
+    .about-text .serious { font-weight: 700; text-decoration: none; background: var(--lime); padding: 0 .25em; border-bottom: 3px solid var(--ink); }
+    .about-text .serious:hover { background: var(--paper); }
+    .music { max-width: 440px; margin-top: 30px; padding: 18px 20px 20px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); }
+    .music h3 { margin: 0 0 6px; font-size: 16px; }
+    .music ul { list-style: none; margin: 0; padding: 0; }
+    .music li a { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(22, 22, 22, .12); text-decoration: none; font-weight: 700; }
+    .music li a::before { content: ""; flex: 0 0 34px; height: 34px; border-radius: 9px; background: var(--pink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 17.5a2.5 2.5 0 1 1-2-2.45V5.5l11-2v11a2.5 2.5 0 1 1-2-2.45V7.1l-7 1.3z' fill='%23161616'/%3E%3C/svg%3E") center / 18px no-repeat; }
+    .music li a:hover { color: var(--pink-deep); }
+    .music p { margin: 12px 0 16px; color: var(--muted); font-size: 15px; }
+    .music iframe { display: block; width: 100%; height: 450px; margin-top: 18px; border: 0; border-radius: 14px; }
+
     /* ---------- app icons ---------- */
     .apps { position: relative; display: grid; place-items: center; overflow: hidden; padding: 10px 20px 30px; }
     .apps-inner { position: relative; z-index: 2; display: grid; justify-items: center; gap: 30px; }
@@ -213,6 +235,10 @@
       .lb-nav { top: auto; bottom: -70px; translate: none; }
       .caption { display: none; }
     }
+    @media (max-width: 760px) {
+      .about { grid-template-columns: 1fr; padding-top: 80px; }
+      .me-print { width: min(78%, 280px); }
+    }
     @media (max-width: 520px) {
       .bar nav .pill:not(.lime) { display: none; }
       .shall { font-size: 22vw; }
@@ -267,6 +293,31 @@
         <h2 class="shall" id="shall" aria-label="shall we?"></h2>
         <svg class="swash" viewBox="0 0 560 60" aria-hidden="true"><path d="M10 38 C 120 8, 220 56, 320 30 S 500 14, 550 34" fill="none" stroke="#c9f45b" stroke-width="14" stroke-linecap="round" /></svg>
         <p>Come see the world through my eyes.</p>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="aboutTitle">
+      <figure class="me-print">
+        <span class="tape" aria-hidden="true"></span>
+        <video id="meVideo" src="img/me.mp4" poster="img/me-poster.jpg" muted loop playsinline preload="metadata" aria-label="A short clip of Toyio in pink sunglasses on a sunny street"></video>
+        <figcaption>that's me</figcaption>
+      </figure>
+      <div class="about-text">
+        <h2 id="aboutTitle">hi, i'm Toyio</h2>
+        <!-- Add more about-me lines here as new <p> paragraphs. -->
+        <p>I'm <span id="age">22</span>, born on 20 August 2003, and the last of four siblings.</p>
+        <p>I'm doing my master's in AI, and <a class="serious" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">we get serious in here</a>.</p>
+        <div class="music">
+          <h3>On repeat</h3>
+          <ul>
+            <li><a href="https://music.apple.com/us/artist/tems/1413909060" rel="noopener">Tems</a></li>
+            <li><a href="https://music.apple.com/us/artist/olivia-dean/1487253329" rel="noopener">Olivia Dean</a></li>
+            <li><a href="https://music.apple.com/us/artist/odeal/1221904128" rel="noopener">Odeal</a></li>
+          </ul>
+          <p>My favourites, but honestly my music taste runs wide.</p>
+          <a class="pill lime" href="https://music.apple.com/profile/toyio" rel="noopener">Follow me on Apple Music</a>
+          <div id="playlist"></div>
+        </div>
       </div>
     </section>
 
@@ -469,6 +520,30 @@
     const inviteGarden = document.createElement("div"); inviteGarden.className = "garden"; inviteGarden.setAttribute("aria-hidden", "true");
     document.getElementById("invite").prepend(inviteGarden);
     plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6]]);
+
+    // ---------- about me ----------
+    // Paste an Apple Music playlist link here to show it in the "On repeat" card,
+    // e.g. "https://music.apple.com/us/playlist/my-playlist/pl.u-xxxxxxxx"
+    const PLAYLIST = "";
+    (() => {
+      const born = new Date(2003, 7, 20), now = new Date();
+      let age = now.getFullYear() - born.getFullYear();
+      if (now < new Date(now.getFullYear(), born.getMonth(), born.getDate())) age--;
+      document.getElementById("age").textContent = age;
+      if (PLAYLIST) {
+        const f = document.createElement("iframe");
+        f.src = PLAYLIST.replace("https://music.apple.com", "https://embed.music.apple.com");
+        f.allow = "autoplay *; encrypted-media *; clipboard-write"; f.loading = "lazy"; f.title = "My Apple Music playlist";
+        f.sandbox = "allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation";
+        document.getElementById("playlist").appendChild(f);
+      }
+      const about = document.getElementById("about"), vid = document.getElementById("meVideo");
+      if (!("IntersectionObserver" in window)) { about.classList.add("on"); if (!reduce) vid.play().catch(() => {}); return; }
+      new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting) { about.classList.add("on"); if (!reduce) vid.play().catch(() => {}); }
+        else vid.pause();
+      }), { threshold: 0.25 }).observe(about);
+    })();
 
     // ---------- app icons ----------
     const INSTAGRAM = "";   // put your Instagram handle here, e.g. "yourhandle"
