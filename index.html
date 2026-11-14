@@ -683,7 +683,7 @@
       };
       const half = Math.ceil(PHOTOS.length / 2);
       fill(document.getElementById("rowA"), PHOTOS.slice(0, half), 0);
-      fill(document.getElementById("rowB"), PHOTOS.slice(half), 4);
+      fill(document.getElementById("rowB"), PHOTOS.slice(half), half);
       // buttons and swiping: move a row by hand (it carries on drifting by itself afterwards)
       document.querySelectorAll(".strip").forEach((strip) => {
         const nudge = strip.querySelector(".nudge"), track = strip.querySelector(".track");
