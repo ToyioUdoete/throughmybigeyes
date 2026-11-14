@@ -206,10 +206,14 @@
     .feed .arrow .head { stroke-dasharray: 80; stroke-dashoffset: 80; transition: stroke-dashoffset .3s ease 1.35s; }
     .feed.on .arrow .shaft, .feed.on .arrow .head { stroke-dashoffset: 0; }
     .rows { position: relative; z-index: 2; display: grid; gap: clamp(14px, 2vw, 24px); }
-    .row { overflow: hidden; padding: 10px 0 14px; }
+    .strip { position: relative; overflow: hidden; padding: 10px 0 14px; touch-action: pan-y; }
+    .nudge { will-change: transform; }
     .track { display: flex; gap: clamp(14px, 2vw, 24px); width: max-content; animation: slide var(--dur, 60s) linear infinite; }
-    .row.rev .track { animation-direction: reverse; }
-    .row:hover .track, .row:focus-within .track { animation-play-state: paused; }
+    .strip.rev .track { animation-direction: reverse; }
+    .strip:hover .track, .strip:focus-within .track, .strip.held .track { animation-play-state: paused; }
+    .strip-btn { position: absolute; top: 50%; z-index: 3; width: 46px; height: 46px; display: grid; place-items: center; padding: 0 0 3px; translate: 0 -50%; border: 2px solid var(--ink); border-radius: 50%; background: var(--lime); box-shadow: 3px 3px 0 var(--ink); font-size: 28px; line-height: 1; cursor: pointer; }
+    .strip-btn:active { translate: 1px calc(-50% + 1px); box-shadow: 2px 2px 0 var(--ink); }
+    .strip-btn.prev { left: max(8px, 1.5vw); } .strip-btn.next { right: max(8px, 1.5vw); }
     @keyframes slide { to { transform: translateX(calc(-100% / 3)); } }
     .flip { flex: 0 0 auto; width: var(--cw); aspect-ratio: 4 / 5; padding: 0; border: 0; background: none; perspective: 900px; cursor: pointer; }
     .flip:nth-child(odd) { rotate: -1.5deg; } .flip:nth-child(even) { rotate: 1.5deg; }
@@ -371,8 +375,8 @@
       <div class="garden" id="garden" aria-hidden="true"></div>
       <svg class="arrow" id="arrow" viewBox="0 0 600 190" aria-hidden="true"><path class="shaft" d="M318 6 C 350 66, 300 116, 200 116 C 112 116, 64 128, 56 176" /><path class="head" d="M34 152 L 56 181 L 82 158" /></svg>
       <div class="rows" id="rows">
-        <div class="row" style="--dur: 64s"><div class="track" id="rowA"></div></div>
-        <div class="row rev" style="--dur: 72s"><div class="track" id="rowB"></div></div>
+        <div class="strip" style="--dur: 64s"><div class="nudge"><div class="track" id="rowA"></div></div><button class="strip-btn prev" type="button" aria-label="Show earlier photos">‹</button><button class="strip-btn next" type="button" aria-label="Show more photos">›</button></div>
+        <div class="strip rev" style="--dur: 72s"><div class="nudge"><div class="track" id="rowB"></div></div><button class="strip-btn prev" type="button" aria-label="Show earlier photos">‹</button><button class="strip-btn next" type="button" aria-label="Show more photos">›</button></div>
       </div>
       <div class="feed-foot">
         <p>Tap a photo to flip it for a fun fact about me.</p>
@@ -651,7 +655,12 @@
         "I've been doing makeup since I was about 12.",
         "I'm afraid of heights and snakes.",
         "Pet peeves: men peeing on the road, manspreading, and Lagos men catcalling me. PTSD.",
-        "I used to run my school's debate back in Primary 4, at Monef Kiddies School."
+        "I used to run my school's debate back in Primary 4, at Monef Kiddies School.",
+        "I have naturally long fangs, so I got a free vampire costume this Halloween.",
+        "My siblings call me Npon Eyen, meaning big eyes.",
+        "My mum calls me Twinkle though, because I'm a star.",
+        "I love ice cream, pizza, pasta and yoghurt. And yes, I'm lactose intolerant.",
+        "I wanted to be a doctor when I was much younger. God punish Ben Carson. Still doing medical AI though."
       ];
       const card = (p, fact) => {
         const b = document.createElement("button");
@@ -675,8 +684,34 @@
       const half = Math.ceil(PHOTOS.length / 2);
       fill(document.getElementById("rowA"), PHOTOS.slice(0, half), 0);
       fill(document.getElementById("rowB"), PHOTOS.slice(half), 4);
+      // buttons and swiping: move a row by hand (it carries on drifting by itself afterwards)
+      document.querySelectorAll(".strip").forEach((strip) => {
+        const nudge = strip.querySelector(".nudge"), track = strip.querySelector(".track");
+        let off = 0, drag = null, moved = false, resume;
+        const listW = () => track.scrollWidth / 3;
+        const step = () => (track.firstElementChild ? track.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16) : 200);
+        const apply = (v, anim) => { nudge.style.transition = anim ? "transform .45s cubic-bezier(.2, .8, .3, 1)" : "none"; nudge.style.transform = "translateX(" + v + "px)"; };
+        const hold = () => { strip.classList.add("held"); clearTimeout(resume); resume = setTimeout(() => strip.classList.remove("held"), 3500); };
+        // keep the offset within one copy of the list (the row repeats, so the jump can't be seen)
+        const wrap = (v) => { const L = listW(); if (v > 0) { off -= L; apply(off, false); void nudge.offsetWidth; return v - L; } if (v < -L) { off += L; apply(off, false); void nudge.offsetWidth; return v + L; } return v; };
+        const go = (dir) => { hold(); off = wrap(off - dir * step() * 2); apply(off, true); };
+        strip.querySelector(".next").addEventListener("click", (e) => { e.stopPropagation(); go(1); });
+        strip.querySelector(".prev").addEventListener("click", (e) => { e.stopPropagation(); go(-1); });
+        nudge.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, start: off }; moved = false; });
+        addEventListener("pointermove", (e) => {
+          if (!drag) return;
+          const dx = e.clientX - drag.x;
+          if (Math.abs(dx) > 8) { moved = true; hold(); }
+          if (moved) apply(drag.start + dx, false);
+        });
+        addEventListener("pointerup", (e) => { if (!drag) return; if (moved) off = wrap(drag.start + e.clientX - drag.x), apply(off, false); drag = null; });
+        addEventListener("pointercancel", () => { if (drag) { apply(off, false); drag = null; } });
+        // a swipe shouldn't also flip the photo it started on
+        nudge.addEventListener("click", (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+      });
+
       const sec = document.getElementById("gallery");
-      if (reduce || !("IntersectionObserver" in window)) { sec.classList.add("on"); document.querySelectorAll(".row").forEach((r) => { r.style.overflowX = "auto"; }); document.querySelectorAll(".track").forEach((t) => { t.style.animation = "none"; }); return; }
+      if (reduce || !("IntersectionObserver" in window)) { sec.classList.add("on"); document.querySelectorAll(".strip").forEach((r) => { r.style.overflowX = "auto"; }); document.querySelectorAll(".track").forEach((t) => { t.style.animation = "none"; }); return; }
       let hinted = false;
       new IntersectionObserver((es) => es.forEach((e) => {
         if (!e.isIntersecting) return;
