@@ -156,7 +156,9 @@
     .lib-grid button { position: relative; aspect-ratio: 1; padding: 0; border: 0; background: var(--c, #222); cursor: pointer; overflow: hidden; }
     .lib-grid img { width: 100%; height: 100%; object-fit: cover; }
     .lib-grid .dur { position: absolute; right: 5px; bottom: 4px; display: flex; align-items: center; gap: 3px; font: 600 11px -apple-system, var(--body); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
-    .lib-grid .vid-tile { display: grid; place-items: center; background: linear-gradient(160deg, #ff6fae, #8a3ffc); }
+    .lib-grid .tt-tile { background: #1b1719; }
+    .lib-grid .tt-tile iframe { position: absolute; left: 0; top: 50%; width: 100%; height: 178%; translate: 0 -50%; border: 0; pointer-events: none; }
+    .lib-grid .dur { z-index: 1; }
     .tabs { position: absolute; z-index: 4; left: 12px; right: 12px; bottom: 26px; display: flex; justify-content: space-between; gap: 4px; padding: 5px; border-radius: 999px; background: rgba(60, 60, 64, .72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
     .tabs button { flex: 1; border: 0; border-radius: 999px; padding: 8px 6px; background: none; color: rgba(255, 255, 255, .8); font: 600 13px -apple-system, var(--body); cursor: pointer; }
     .tabs button[aria-pressed="true"] { background: rgba(255, 255, 255, .22); color: #fff; }
@@ -344,25 +346,25 @@
   <script>
     // Photos uploaded to Pinterest by twiiinklle (newest first).
     const PHOTOS = [
-      ["790cc92616081c1facc024b3ba28a599", 736, 1308, "#e3dcc0", "1098245059170556417", ""],
-      ["2a7da9c7b433db7aeb856c875b4c349e", 736, 1308, "#e9eed9", "1098245059170539696", ""],
-      ["857d449168e7757872977533f2aa1957", 736, 1308, "#293219", "1098245059168343963", "summer in greece 🇬🇷"],
-      ["cd403efb77f2f4acd5210f16494d8b88", 736, 1308, "#68533a", "1098245059168343917", ""],
-      ["a3c3b30598138af41efcb4eb97db8ed4", 736, 1308, "#967c64", "1098245059165836788", ""],
-      ["b63d3cea22f7dac3c702c8006566617c", 736, 1308, "#3a2729", "1098245059163748951", ""],
-      ["5c49b92e712648536c69f84bc0b800e6", 736, 552,  "#456479", "1098245059163748912", ""],
-      ["1039824240f88684a2ea2daffe458ee2", 736, 981,  "#846c51", "1098245059163744388", ""],
-      ["3601af6e0f72e666f663f653d400ab27", 736, 981,  "#85919f", "1098245059163744354", ""],
-      ["690b24fa7f637923b03c961827220f42", 736, 1308, "#464440", "1098245059161252833", ""],
-      ["941f712928a8e3d1f28184b67c514fad", 736, 1308, "#e1e79e", "1098245059161252821", ""],
-      ["38da99a19ab8f79d44a756a36136f435", 736, 981,  "#79756c", "1098245059146638237", ""],
-      ["5ec3d7bf5c3aefcf1d8bb371f6cfaedf", 736, 981,  "#55591c", "1098245059146638232", ""],
-      ["faf729dc48fbc5aa088f05a51506459a", 736, 981,  "#040605", "1098245059146638228", ""],
-      ["15045dc7b83f597b6c590c8be6773d51", 736, 981,  "#141916", "1098245059146638223", ""],
-      ["769968bda9a168089821cc7bba592173", 736, 981,  "#73423d", "1098245059146638222", ""]
-    ].map(([hash, w, h, color, pin, caption]) => ({
+      ["790cc92616081c1facc024b3ba28a599", 736, 1308, "#e3dcc0", "1098245059170556417", "", 1794175102],
+      ["2a7da9c7b433db7aeb856c875b4c349e", 736, 1308, "#e9eed9", "1098245059170539696", "", 1794162085],
+      ["857d449168e7757872977533f2aa1957", 736, 1308, "#293219", "1098245059168343963", "summer in greece 🇬🇷", 1792084767],
+      ["cd403efb77f2f4acd5210f16494d8b88", 736, 1308, "#68533a", "1098245059168343917", "", 1792084732],
+      ["a3c3b30598138af41efcb4eb97db8ed4", 736, 1308, "#967c64", "1098245059165836788", "", 1789532101],
+      ["b63d3cea22f7dac3c702c8006566617c", 736, 1308, "#3a2729", "1098245059163748951", "", 1787283626],
+      ["5c49b92e712648536c69f84bc0b800e6", 736, 552,  "#456479", "1098245059163748912", "", 1787283587],
+      ["1039824240f88684a2ea2daffe458ee2", 736, 981,  "#846c51", "1098245059163744388", "", 1787277312],
+      ["3601af6e0f72e666f663f653d400ab27", 736, 981,  "#85919f", "1098245059163744354", "", 1787277251],
+      ["690b24fa7f637923b03c961827220f42", 736, 1308, "#464440", "1098245059161252833", "", 1784611122],
+      ["941f712928a8e3d1f28184b67c514fad", 736, 1308, "#e1e79e", "1098245059161252821", "", 1784611086],
+      ["38da99a19ab8f79d44a756a36136f435", 736, 981,  "#79756c", "1098245059146638237", "", 1763447032],
+      ["5ec3d7bf5c3aefcf1d8bb371f6cfaedf", 736, 981,  "#55591c", "1098245059146638232", "", 1763447026],
+      ["faf729dc48fbc5aa088f05a51506459a", 736, 981,  "#040605", "1098245059146638228", "", 1763447017],
+      ["15045dc7b83f597b6c590c8be6773d51", 736, 981,  "#141916", "1098245059146638223", "", 1763447003],
+      ["769968bda9a168089821cc7bba592173", 736, 981,  "#73423d", "1098245059146638222", "", 1763446998]
+    ].map(([hash, w, h, color, pin, caption, t]) => ({
       src: `https://i.pinimg.com/736x/${hash.slice(0, 2)}/${hash.slice(2, 4)}/${hash.slice(4, 6)}/${hash}.jpg`,
-      w, h, color, caption, pin: `https://www.pinterest.com/pin/${pin}/`
+      w, h, color, caption, t, pin: `https://www.pinterest.com/pin/${pin}/`
     }));
     const N = PHOTOS.length;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -470,25 +472,164 @@
 
     // ---------- app icons ----------
     const INSTAGRAM = "";   // put your Instagram handle here, e.g. "yourhandle"
-    // TikTok videos to show in the gallery: paste each video's number from its link
-    // (tiktok.com/@throughmybigeyes/video/THIS_NUMBER), with an optional caption.
+    // TikTok posts from @throughmybigeyes: [v = video or p = photo post, post number from its link, caption]
+    // To add one, paste a new line at the top, e.g. ["v", "7301234567890123456", "caption"],
     const TIKTOKS = [
-      // ["7301234567890123456", "caption"],
+      ["p", "7707485528450436370", ""],
+      ["p", "7704754563559083272", "Folaholic😚"],
+      ["v", "7704534972052393217", ""],
+      ["p", "7702887641364040968", ""],
+      ["v", "7702729192168787218", "No fake fangs needed 🧛‍♀️"],
+      ["v", "7700259102642982151", ""],
+      ["v", "7699987060349750536", "Spooky season 🎃"],
+      ["v", "7698490621509569799", "Eat work repeat"],
+      ["p", "7696694990373653767", ""],
+      ["p", "7695215061974994183", ""],
+      ["p", "7685966640659467528", ""],
+      ["p", "7684696037906599188", "People , places, memories"],
+      ["v", "7683741329821535509", ""],
+      ["p", "7683167241818393876", ""],
+      ["v", "7676931975436848404", ""],
+      ["p", "7676070164831489300", ""],
+      ["v", "7668708762621988117", ""],
+      ["v", "7667574398815079700", "Live laugh love Dean🤭🤍"],
+      ["p", "7661842089465990420", "Fml"],
+      ["v", "7659034036525927701", ""],
+      ["p", "7657758997742685460", ""],
+      ["v", "7657019017743420693", "Dinner on the mountains?"],
+      ["p", "7651741779145886996", "🤍 u all"],
+      ["v", "7650303042012663061", "Truly the Denver Way☺️"],
+      ["p", "7649109421355748629", ""],
+      ["v", "7648378650261441813", "Finally met Mj🤭"],
+      ["p", "7645507405089885460", ""],
+      ["p", "7643830218649570580", ""],
+      ["p", "7640943660519017749", ""],
+      ["v", "7639913670444715284", ""],
+      ["p", "7638471307746741524", ""],
+      ["v", "7636815916403051796", ""],
+      ["p", "7635362748917976340", ""],
+      ["p", "7633865522202807573", ""],
+      ["v", "7632675558886886677", ""],
+      ["p", "7631351659297262868", ""],
+      ["p", "7629949327460650260", ""],
+      ["p", "7627351506131422485", ""],
+      ["v", "7625745736516259092", ""],
+      ["p", "7624913879843278100", ""],
+      ["p", "7623146593604095252", ""],
+      ["p", "7621469269431209236", ""],
+      ["p", "7618925018910575893", ""],
+      ["p", "7617567172063251733", ""],
+      ["p", "7614700010902392084", ""],
+      ["p", "7612748319424580884", ""],
+      ["p", "7604608959181262101", ""],
+      ["p", "7600971237921164564", ""],
+      ["v", "7598754676196035861", ""],
+      ["p", "7596715219515165973", ""],
+      ["p", "7595207903712283924", ""],
+      ["p", "7593435649215155477", ""],
+      ["v", "7591965729721715988", ""],
+      ["p", "7591890458083593492", ""],
+      ["p", "7590889374263299348", ""],
+      ["p", "7590288330722528533", ""],
+      ["v", "7589138473106361620", "To the very best carousels of ‘25☺️💐"],
+      ["p", "7587235881459715349", ""],
+      ["p", "7585772075361635604", ""],
+      ["p", "7584057513318862101", ""],
+      ["v", "7582014745520180501", ""],
+      ["p", "7578625166062767380", ""],
+      ["p", "7577608537862376724", ""],
+      ["p", "7573849410191346964", ""],
+      ["p", "7570533737155300629", ""],
+      ["p", "7563826927488830741", ""],
+      ["v", "7558126979002813714", "Fall🍂"],
+      ["p", "7556088645602561287", ""],
+      ["p", "7546764584661650695", ""],
+      ["p", "7544127807845092616", ""],
+      ["v", "7541782353287433480", "Pilates x park 🍃"],
+      ["v", "7540771155276320007", "20.08"],
+      ["p", "7540624464870968594", ""],
+      ["p", "7539188422498372872", ""],
+      ["p", "7537710547962301702", ""],
+      ["p", "7536581185225477381", ""],
+      ["p", "7535560288624512262", ""],
+      ["v", "7534722343369772294", "🌅⛅️"],
+      ["p", "7533253569399606584", ""],
+      ["p", "7532250819253620024", ""],
+      ["v", "7531734790261722424", "Shall we??? Take a peak into the ocean 🌊"],
+      ["p", "7530995929797692678", ""],
+      ["v", "7530309641071348997", "First video??🙈☺️"],
+      ["p", "7530043737519443201", ""],
+      ["p", "7528858607056588048", ""],
+      ["p", "7522096571727531280", ""],
+      ["p", "7519973191058558209", ""],
+      ["p", "7518502298687999233", ""],
+      ["p", "7515019772740799761", ""],
+      ["p", "7513832830422633784", "@Sheep Feed x 3 days of praise"],
+      ["p", "7513198268969389317", ""],
+      ["p", "7512497176405232912", ""],
+      ["p", "7511640979019975941", ""],
+      ["p", "7510977701499391288", ""],
+      ["p", "7510510203956235526", "We are on 1k🤭🤭🎉"],
+      ["p", "7509398879587060997", ""],
+      ["p", "7508661279658183942", ""],
+      ["p", "7508088698383142150", "@Sharon ♡ Kai popupLagos"],
+      ["p", "7502755397476896006", ""],
+      ["p", "7500550459367705911", "Last part of my throughmyBigeyes mini series 🥹💐. To more adventures with the best girl"],
+      ["p", "7500120146275601669", "Part 2 : Through my Big eyes mini series💐"],
+      ["p", "7499529843567119621", "Starting the month right with my best girl @Sharon ♡ ❤️💐"],
+      ["p", "7489891590526258487", "❤️💡"],
+      ["p", "7477168358895521030", ""],
+      ["p", "7454972227402927366", ""],
+      ["p", "7453885370573376774", ""],
+      ["p", "7452375175120702725", "But enjoy my photos ❤️🤗and merry Christmas🎄"],
+      ["p", "7451181645920832773", ""],
+      ["p", "7450846449555737862", ""],
+      ["p", "7448585754848070918", ""],
+      ["p", "7442062675867323703", ""],
+      ["p", "7440099778102381879", ""],
+      ["p", "7439374249086766392", ""],
+      ["p", "7437251799200976183", "A week’s worth ❤️"],
+      ["p", "7436029300094143800", "Lately …"],
+      ["p", "7431298287275199750", "Hobbies 🎀"],
+      ["p", "7431295934321020166", ""],
+      ["p", "7431295142591565062", "It all started here 😀"],
+      ["p", "7431294351164165382", "Drafts…"],
+      ["p", "7431293468133117189", "Last slide 🫠"],
+      ["p", "7431292404499483910", ""]
     ];
     const igLink = document.getElementById("igLink"), igSoon = document.getElementById("igSoon");
     if (INSTAGRAM) igLink.href = "https://www.instagram.com/" + INSTAGRAM + "/";
     else igLink.addEventListener("click", (e) => { e.preventDefault(); igSoon.classList.add("show"); setTimeout(() => igSoon.classList.remove("show"), 1800); });
 
     // ---------- the phone gallery ----------
-    const ITEMS = PHOTOS.map((p) => ({ type: "photo", ...p })).concat(TIKTOKS.map(([id, cap]) => ({
-      type: "video", id, caption: cap || "", src: "", color: "#8a3ffc", pin: "https://www.tiktok.com/@throughmybigeyes/video/" + id
-    })));
+    const ITEMS = PHOTOS.map((p) => ({ source: "pinterest", type: "photo", ...p }))
+      .concat(TIKTOKS.map(([k, id, cap]) => ({
+        source: "tiktok", type: k === "v" ? "video" : "photo", id, caption: cap, color: "#2a2328",
+        t: Number(BigInt(id) >> 32n), pin: `https://www.tiktok.com/@throughmybigeyes/${k === "v" ? "video" : "photo"}/${id}`
+      })))
+      .sort((a, b) => b.t - a.t);
     document.getElementById("galBadge").textContent = ITEMS.length;
     const layer = document.getElementById("phoneLayer"), phone = document.getElementById("phone"), libGrid = document.getElementById("libGrid");
     const viewer = document.getElementById("viewer"), vMedia = document.getElementById("vMedia"), vCap = document.getElementById("vCap"), vCount = document.getElementById("vCount"), vOpen = document.getElementById("vOpen");
     const galleryBtn = document.getElementById("galleryBtn");
     let filter = "all", list = ITEMS, vi = 0;
     const playSvg = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="#fff"/></svg>';
+    // TikTok thumbnails: TikTok's own player, mounted only when a tile scrolls into view
+    let tileIO = null;
+    function mountTiles() {
+      if (tileIO) tileIO.disconnect();
+      const root = document.getElementById("library");
+      const mount = (b) => {
+        if (b.querySelector("iframe")) return;
+        const f = document.createElement("iframe");
+        f.src = "https://www.tiktok.com/player/v1/" + b.dataset.tt + "?controls=0&play_button=0&progress_bar=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&native_context_menu=0&autoplay=0";
+        f.title = ""; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
+        b.prepend(f);
+      };
+      if (!("IntersectionObserver" in window)) return libGrid.querySelectorAll(".tt-tile").forEach(mount);
+      tileIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { mount(e.target); tileIO.unobserve(e.target); } }), { root, rootMargin: "120px 0px" });
+      libGrid.querySelectorAll(".tt-tile").forEach((b) => tileIO.observe(b));
+    }
     function renderGrid() {
       list = ITEMS.filter((it) => filter === "all" || it.type === filter);
       libGrid.innerHTML = "";
@@ -496,14 +637,17 @@
         const b = document.createElement("button");
         b.type = "button"; b.style.setProperty("--c", it.color);
         b.setAttribute("aria-label", (it.type === "video" ? "Play video " : "Open photo ") + (i + 1) + (it.caption ? ": " + it.caption : ""));
-        if (it.type === "photo") b.appendChild(makeImg(it, "", i > 14));
-        else { b.classList.add("vid-tile"); b.innerHTML = '<svg width="34" height="34" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg><span class="dur">' + playSvg + "TikTok</span>"; }
+        if (it.source === "pinterest") b.appendChild(makeImg(it, "", i > 14));
+        else { b.classList.add("tt-tile"); b.dataset.tt = it.id; }
+        if (it.type === "video") b.insertAdjacentHTML("beforeend", '<span class="dur">' + playSvg + "</span>");
+        else if (it.source === "tiktok") b.insertAdjacentHTML("beforeend", '<span class="dur"><svg width="13" height="13" viewBox="0 0 14 14"><rect x="1" y="3" width="9" height="10" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M4 1h7a2 2 0 0 1 2 2v8" fill="none" stroke="#fff" stroke-width="1.6"/></svg></span>');
         b.onclick = () => openViewer(i);
         libGrid.appendChild(b);
       });
+      mountTiles();
       const nP = ITEMS.filter((x) => x.type === "photo").length, nV = ITEMS.length - nP;
       document.getElementById("libTitle").textContent = filter === "video" ? "Videos" : filter === "photo" ? "Photos" : "All Photos";
-      document.getElementById("libCount").textContent = filter === "video" ? (nV ? nV + " videos" : "Videos coming soon") : filter === "photo" ? nP + " photos" : nP + " photos" + (nV ? ", " + nV + " videos" : "");
+      document.getElementById("libCount").textContent = filter === "video" ? nV + " videos" : filter === "photo" ? nP + " photos" : nP + " photos, " + nV + " videos";
     }
     document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
       filter = b.dataset.filter;
@@ -513,11 +657,11 @@
     function showItem(i) {
       vi = (i + list.length) % list.length; const it = list[vi];
       vMedia.querySelectorAll("img, iframe").forEach((n) => n.remove());
-      if (it.type === "photo") { const img = makeImg(it, it.caption || "Photo", false); vMedia.prepend(img); }
-      else { const f = document.createElement("iframe"); f.src = "https://www.tiktok.com/player/v1/" + it.id + "?autoplay=1&rel=0"; f.allow = "autoplay; encrypted-media; fullscreen"; f.title = it.caption || "TikTok video"; vMedia.prepend(f); }
+      if (it.source === "pinterest") { const img = makeImg(it, it.caption || "Photo", false); vMedia.prepend(img); }
+      else { const f = document.createElement("iframe"); f.src = "https://www.tiktok.com/player/v1/" + it.id + "?autoplay=1&rel=0&description=0"; f.allow = "autoplay; encrypted-media; fullscreen"; f.title = it.caption || "TikTok post"; vMedia.prepend(f); }
       vCap.textContent = it.caption || "";
       vCount.textContent = (vi + 1) + " of " + list.length;
-      vOpen.href = it.pin; vOpen.textContent = it.type === "video" ? "TikTok" : "Pinterest";
+      vOpen.href = it.pin; vOpen.textContent = it.source === "tiktok" ? "TikTok" : "Pinterest";
     }
     function openViewer(i) { showItem(i); viewer.hidden = false; viewer.classList.remove("in"); void viewer.offsetWidth; viewer.classList.add("in"); document.getElementById("vBack").focus(); }
     function closeViewer() { viewer.hidden = true; vMedia.querySelectorAll("iframe").forEach((n) => n.remove()); }
