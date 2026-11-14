@@ -118,6 +118,20 @@
     .listen.talking svg { animation: nudge .5s ease-in-out infinite; }
     .about-text .serious { font-weight: 700; text-decoration: none; background: var(--lime); padding: 0 .25em; border-bottom: 3px solid var(--ink); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
     .about-text .serious:hover { background: var(--paper); }
+    .quotes { position: relative; max-width: 460px; margin-top: 30px; padding: 20px 22px 18px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--pink-deep); rotate: -1deg; }
+    .q-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .q-top h3 { margin: 0; font-size: 16px; }
+    .q-top span { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+    .q-stage { display: grid; margin-top: 12px; touch-action: pan-y; }
+    .q { grid-area: 1 / 1; margin: 0; visibility: hidden; opacity: 0; transform: translateX(var(--from, 24px)); transition: opacity .35s ease, transform .35s ease, visibility 0s .35s; }
+    .q.on { visibility: visible; opacity: 1; transform: none; transition: opacity .35s ease, transform .35s ease; }
+    .q blockquote { position: relative; margin: 0; padding-left: 34px; font: 700 clamp(20px, 2vw, 24px)/1.3 var(--body); }
+    .q blockquote::before { content: "\201C"; position: absolute; left: -2px; top: -12px; font: 400 64px/1 var(--display); color: var(--pink-deep); }
+    .q figcaption { margin: 10px 0 0 34px; color: var(--muted); font-size: 15px; }
+    .q-nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+    .q-btn { width: 44px; height: 44px; display: grid; place-items: center; padding: 0 0 3px; border: 2px solid var(--ink); border-radius: 50%; background: var(--lime); box-shadow: 2px 2px 0 var(--ink); font-size: 26px; line-height: 1; cursor: pointer; }
+    .q-btn:hover { background: var(--paper); }
+    .q-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
     .about-cards { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 36px); align-items: start; margin-top: 10px; }
     .am, .shelf { padding: 22px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); }
     .am-head { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid rgba(22, 22, 22, .12); }
@@ -359,6 +373,24 @@
         <p>I'm <span id="age">23</span>, a proud Leo (20 August 2003, put it in your calendar), 5'4", and the last of four. Yes, the baby. Yes, it explains a lot.</p>
         <p>My favourite colour is pink (shocking, I know) and my best friend is Mary. If you ever need to win me over, it's jollof rice, chicken, dodo and a cold Amstel Malta. That's the whole bribe.</p>
         <p>By day, I'm doing my master's in AI. For that side of me, <a class="serious" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">we get serious in here</a>.</p>
+
+        <!-- Quotes I live by: add one as a new <figure class="q"> -->
+        <section class="quotes" aria-roledescription="carousel" aria-label="Quotes I live by">
+          <div class="q-top"><h3>Quotes I live by</h3><span id="qCount" aria-live="polite"></span></div>
+          <div class="q-stage" id="qStage">
+            <figure class="q"><blockquote>Good girl no dey pay, hope you know that.</blockquote><figcaption>Bobrisky, 2021</figcaption></figure>
+            <figure class="q"><blockquote>May the bridges I burn light the way.</blockquote><figcaption>Emily, <i>The Devil Wears Prada</i></figcaption></figure>
+            <figure class="q"><blockquote>Love exists everywhere. It's in your friendships, your parents, your neighbours…</blockquote><figcaption>Olivia Dean, 2026</figcaption></figure>
+            <figure class="q"><blockquote>Life is to be enjoyed, and you should find every piece of enjoyment.</blockquote><figcaption>Tems, 2024</figcaption></figure>
+            <figure class="q"><blockquote>Oh, it's even plastic.</blockquote><figcaption>Mama G, reminding us never to settle for less</figcaption></figure>
+            <figure class="q"><blockquote>Corruption is only bad when I'm not involved.</blockquote><figcaption>A corrupt politician</figcaption></figure>
+            <figure class="q"><blockquote>Good girls get the corner office.</blockquote><figcaption>Millie Odhiambo</figcaption></figure>
+          </div>
+          <div class="q-nav">
+            <button class="q-btn" id="qPrev" type="button" aria-label="Previous quote">‹</button>
+            <button class="q-btn" id="qNext" type="button" aria-label="Next quote">›</button>
+          </div>
+        </section>
       </div>
 
       <div class="about-cards">
@@ -644,6 +676,26 @@
         f.title = "Project Hail Mary trailer";
         t.appendChild(f); t.querySelector(".trailer-play").remove(); t.style.cursor = "default";
       });
+    })();
+
+    // ---------- quotes I live by: one at a time, with buttons (and swipe) ----------
+    (() => {
+      const qs = [...document.querySelectorAll(".quotes .q")], count = document.getElementById("qCount"), stage = document.getElementById("qStage");
+      let i = 0;
+      const go = (n, dir) => {
+        const next = (n + qs.length) % qs.length;
+        qs[i].classList.remove("on");
+        qs[next].style.setProperty("--from", (dir > 0 ? 24 : -24) + "px");
+        void qs[next].offsetWidth;
+        qs[next].classList.add("on"); i = next;
+        count.textContent = (i + 1) + " of " + qs.length;
+      };
+      qs[0].classList.add("on"); count.textContent = "1 of " + qs.length;
+      document.getElementById("qNext").addEventListener("click", () => go(i + 1, 1));
+      document.getElementById("qPrev").addEventListener("click", () => go(i - 1, -1));
+      let sx = null;
+      stage.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+      stage.addEventListener("pointerup", (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) go(i + (e.clientX < sx ? 1 : -1), e.clientX < sx ? 1 : -1); sx = null; });
     })();
 
     // ---------- photo puzzle: slide the tiles back into place ----------
