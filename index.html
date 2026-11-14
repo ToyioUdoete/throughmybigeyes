@@ -763,8 +763,8 @@
         order = [...Array(N3 * N3).keys()];
         let gap = N3 * N3 - 1, prev = -1;
         // only real slides from the solved picture, so it can always be solved
-        // a light mix (about 16 slides) so it's a fun puzzle, not a frustrating one
-        for (let i = 0; i < 16 || order.every((t, j) => t === j); i++) {
+        // a light mix (10 slides) so it can be solved in 10 moves or fewer
+        for (let i = 0; i < 10 || order.every((t, j) => t === j); i++) {
           const r = Math.floor(gap / N3), c = gap % N3, opts = [];
           if (r > 0) opts.push(gap - N3); if (r < N3 - 1) opts.push(gap + N3);
           if (c > 0) opts.push(gap - 1); if (c < N3 - 1) opts.push(gap + 1);
