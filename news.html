@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>breaking news · through my big eyes</title>
+  <meta name="description" content="Recent news from through my big eyes: my mum's master's degree, and three papers at WACV 2027." />
+  <meta name="theme-color" content="#ffc9df" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ffc9df;
+      --pink-deep: #ff6fae;
+      --lime: #c9f45b;
+      --orange: #ff8a3d;
+      --ink: #161616;
+      --paper: #fbfaf6;
+      --muted: #5a4650;
+      --script: "Mrs Saint Delafield", "Brush Script MT", cursive;
+      --display: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
+      --body: "DM Sans", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body {
+      margin: 0; color: var(--ink); font: 17px/1.55 var(--body); background-color: var(--pink);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-x: clip;
+    }
+    body.waiting { overflow: hidden; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--paper); border: 2px solid var(--ink); text-decoration: none; font-weight: 700; font-size: 15px; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+    .pill:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+    .pill.lime { background: var(--lime); }
+
+    /* ---------- top bar (same as the home page) ---------- */
+    .bar { display: flex; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
+    .handle { font-family: var(--script); font-size: 54px; line-height: .9; text-decoration: none; padding-top: 6px; }
+    .tune { margin-right: auto; display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border: 2px solid var(--ink); border-radius: 16px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; text-align: left; }
+    .tune .eq { display: flex; align-items: flex-end; gap: 3px; width: 26px; height: 26px; padding: 5px; border-radius: 8px; background: var(--pink); }
+    .tune .eq i { flex: 1; height: 30%; border-radius: 2px; background: var(--ink); }
+    .tune.playing .eq i { animation: eq 1s ease-in-out infinite; }
+    .tune.playing .eq i:nth-child(2) { animation-delay: -.35s; }
+    .tune.playing .eq i:nth-child(3) { animation-delay: -.7s; }
+    @keyframes eq { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+    .tune-txt { display: grid; line-height: 1.15; font-size: 13px; }
+    .tune-txt span { color: var(--muted); font-size: 12px; }
+    .tune-state { display: block; width: 0; height: 0; margin-left: 4px; border-left: 10px solid var(--ink); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+    .playing .tune-state { width: 10px; height: 12px; border: 0; border-left: 3px solid var(--ink); border-right: 3px solid var(--ink); }
+
+    /* ---------- the opening screen ---------- */
+    .splash { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; align-content: center; gap: 26px; padding: 20px; text-align: center; background: var(--pink); transition: opacity .45s ease, transform .45s ease; }
+    .splash[hidden] { display: none; }
+    .splash.gone { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    .tag { display: inline-block; padding: .08em .35em .14em; background: var(--orange); color: #fff; font: 400 clamp(18px, 2vw, 22px)/1.1 var(--display); border: 2px solid var(--ink); border-radius: 8px; box-shadow: 3px 3px 0 var(--ink); rotate: -3deg; }
+    .splash .tag { font-size: clamp(56px, 13vw, 150px); border-width: 4px; border-radius: 22px; box-shadow: 9px 9px 0 var(--ink); animation: shake 2.4s ease-in-out infinite; }
+    @keyframes shake { 0%, 70%, 100% { rotate: -3deg; } 75% { rotate: 2deg; } 80% { rotate: -6deg; } 85% { rotate: 1deg; } 90% { rotate: -4deg; } }
+    .splash p { margin: 0; font-size: 19px; font-weight: 500; }
+    .splash .go { font-size: 20px; padding: 16px 34px; }
+
+    /* ---------- ticker ---------- */
+    .ticker { overflow: hidden; background: var(--lime); border-block: 2px solid var(--ink); }
+    .ticker div { display: flex; width: max-content; animation: tick 34s linear infinite; }
+    .ticker span { padding: 10px 0; font-weight: 700; white-space: nowrap; }
+    .ticker span::after { content: "✦"; margin: 0 22px; color: var(--pink-deep); }
+    @keyframes tick { to { transform: translateX(-50%); } }
+
+    /* ---------- page ---------- */
+    .n-head { max-width: 1100px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 48px) 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+    .n-head h1 { font: 400 clamp(56px, 9vw, 120px)/.9 var(--display); margin: 0; }
+    .replay { padding: 8px 14px; font-size: 14px; }
+    .story { position: relative; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(30px, 6vw, 80px); max-width: 1100px; margin: 0 auto; padding: 60px clamp(20px, 4vw, 48px); }
+    .story.flip { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
+    .story.flip .media { order: 2; }
+    .story h2 { font: 400 clamp(40px, 5.6vw, 76px)/.95 var(--display); margin: 16px 0 18px; }
+    .story p { max-width: 40ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
+    .media { position: relative; justify-self: center; width: min(100%, 400px); }
+    .print { margin: 0; padding: 12px 12px 54px; background: var(--paper); border: 2px solid var(--ink); box-shadow: 7px 7px 0 var(--ink); rotate: -3deg; }
+    .print img { width: 100%; height: auto; }
+    .print figcaption { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font: 52px/1 var(--script); }
+    .tape { position: absolute; top: -15px; left: 50%; width: 120px; height: 30px; translate: -50% 0; rotate: 4deg; background: rgba(201, 244, 91, .9); z-index: 1; }
+
+    /* Nigerian-meme stickers */
+    .sticker { position: absolute; z-index: 2; padding: 8px 14px; border: 2px solid var(--ink); border-radius: 14px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); font: 400 clamp(17px, 1.8vw, 22px)/1.1 var(--display); white-space: nowrap; rotate: var(--r, -6deg); }
+    .sticker.lime { background: var(--lime); } .sticker.pink { background: var(--pink-deep); } .sticker.orange { background: var(--orange); color: #fff; }
+    .story.in .sticker { animation: pop .5s cubic-bezier(.2, 1.6, .4, 1) both; animation-delay: var(--d, 0s); }
+    @keyframes pop { from { transform: scale(0); } }
+
+    .wacv { display: grid; place-items: center; padding: 26px; background: var(--ink); border: 2px solid var(--ink); border-radius: 20px; box-shadow: 7px 7px 0 var(--pink-deep); rotate: 2deg; }
+    .wacv img { width: 100%; max-width: 320px; height: auto; }
+    .papers { list-style: none; margin: 20px 0 22px; padding: 0; display: grid; gap: 12px; max-width: 560px; }
+    .papers li { padding: 14px 16px; background: var(--paper); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); }
+    .papers b { display: block; line-height: 1.3; }
+    .papers span { color: var(--muted); font-size: 15px; }
+
+    footer { text-align: center; padding: 50px 20px 60px; }
+    footer .sign { font-family: var(--display); font-size: clamp(40px, 7vw, 84px); line-height: 1; margin: 0 0 18px; }
+    footer small { display: block; margin-top: 26px; color: var(--muted); }
+    footer small a { color: var(--muted); }
+
+    @media (max-width: 760px) {
+      .story, .story.flip { grid-template-columns: 1fr; padding-top: 40px; padding-bottom: 40px; }
+      .story.flip .media { order: 0; }
+      .media { width: min(84%, 340px); }
+    }
+    @media (max-width: 520px) {
+      .handle { font-size: 44px; }
+      .bar .home-link { padding: 8px 14px; font-size: 14px; }
+      .tune-txt { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="waiting">
+  <div class="splash" id="splash">
+    <span class="tag">Breaking news!</span>
+    <p>Two big stories today.</p>
+    <button class="pill lime go" id="go" type="button">Tell me!</button>
+  </div>
+
+  <header class="bar">
+    <a class="handle" href="index.html">twiiinklle</a>
+    <button class="tune" data-song type="button" aria-pressed="false" aria-label="Play Carmen by Olivia Dean">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="tune-txt"><b>Carmen</b><span>Olivia Dean</span></span>
+      <span class="tune-state" aria-hidden="true"></span>
+    </button>
+    <a class="pill home-link" href="index.html">Back home</a>
+  </header>
+
+  <div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+
+  <main>
+    <div class="n-head">
+      <h1>recent news</h1>
+      <button class="pill replay" id="replay" type="button">🔊 Play the news sound again</button>
+    </div>
+
+    <article class="story" aria-labelledby="mumTitle">
+      <div class="media">
+        <span class="tape" aria-hidden="true"></span>
+        <figure class="print">
+          <img src="img/mum-graduation.webp" alt="My mum smiling in her graduation gown and cap" width="690" height="864" />
+          <figcaption>my mummy</figcaption>
+        </figure>
+        <span class="sticker lime" style="--r:-8deg; --d:.2s; left:-18px; top:14%">Omo! 😳</span>
+        <span class="sticker" style="--r:6deg; --d:.45s; right:-22px; top:46%">Una well done o!</span>
+        <span class="sticker pink" style="--r:-4deg; --d:.7s; left:6%; bottom:-20px">God when? 🙏🏾</span>
+      </div>
+      <div>
+        <span class="tag">Breaking news!</span>
+        <h2 id="mumTitle">Mummy went back to school at 56. And she won.</h2>
+        <p>My mum, Mrs Udual Udoete, just earned her master's in Early Childhood Education.</p>
+        <p>She went back to school at 56, which is one of the most daring things I've ever seen anyone do, and she beat all the odds. Now she's doing her PhD.</p>
+        <p>So if you've been telling yourself it's too late, it isn't.</p>
+      </div>
+    </article>
+
+    <article class="story flip" aria-labelledby="wacvTitle">
+      <div class="media">
+        <div class="wacv"><img src="https://wacv.thecvf.com/static/core/img/wacv-navbar-logo.svg" alt="WACV 2027, January 4 to 8, Orlando, Florida" width="300" height="112" /></div>
+        <span class="sticker orange" style="--r:-7deg; --d:.2s; left:-16px; top:-22px">E choke! 🔥</span>
+        <span class="sticker lime" style="--r:5deg; --d:.45s; right:-14px; bottom:-22px">Who sabi, sabi</span>
+        <span class="sticker" style="--r:-3deg; --d:.7s; left:12%; bottom:-64px">We move 💪🏾</span>
+      </div>
+      <div>
+        <span class="tag">Breaking news!</span>
+        <h2 id="wacvTitle">Three papers. Three acceptances.</h2>
+        <p>All three of my papers got accepted at WACV 2027 workshops. See you in Orlando in January!</p>
+        <ul class="papers">
+          <li><b>Restoring Ovarian Ultrasound for Reliable Follicle Detection</b><span>WVAQ Workshop, WACV 2027</span></li>
+          <li><b>Trust but Verify: Training-Free Evidence Verification for VLM-Generated Ovarian Ultrasound Reports</b><span>FABRIC Workshop, WACV 2027</span></li>
+          <li><b>Frozen-Backbone Adaptation: An Empirical Study of Component Substitution in a Pretrained Deraining Network</b><span>WVAQ Workshop, WACV 2027</span></li>
+        </ul>
+        <a class="pill lime" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">The serious side lives here</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p class="sign">see you soon</p>
+    <a class="pill lime" href="index.html">Back home</a>
+    <small>WACV logo © IEEE/CVF, from <a href="https://wacv.thecvf.com/" rel="noopener">wacv.thecvf.com</a>.</small>
+  </footer>
+
+  <script src="song.js"></script>
+  <script>
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ---------- the news sound ----------
+    const jingle = new Audio("img/breaking-news.m4a");
+    jingle.preload = "auto"; jingle.volume = 0.9;
+    jingle.addEventListener("play", () => window.song && song.duck(true));
+    jingle.addEventListener("ended", () => window.song && song.duck(false));
+    const playJingle = () => { jingle.currentTime = 0; jingle.play().catch(() => {}); };
+    document.getElementById("replay").addEventListener("click", (e) => { e.stopPropagation(); playJingle(); });
+
+    // ---------- opening screen: one tap plays the sound and shows the news ----------
+    (() => {
+      const s = document.getElementById("splash");
+      document.getElementById("go").addEventListener("click", () => {
+        playJingle();
+        s.classList.add("gone"); document.body.classList.remove("waiting");
+        setTimeout(() => { s.hidden = true; }, 500);
+      });
+    })();
+
+    // ---------- ticker ----------
+    (() => {
+      const lines = ["Mrs Udoete earns her master's at 56", "Now she's doing her PhD", "All three of Toyio's papers accepted at WACV 2027 workshops", "See you in Orlando"];
+      const t = document.getElementById("ticker");
+      [...lines, ...lines, ...lines, ...lines].forEach((l) => { const s = document.createElement("span"); s.textContent = l; t.appendChild(s); });
+    })();
+
+    // ---------- stickers pop in when each story comes into view ----------
+    (() => {
+      const stories = document.querySelectorAll(".story");
+      if (reduce || !("IntersectionObserver" in window)) return stories.forEach((s) => s.classList.add("in"));
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !document.body.classList.contains("waiting")) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.3 });
+      stories.forEach((s) => io.observe(s));
+      document.getElementById("go").addEventListener("click", () => setTimeout(() => stories.forEach((s) => { const r = s.getBoundingClientRect(); if (r.top < innerHeight * .8) { s.classList.add("in"); io.unobserve(s); } }), 300));
+    })();
+  </script>
+</body>
+</html>

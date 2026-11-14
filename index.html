@@ -80,6 +80,12 @@
     .print img { width: 100%; height: 100%; object-fit: cover; }
     .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
 
+    .news-btn { background: #ff8a3d; color: #fff; animation: nudge-news 4s ease-in-out 1.5s infinite; }
+    .news-btn .live { position: relative; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid var(--ink); }
+    .news-btn .live::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid #fff; animation: ping 1.6s ease-out infinite; }
+    @keyframes ping { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+    @keyframes nudge-news { 0%, 84%, 100% { rotate: 0deg; } 88% { rotate: -4deg; } 92% { rotate: 3deg; } 96% { rotate: -2deg; } }
+
     /* ---------- shall we ---------- */
     .invite { position: relative; display: grid; place-items: center; text-align: center; padding: 110px 20px 0; }
     .shall { font-family: var(--display); font-weight: 400; font-size: clamp(84px, 17vw, 260px); line-height: .9; margin: 0; white-space: nowrap; }
@@ -322,7 +328,7 @@
         <h1 id="title"><span class="row">through</span><span class="row"><span class="cut">my big</span></span><span class="row eyes-row"><span class="eyes">eyes</span><picture class="clip"><source srcset="img/my-big-eyes.webp" type="image/webp" /><img src="img/my-big-eyes.png" alt="Black and white newspaper-style close-up of my eyes" width="634" height="280" /></picture></span></h1>
         <p>A digital diary of the little things I stop to look at. 📸 💐</p>
         <div class="actions">
-          <a class="pill lime" href="#invite">Come see</a>
+          <a class="pill news-btn" href="news.html"><span class="live" aria-hidden="true"></span>Recent news</a>
           <a class="pill" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Follow on Pinterest</a>
         </div>
         <p class="hint">Press the camera to print another one.</p>
