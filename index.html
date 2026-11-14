@@ -360,11 +360,12 @@
       <div class="about-text">
         <p class="lead">if you've made it this far,</p>
         <h2 id="aboutTitle">hi, i'm Toyio</h2>
-        <p class="say">It's said <b>Toe-yoh</b>. <button class="listen" id="sayName" type="button" hidden><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Listen</button></p>
+        <p class="say">It's <b>Toe-yoh</b>. Hear it from me: <button class="listen" id="sayName" type="button" aria-label="Listen to Toyio say her name"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Listen</button></p>
         <!-- Add more about-me lines here as new <p> paragraphs. -->
-        <p>I'm <span id="age">23</span>, born on 20 August 2003 (a Leo), 5'4", and the last of four siblings.</p>
-        <p>My favourite colour is pink, my best friend is Mary, and you can sell me with jollof rice, chicken, dodo and a cold Amstel Malta.</p>
-        <p>I'm doing my master's in AI, and <a class="serious" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">we get serious in here</a>.</p>
+        <p>I'm <span id="age">23</span>, a proud Leo (20 August 2003, put it in your calendar), 5'4", and the last of four. Yes, the baby. Yes, it explains a lot.</p>
+        <p>I grew up in Uyo, Akwa Ibom, and if you know, you know: it's one of the most beautiful places in Nigeria. On the drives to my village in Ete, I'd sit by the window with my phone out, catching the road as it went by. Those photos kept me going, because how else do you show people the world through your eyes?</p>
+        <p>My favourite colour is pink (shocking, I know) and my best friend is Mary. If you ever need to win me over, it's jollof rice, chicken, dodo and a cold Amstel Malta. That's the whole bribe.</p>
+        <p>By day, I'm doing my master's in AI. For that side of me, <a class="serious" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">we get serious in here</a>.</p>
       </div>
 
       <div class="about-cards">
@@ -931,20 +932,22 @@
       const btns = [...document.querySelectorAll("[data-song]")];
       let off = false; try { off = localStorage.getItem("tmbe-song") === "off"; } catch (_) {}
       const audio = new Audio(); audio.crossOrigin = "anonymous"; audio.src = SONG; audio.loop = true; audio.preload = "none";
-      let ctx = null, gain = null, playing = false, ducked = false;
+      let ctx = null, gain = null, playing = false, ducked = false, userOff = false;
       const level = (v, secs) => {
         if (gain) { gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime); gain.gain.linearRampToValueAtTime(v, ctx.currentTime + secs); }
         else audio.volume = v;
       };
       const vol = () => (ducked ? VOL * .2 : VOL);
       const setUi = (on) => { playing = on; btns.forEach((b) => { b.classList.toggle("playing", on); b.setAttribute("aria-pressed", String(on)); b.setAttribute("aria-label", (on ? "Pause" : "Play") + " Carmen by Olivia Dean"); }); };
+      let trying = false;
       const start = () => {
+        if (trying) return; trying = true;
         if (!ctx && window.AudioContext) {
           try { ctx = new AudioContext(); gain = ctx.createGain(); gain.gain.value = 0; ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination); } catch (_) { ctx = null; gain = null; }
         }
         if (ctx && ctx.state === "suspended") ctx.resume();
         if (!gain) audio.volume = 0;
-        audio.play().then(() => { level(vol(), 2.5); setUi(true); }).catch(() => setUi(false));
+        audio.play().then(() => { level(vol(), 2.5); setUi(true); }).catch(() => setUi(false)).finally(() => { trying = false; });
       };
       const stop = () => { level(0, .6); setTimeout(() => { if (!playing) audio.pause(); }, 650); setUi(false); };
       // soften the jump where the 30-second clip loops
@@ -956,39 +959,35 @@
       });
       btns.forEach((b) => b.addEventListener("click", (e) => {
         e.stopPropagation();
-        const on = !playing;
+        const on = !playing; userOff = !on;
         try { localStorage.setItem("tmbe-song", on ? "on" : "off"); } catch (_) {}
         on ? start() : stop();
       }));
       setUi(false);
       if (!off) {
+        // Plays as soon as the page opens wherever the browser allows it. Browsers that block sound
+        // until the visitor interacts get it on their very first tap, click, key press or swipe.
+        const kinds = ["pointerdown", "pointerup", "click", "keydown", "touchend", "mousedown"];
+        const done = () => kinds.forEach((t) => removeEventListener(t, first, true));
         const first = (e) => {
-          if (e.target.closest && e.target.closest("[data-song]")) return;
-          ["pointerdown", "keydown", "touchstart"].forEach((t) => removeEventListener(t, first, true));
-          if (!playing) start();
+          if (ctx && ctx.state === "suspended") ctx.resume();
+          if (e.target.closest && e.target.closest("[data-song]")) return done();
+          if (userOff || (playing && (!ctx || ctx.state === "running"))) return done();
+          start();
         };
-        ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, first, true));
-        start(); // works straight away where the browser allows it
+        kinds.forEach((t) => addEventListener(t, first, true));
+        start();
       }
       return { duck: (on) => { ducked = on; if (playing) level(vol(), .4); } };
     })();
 
-    // ---------- how to say my name ----------
+    // ---------- how to say my name (my own voice) ----------
     (() => {
-      const btn = document.getElementById("sayName");
-      if (!("speechSynthesis" in window)) return;
-      btn.hidden = false;
-      btn.addEventListener("click", () => {
-        speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance("Toe-yoh");
-        u.rate = 0.8; u.lang = "en-US";
-        const voices = speechSynthesis.getVoices().filter((v) => /^en/.test(v.lang));
-        const pick = voices.find((v) => /samantha|karen|moira|tessa|zira|female|google us english/i.test(v.name)) || voices[0];
-        if (pick) u.voice = pick;
-        u.onstart = () => { btn.classList.add("talking"); song.duck(true); };
-        u.onend = u.onerror = () => { btn.classList.remove("talking"); song.duck(false); };
-        speechSynthesis.speak(u);
-      });
+      const btn = document.getElementById("sayName"), voice = new Audio("img/my-name.m4a");
+      voice.preload = "auto";
+      voice.addEventListener("play", () => { btn.classList.add("talking"); song.duck(true); });
+      voice.addEventListener("ended", () => { btn.classList.remove("talking"); setTimeout(() => song.duck(false), 250); });
+      btn.addEventListener("click", (e) => { e.stopPropagation(); voice.currentTime = 0; voice.play().catch(() => {}); });
     })();
   </script>
 </body>
