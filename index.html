@@ -99,47 +99,76 @@
     @keyframes nudge { 50% { transform: translateY(6px); } }
 
     /* ---------- app icons ---------- */
-    .apps { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 120px 20px 100px;
+    .apps { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 140px 20px 100px;
       background: radial-gradient(90% 70% at 50% 55%, #ffe3ef 0%, var(--pink) 60%, #f9b6d2 100%); }
-    .apps-inner { position: relative; z-index: 2; display: grid; justify-items: center; gap: 46px; }
-    .app { display: grid; justify-items: center; gap: 12px; text-decoration: none; color: var(--ink); border: 0; background: none; padding: 0; cursor: pointer; font: inherit; }
-    .app .tile { position: relative; display: grid; place-items: center; width: 116px; aspect-ratio: 1; border-radius: 26%; overflow: hidden;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 14px 30px -12px rgba(22, 22, 22, .45); transition: transform .35s cubic-bezier(.2, 1.4, .4, 1); }
+    .apps-inner { position: relative; z-index: 2; display: grid; justify-items: center; gap: 30px; }
+    .row-apps { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(22px, 5vw, 64px); }
+    .app { position: relative; display: grid; justify-items: center; gap: 12px; text-decoration: none; color: var(--ink); border: 0; background: none; padding: 0; cursor: pointer; font: inherit; }
+    .app .tile { position: relative; display: grid; place-items: center; width: clamp(96px, 11vw, 140px); aspect-ratio: 1; border-radius: 24%; overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 16px 30px -14px rgba(22, 22, 22, .5); transition: transform .35s cubic-bezier(.2, 1.4, .4, 1); }
     .app:hover .tile, .app:focus-visible .tile { transform: translateY(-8px) rotate(-3deg); }
     .app:active .tile { transform: scale(.94); }
     .app .tile img.glyph { width: 52%; height: 52%; }
     .app .name { font-weight: 700; font-size: 16px; }
-    .app .sub { margin-top: -10px; font-size: 13px; color: var(--muted); }
     .tile.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
     .tile.tt { background: #111; }
     .tile.pin { background: #e60023; }
-    .row-apps { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(28px, 6vw, 72px); }
-    .app.main .tile { width: clamp(180px, 22vw, 250px); background: #fff; padding: 9%; display: grid; grid-template-columns: 1fr 1fr; gap: 6%; place-items: stretch; animation: bob 3.4s ease-in-out infinite; }
-    .app.main .tile span { border-radius: 14%; background: var(--c, var(--grey)) center / cover no-repeat; }
-    .app.main .name { font-size: 22px; }
-    .app.main .badge { position: absolute; top: -10px; right: -10px; z-index: 2; min-width: 42px; height: 42px; padding: 0 10px; border-radius: 999px; display: grid; place-items: center; background: var(--pink-deep); color: #fff; font: 700 18px var(--body); border: 3px solid var(--pink); }
-    .app.main { position: relative; }
-    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .app.main:hover .tile { animation-play-state: paused; }
-    .soon { position: absolute; left: 50%; bottom: -34px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
+    .tile.gal { background: linear-gradient(160deg, #ffffff, #f4f1ea); }
+    .tile.gal svg { width: 78%; height: 78%; }
+    .app.main .tile { animation: bob 3.4s ease-in-out infinite; }
+    .app.main:hover .tile { animation: none; }
+    .app .badge { position: absolute; top: -9px; right: -9px; z-index: 2; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; display: grid; place-items: center; background: var(--pink-deep); color: #fff; font: 700 15px var(--body); border: 3px solid var(--pink); }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .apps-hint { margin: 0; color: var(--muted); font-size: 15px; }
+    .soon { position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
     .soon.show { opacity: 1; }
 
-    /* ---------- gallery (opens from the Gallery icon) ---------- */
-    .gallery { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: var(--paper); transform-origin: var(--ox, 50%) var(--oy, 50%); }
-    .gallery[hidden] { display: none; }
-    .gallery.opening { animation: g-open .45s cubic-bezier(.2, .9, .3, 1); }
-    .gallery.closing { animation: g-close .3s ease-in forwards; }
-    @keyframes g-open { from { transform: scale(.2); opacity: 0; border-radius: 40px; } to { transform: none; opacity: 1; border-radius: 0; } }
-    @keyframes g-close { to { transform: scale(.2); opacity: 0; border-radius: 40px; } }
-    .g-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 22px clamp(16px, 4vw, 40px) 14px; border-bottom: 1px solid #e7e2da; }
-    .g-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(32px, 4vw, 48px); line-height: 1; }
-    .g-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
-    .g-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(30vw, 190px), 1fr)); gap: 3px; padding: 3px; align-content: start; }
-    .g-grid button { position: relative; aspect-ratio: 1; padding: 0; border: 0; background: var(--c, var(--grey)); cursor: zoom-in; overflow: hidden; }
-    .g-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
-    .g-grid button:hover img { transform: scale(1.05); }
-    .g-grid .in { animation: g-in .45s ease both; animation-delay: calc(var(--i) * 30ms); }
-    @keyframes g-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+    /* ---------- the phone (opens from the Gallery icon) ---------- */
+    .phone-layer { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(22, 22, 22, .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .phone-layer[hidden] { display: none; }
+    .phone { position: relative; width: min(390px, 92vw, calc((100svh - 32px) * .49)); aspect-ratio: 9 / 19.5; border-radius: 56px; padding: 12px; background: linear-gradient(145deg, #3b3b3d, #0d0d0e 40%, #262628); box-shadow: inset 0 0 0 2px #5a5a5d, 0 40px 80px -20px rgba(0, 0, 0, .6); transform-origin: var(--ox, 50%) var(--oy, 50%); }
+    .phone::before { content: ""; position: absolute; left: -4px; top: 22%; width: 4px; height: 9%; border-radius: 3px 0 0 3px; background: #2a2a2c; box-shadow: 0 90px 0 #2a2a2c; }
+    .phone::after { content: ""; position: absolute; right: -4px; top: 27%; width: 4px; height: 14%; border-radius: 0 3px 3px 0; background: #2a2a2c; }
+    .phone-layer.opening .phone { animation: p-open .5s cubic-bezier(.2, .9, .3, 1); }
+    .phone-layer.opening { animation: fade-in .3s ease; }
+    .phone-layer.closing .phone { animation: p-close .3s ease-in forwards; }
+    .phone-layer.closing { animation: fade-out .3s ease-in forwards; }
+    @keyframes p-open { from { transform: translate(var(--dx, 0), var(--dy, 0)) scale(.25); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes p-close { to { transform: translate(var(--dx, 0), var(--dy, 0)) scale(.25); opacity: 0; } }
+    @keyframes fade-in { from { opacity: 0; } } @keyframes fade-out { to { opacity: 0; } }
+    .screen { position: relative; height: 100%; border-radius: 44px; overflow: hidden; background: #000; color: #fff; font-family: -apple-system, "SF Pro Text", var(--body); }
+    .island { position: absolute; z-index: 5; top: 11px; left: 50%; translate: -50% 0; width: 31%; height: 30px; border-radius: 20px; background: #000; }
+    .status { position: absolute; z-index: 4; top: 0; left: 0; right: 0; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 6px 28px 0 34px; font-weight: 600; font-size: 15px; pointer-events: none; }
+    .status svg { display: block; }
+    .library { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
+    .library::-webkit-scrollbar { display: none; }
+    .lib-head { position: sticky; top: 0; z-index: 3; padding: 56px 16px 12px; display: flex; align-items: end; justify-content: space-between; background: linear-gradient(180deg, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0)); }
+    .lib-head h3 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+    .lib-head small { display: block; font-size: 13px; font-weight: 500; opacity: .75; margin-top: 2px; }
+    .chip { border: 0; border-radius: 999px; padding: 6px 13px; background: rgba(120, 120, 128, .45); color: #fff; font: 600 13px -apple-system, var(--body); cursor: pointer; }
+    .lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: -56px; padding-bottom: 110px; }
+    .lib-grid button { position: relative; aspect-ratio: 1; padding: 0; border: 0; background: var(--c, #222); cursor: pointer; overflow: hidden; }
+    .lib-grid img { width: 100%; height: 100%; object-fit: cover; }
+    .lib-grid .dur { position: absolute; right: 5px; bottom: 4px; display: flex; align-items: center; gap: 3px; font: 600 11px -apple-system, var(--body); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
+    .lib-grid .vid-tile { display: grid; place-items: center; background: linear-gradient(160deg, #ff6fae, #8a3ffc); }
+    .tabs { position: absolute; z-index: 4; left: 12px; right: 12px; bottom: 26px; display: flex; justify-content: space-between; gap: 4px; padding: 5px; border-radius: 999px; background: rgba(60, 60, 64, .72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .tabs button { flex: 1; border: 0; border-radius: 999px; padding: 8px 6px; background: none; color: rgba(255, 255, 255, .8); font: 600 13px -apple-system, var(--body); cursor: pointer; }
+    .tabs button[aria-pressed="true"] { background: rgba(255, 255, 255, .22); color: #fff; }
+    .home-bar { position: absolute; z-index: 6; left: 50%; bottom: 8px; translate: -50% 0; width: 36%; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, .8); }
+    .viewer { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; background: #000; }
+    .viewer[hidden] { display: none; }
+    .viewer.in { animation: v-in .3s ease; }
+    @keyframes v-in { from { opacity: 0; transform: scale(.96); } }
+    .v-top { display: flex; align-items: center; justify-content: space-between; padding: 54px 14px 8px; }
+    .v-top button { border: 0; background: none; color: #fff; font: 600 16px -apple-system, var(--body); cursor: pointer; padding: 6px; }
+    .v-top span { font: 600 14px -apple-system, var(--body); opacity: .8; }
+    .v-media { flex: 1; display: grid; place-items: center; min-height: 0; position: relative; touch-action: pan-y; }
+    .v-media img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .v-media iframe { width: 100%; height: 100%; border: 0; }
+    .v-nav { position: absolute; top: 50%; translate: 0 -50%; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(60, 60, 64, .6); color: #fff; font-size: 20px; cursor: pointer; }
+    .v-prev { left: 8px; } .v-next { right: 8px; }
+    .v-cap { min-height: 64px; padding: 10px 16px 40px; font-size: 14px; text-align: center; opacity: .9; }
+    .phone-close { position: absolute; top: 18px; right: 18px; }
     .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
     .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
     .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
@@ -233,25 +262,55 @@
       <h2 class="room-title" id="apps-title">through my big eyes</h2>
       <div class="garden" id="garden" aria-hidden="true"></div>
       <div class="apps-inner">
-        <button class="app main" id="galleryBtn" type="button" aria-haspopup="dialog" aria-controls="gallery">
-          <span class="badge" aria-hidden="true">16</span>
-          <span class="tile" id="galleryTile" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-          <span class="name">Gallery</span>
-          <span class="sub">Tap to see all my photos</span>
-        </button>
         <div class="row-apps">
+          <button class="app main" id="galleryBtn" type="button" aria-haspopup="dialog" aria-controls="phoneLayer">
+            <span class="badge" id="galBadge" aria-hidden="true">16</span>
+            <span class="tile gal" aria-hidden="true">
+              <svg viewBox="-50 -50 100 100"><g id="galFlower"></g><circle r="11" fill="#c9f45b" /><circle r="11" fill="none" stroke="#8fcf1c" stroke-width="2" stroke-dasharray="2 3" /></svg>
+            </span>
+            <span class="name">Gallery</span>
+          </button>
           <a class="app" id="igLink" href="#" rel="noopener"><span class="tile ig"><img class="glyph" src="https://cdn.simpleicons.org/instagram/ffffff" alt="" width="60" height="60" /></span><span class="name">Instagram</span><span class="soon" id="igSoon">Link coming soon</span></a>
           <a class="app" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener"><span class="tile tt"><img class="glyph" src="https://cdn.simpleicons.org/tiktok/ffffff" alt="" width="60" height="60" /></span><span class="name">TikTok</span></a>
           <a class="app" href="https://www.pinterest.com/twiiinklle/" rel="noopener"><span class="tile pin"><img class="glyph" src="https://cdn.simpleicons.org/pinterest/ffffff" alt="" width="60" height="60" /></span><span class="name">Pinterest</span></a>
         </div>
+        <p class="apps-hint">Open the Gallery to see everything.</p>
       </div>
     </section>
-    <div class="gallery" id="gallery" role="dialog" aria-modal="true" aria-labelledby="g-title" hidden>
-      <div class="g-head">
-        <div><h2 id="g-title">Gallery</h2><p>16 photos, newest first</p></div>
-        <button class="pill" id="gClose" type="button">Close</button>
+
+    <div class="phone-layer" id="phoneLayer" role="dialog" aria-modal="true" aria-label="Gallery" hidden>
+      <button class="pill phone-close" id="phoneClose" type="button">Close</button>
+      <div class="phone" id="phone">
+        <div class="screen">
+          <div class="island" aria-hidden="true"></div>
+          <div class="status" aria-hidden="true">
+            <span id="clock">9:41</span>
+            <span style="display:flex;gap:6px;align-items:center">
+              <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>
+              <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0z M3.6 7a6.2 6.2 0 0 1 8.8 0l-1.3 1.3a4.4 4.4 0 0 0-6.2 0z M1.4 4.8a9.3 9.3 0 0 1 13.2 0L13.3 6.1a7.5 7.5 0 0 0-10.6 0z" fill="#fff"/></svg>
+              <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#fff"/><rect x="24.5" y="4.5" width="2" height="4" rx="1" fill="#fff" opacity=".5"/></svg>
+            </span>
+          </div>
+          <div class="library" id="library">
+            <div class="lib-head"><div><h3 id="libTitle">All Photos</h3><small id="libCount"></small></div></div>
+            <div class="lib-grid" id="libGrid"></div>
+          </div>
+          <div class="tabs" role="group" aria-label="Show">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="photo" aria-pressed="false">Photos</button>
+            <button type="button" data-filter="video" aria-pressed="false">Videos</button>
+          </div>
+          <div class="viewer" id="viewer" hidden>
+            <div class="v-top"><button type="button" id="vBack">‹ Back</button><span id="vCount"></span><a class="chip" id="vOpen" href="#" rel="noopener" style="text-decoration:none">Open</a></div>
+            <div class="v-media" id="vMedia">
+              <button class="v-nav v-prev" type="button" id="vPrev" aria-label="Previous">‹</button>
+              <button class="v-nav v-next" type="button" id="vNext" aria-label="Next">›</button>
+            </div>
+            <p class="v-cap" id="vCap"></p>
+          </div>
+          <div class="home-bar" aria-hidden="true"></div>
+        </div>
       </div>
-      <div class="g-grid" id="gGrid"></div>
     </div>
   </main>
 
@@ -403,43 +462,91 @@
 
     // ---------- app icons ----------
     const INSTAGRAM = "";   // put your Instagram handle here, e.g. "yourhandle"
+    // TikTok videos to show in the gallery: paste each video's number from its link
+    // (tiktok.com/@throughmybigeyes/video/THIS_NUMBER), with an optional caption.
+    const TIKTOKS = [
+      // ["7301234567890123456", "caption"],
+    ];
     const igLink = document.getElementById("igLink"), igSoon = document.getElementById("igSoon");
     if (INSTAGRAM) igLink.href = "https://www.instagram.com/" + INSTAGRAM + "/";
     else igLink.addEventListener("click", (e) => { e.preventDefault(); igSoon.classList.add("show"); setTimeout(() => igSoon.classList.remove("show"), 1800); });
-    // the Gallery icon is a little collage of four of the photos
-    document.querySelectorAll("#galleryTile > span").forEach((sp, k) => { const p = PHOTOS[[0, 2, 6, 12][k]]; sp.style.setProperty("--c", p.color); sp.style.backgroundImage = `url("${p.src}")`; });
+    // the Gallery icon: an original daisy in the site's pink and lime
+    document.getElementById("galFlower").innerHTML = Array.from({ length: 10 }, (_, k) =>
+      `<ellipse cx="0" cy="-25" rx="9" ry="20" fill="${k % 2 ? "#ff8fc0" : "#ff6fae"}" opacity=".95" transform="rotate(${k * 36})"/>`).join("");
 
-    // ---------- gallery ----------
-    const gallery = document.getElementById("gallery"), gGrid = document.getElementById("gGrid"), galleryBtn = document.getElementById("galleryBtn");
-    let built = false;
-    function buildGrid() {
-      if (built) return; built = true;
-      PHOTOS.forEach((p, i) => {
+    // ---------- the phone gallery ----------
+    const ITEMS = PHOTOS.map((p) => ({ type: "photo", ...p })).concat(TIKTOKS.map(([id, cap]) => ({
+      type: "video", id, caption: cap || "", src: "", color: "#8a3ffc", pin: "https://www.tiktok.com/@throughmybigeyes/video/" + id
+    })));
+    document.getElementById("galBadge").textContent = ITEMS.length;
+    const layer = document.getElementById("phoneLayer"), phone = document.getElementById("phone"), libGrid = document.getElementById("libGrid");
+    const viewer = document.getElementById("viewer"), vMedia = document.getElementById("vMedia"), vCap = document.getElementById("vCap"), vCount = document.getElementById("vCount"), vOpen = document.getElementById("vOpen");
+    const galleryBtn = document.getElementById("galleryBtn");
+    let filter = "all", list = ITEMS, vi = 0;
+    const playSvg = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="#fff"/></svg>';
+    function renderGrid() {
+      list = ITEMS.filter((it) => filter === "all" || it.type === filter);
+      libGrid.innerHTML = "";
+      list.forEach((it, i) => {
         const b = document.createElement("button");
-        b.type = "button"; b.className = "in"; b.style.setProperty("--c", p.color); b.style.setProperty("--i", i);
-        b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
-        b.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), i > 11));
-        b.onclick = () => openLb(i);
-        gGrid.appendChild(b);
+        b.type = "button"; b.style.setProperty("--c", it.color);
+        b.setAttribute("aria-label", (it.type === "video" ? "Play video " : "Open photo ") + (i + 1) + (it.caption ? ": " + it.caption : ""));
+        if (it.type === "photo") b.appendChild(makeImg(it, "", i > 14));
+        else { b.classList.add("vid-tile"); b.innerHTML = '<svg width="34" height="34" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg><span class="dur">' + playSvg + "TikTok</span>"; }
+        b.onclick = () => openViewer(i);
+        libGrid.appendChild(b);
       });
+      const nP = ITEMS.filter((x) => x.type === "photo").length, nV = ITEMS.length - nP;
+      document.getElementById("libTitle").textContent = filter === "video" ? "Videos" : filter === "photo" ? "Photos" : "All Photos";
+      document.getElementById("libCount").textContent = filter === "video" ? (nV ? nV + " videos" : "Videos coming soon") : filter === "photo" ? nP + " photos" : nP + " photos" + (nV ? ", " + nV + " videos" : "");
     }
-    function openGallery() {
-      buildGrid();
+    document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
+      filter = b.dataset.filter;
+      document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      renderGrid(); document.getElementById("library").scrollTop = 0;
+    }));
+    function showItem(i) {
+      vi = (i + list.length) % list.length; const it = list[vi];
+      vMedia.querySelectorAll("img, iframe").forEach((n) => n.remove());
+      if (it.type === "photo") { const img = makeImg(it, it.caption || "Photo", false); vMedia.prepend(img); }
+      else { const f = document.createElement("iframe"); f.src = "https://www.tiktok.com/player/v1/" + it.id + "?autoplay=1&rel=0"; f.allow = "autoplay; encrypted-media; fullscreen"; f.title = it.caption || "TikTok video"; vMedia.prepend(f); }
+      vCap.textContent = it.caption || "";
+      vCount.textContent = (vi + 1) + " of " + list.length;
+      vOpen.href = it.pin; vOpen.textContent = it.type === "video" ? "TikTok" : "Pinterest";
+    }
+    function openViewer(i) { showItem(i); viewer.hidden = false; viewer.classList.remove("in"); void viewer.offsetWidth; viewer.classList.add("in"); document.getElementById("vBack").focus(); }
+    function closeViewer() { viewer.hidden = true; vMedia.querySelectorAll("iframe").forEach((n) => n.remove()); }
+    document.getElementById("vBack").onclick = closeViewer;
+    document.getElementById("vPrev").onclick = () => showItem(vi - 1);
+    document.getElementById("vNext").onclick = () => showItem(vi + 1);
+    let sx = null;
+    vMedia.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+    vMedia.addEventListener("pointerup", (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) showItem(vi + (e.clientX < sx ? 1 : -1)); sx = null; });
+    function tick() { const d = new Date(); document.getElementById("clock").textContent = (d.getHours() % 12 || 12) + ":" + String(d.getMinutes()).padStart(2, "0"); }
+
+    function openPhone() {
+      renderGrid(); tick();
       const r = galleryBtn.querySelector(".tile").getBoundingClientRect();
-      gallery.style.setProperty("--ox", r.left + r.width / 2 + "px"); gallery.style.setProperty("--oy", r.top + r.height / 2 + "px");
-      gallery.hidden = false; document.body.style.overflow = "hidden";
-      if (!reduce) { gallery.classList.remove("closing"); gallery.classList.add("opening"); }
-      document.getElementById("gClose").focus();
+      phone.style.setProperty("--dx", (r.left + r.width / 2 - innerWidth / 2) + "px");
+      phone.style.setProperty("--dy", (r.top + r.height / 2 - innerHeight / 2) + "px");
+      layer.hidden = false; document.body.style.overflow = "hidden";
+      if (!reduce) { layer.classList.remove("closing"); layer.classList.add("opening"); }
+      document.getElementById("phoneClose").focus();
     }
-    function closeGallery() {
-      const done = () => { gallery.hidden = true; gallery.classList.remove("closing"); document.body.style.overflow = ""; galleryBtn.focus(); };
+    function closePhone() {
+      const done = () => { layer.hidden = true; layer.classList.remove("closing", "opening"); closeViewer(); document.body.style.overflow = ""; galleryBtn.focus(); };
       if (reduce) return done();
-      gallery.classList.remove("opening"); gallery.classList.add("closing");
-      gallery.addEventListener("animationend", done, { once: true });
+      layer.classList.remove("opening"); layer.classList.add("closing");
+      layer.addEventListener("animationend", done, { once: true });
     }
-    galleryBtn.addEventListener("click", openGallery);
-    document.getElementById("gClose").addEventListener("click", closeGallery);
-    gallery.addEventListener("keydown", (e) => { if (e.key === "Escape" && !lb.open) closeGallery(); });
+    galleryBtn.addEventListener("click", openPhone);
+    document.getElementById("phoneClose").addEventListener("click", closePhone);
+    layer.addEventListener("click", (e) => { if (e.target === layer) closePhone(); });
+    layer.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { if (!viewer.hidden) closeViewer(); else closePhone(); }
+      if (!viewer.hidden && e.key === "ArrowRight") showItem(vi + 1);
+      if (!viewer.hidden && e.key === "ArrowLeft") showItem(vi - 1);
+    });
 
     // flowers drift a little as the page scrolls
     const walk = document.getElementById("walk");
