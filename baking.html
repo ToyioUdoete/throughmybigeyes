@@ -146,6 +146,20 @@
 
   <script src="song.js"></script>
   <script>
+    // ---------- the "yum" sound plays once when the page opens ----------
+    // (browsers that block sound until a tap play it on the visitor's first tap or click instead)
+    (() => {
+      const yum = new Audio("img/bake/yum.m4a");
+      yum.volume = 0.9; let done = false;
+      yum.addEventListener("play", () => window.song && song.duck(true));
+      yum.addEventListener("ended", () => window.song && song.duck(false));
+      const kinds = ["pointerdown", "keydown", "touchend", "click"];
+      const off = () => kinds.forEach((t) => removeEventListener(t, tryPlay, true));
+      function tryPlay() { if (done) return off(); yum.play().then(() => { done = true; off(); }).catch(() => {}); }
+      kinds.forEach((t) => addEventListener(t, tryPlay, true));
+      tryPlay();
+    })();
+
     // Every bake on this page. To add one, copy a { ... } block.
     // photos: pictures in img/bake/, video: a short clip, story: a line or two (<b>bold</b> works),
     // recipe: what you need and how to make it (or null for no recipe), sticker: optional.

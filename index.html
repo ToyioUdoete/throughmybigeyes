@@ -249,6 +249,9 @@
     .pz-text p { max-width: 34ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
     .pz-text .pz-moves { font-weight: 700; font-size: 17px; }
     .pz-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .pz-goal { display: flex; align-items: center; gap: 14px; margin: 20px 0 0; }
+    .pz-goal img { width: 96px; height: 96px; object-fit: cover; border: 2px solid var(--ink); border-radius: 10px; box-shadow: 3px 3px 0 var(--ink); rotate: -3deg; }
+    .pz-goal figcaption { color: var(--muted); font-size: 15px; }
     .pz-wrap { position: relative; justify-self: center; width: min(100%, 440px); }
     .pz-board { position: relative; width: 100%; aspect-ratio: 1; padding: 0; background: var(--ink); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 7px 7px 0 var(--pink-deep); overflow: hidden; touch-action: manipulation; }
     .pz-tile { position: absolute; left: 0; top: 0; width: calc(100% / 3); height: calc(100% / 3); padding: 0; border: 2px solid var(--ink); border-radius: 6px; background-color: var(--paper); background-repeat: no-repeat; cursor: pointer; transition: transform .18s ease; }
@@ -380,7 +383,7 @@
         <!-- Add more about-me lines here as new <p> paragraphs. -->
         <p>I'm <span id="age">23</span>, a proud Leo (20 August 2003, put it in your calendar), 5'4", and the last of four. Yes, the baby. Yes, it explains a lot.</p>
         <p>My favourite colour is pink (shocking, I know) and my best friend is Mary. If you ever need to win me over, it's jollof rice, chicken, dodo and a cold Amstel Malta. That's the whole bribe.</p>
-        <p>By day, I'm doing my master's in AI. For that side of me, <a class="serious" href="https://toyioudoete.github.io/myPortfolio/" rel="noopener">we get serious in here</a>.</p>
+        <p>By day, I'm doing my master's in AI. For that side of me, <a class="serious" href="https://toyioudoete.github.io/myPortfolio/?from=bigeyes" rel="noopener">we get serious in here</a>.</p>
 
         <!-- Quotes I live by: add one as a new <figure class="q"> -->
         <section class="quotes" aria-roledescription="carousel" aria-label="Quotes I live by">
@@ -463,6 +466,7 @@
           <button class="pill lime" id="pzNew" type="button">New photo</button>
           <button class="pill" id="pzPeek" type="button">Peek</button>
         </div>
+        <figure class="pz-goal"><img id="pzGoal" alt="The finished photo" /><figcaption>This is what you're making</figcaption></figure>
       </div>
       <div class="pz-wrap">
         <div class="pz-board" id="pzBoard" aria-label="Sliding photo puzzle"></div>
@@ -740,6 +744,7 @@
         const p = picks[photo];
         tiles.forEach((el, t) => bg(el, p, Math.floor(t / N3), t % N3));
         bg(full, p);
+        document.getElementById("pzGoal").src = p.src;
       };
       const move = (pos) => {
         if (done) return;
@@ -758,7 +763,8 @@
         order = [...Array(N3 * N3).keys()];
         let gap = N3 * N3 - 1, prev = -1;
         // only real slides from the solved picture, so it can always be solved
-        for (let i = 0; i < 120 || order.every((t, j) => t === j); i++) {
+        // a light mix (about 16 slides) so it's a fun puzzle, not a frustrating one
+        for (let i = 0; i < 16 || order.every((t, j) => t === j); i++) {
           const r = Math.floor(gap / N3), c = gap % N3, opts = [];
           if (r > 0) opts.push(gap - N3); if (r < N3 - 1) opts.push(gap + N3);
           if (c > 0) opts.push(gap - 1); if (c < N3 - 1) opts.push(gap + 1);
