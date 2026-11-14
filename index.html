@@ -120,7 +120,7 @@
     .about-cards { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 36px); align-items: start; margin-top: 10px; }
     .am, .shelf { padding: 22px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); }
     .am-head { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid rgba(22, 22, 22, .12); }
-    .am-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; }
+    .am-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
     .am-head h3 { margin: 0; font-size: 24px; line-height: 1.1; }
     .am-app { margin: 0; font-size: 13px; color: var(--muted); }
     .am-follow { margin-left: auto; padding: 8px 16px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 700; font-size: 14px; text-decoration: none; }
@@ -385,7 +385,7 @@
         <!-- my Apple Music profile -->
         <article class="am" aria-label="My Apple Music">
           <div class="am-head">
-            <img class="am-avatar" src="img/me-poster.jpg" alt="" width="64" height="64" />
+            <img class="am-avatar" src="https://is1-ssl.mzstatic.com/image/thumb/HRGmhVrElum-IDxdZC1fXQ/220x220cc-60.jpg" onerror="this.onerror=null;this.src='img/me-poster.jpg'" alt="" width="64" height="64" />
             <div><p class="am-app">Apple Music</p><h3>toyio</h3></div>
             <a class="am-follow" href="https://music.apple.com/profile/toyio" rel="noopener">Follow</a>
           </div>
