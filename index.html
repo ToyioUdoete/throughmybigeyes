@@ -104,12 +104,12 @@
     .me-print { position: relative; justify-self: center; width: min(100%, 330px); margin: 0; padding: 12px 12px 58px; background: var(--paper); border: 2px solid var(--ink); box-shadow: 7px 7px 0 var(--ink); rotate: -4deg; }
     .me-print video { display: block; width: 100%; aspect-ratio: 480 / 854; object-fit: cover; background: #d9c9c0; }
     .me-print .tape { position: absolute; top: -15px; left: 50%; width: 118px; height: 30px; translate: -50% 0; rotate: 4deg; background: rgba(201, 244, 91, .88); box-shadow: 0 1px 0 rgba(22, 22, 22, .15); }
-    .me-print figcaption { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: var(--script); font-size: 44px; line-height: 1; }
+    .me-print figcaption { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font-family: var(--script); font-size: 58px; line-height: 1; }
     .about.on .me-print { animation: print-in .9s cubic-bezier(.2, 1.3, .4, 1) both; }
     @keyframes print-in { from { opacity: 0; transform: translateY(40px) rotate(10deg); } }
     .about-text h2 { font-family: var(--display); font-weight: 400; font-size: clamp(52px, 7vw, 100px); line-height: .9; margin: 0 0 24px; }
     .about-text > p { max-width: 36ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
-    .about-text .serious { font-weight: 700; text-decoration: none; background: var(--lime); padding: 0 .25em; border-bottom: 3px solid var(--ink); }
+    .about-text .serious { font-weight: 700; text-decoration: none; background: var(--lime); padding: 0 .25em; border-bottom: 3px solid var(--ink); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
     .about-text .serious:hover { background: var(--paper); }
     .music { max-width: 440px; margin-top: 30px; padding: 18px 20px 20px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); }
     .music h3 { margin: 0 0 6px; font-size: 16px; }
@@ -237,7 +237,7 @@
     }
     @media (max-width: 760px) {
       .about { grid-template-columns: 1fr; padding-top: 80px; }
-      .me-print { width: min(78%, 280px); }
+      .me-print { width: min(64%, 240px); }
     }
     @media (max-width: 520px) {
       .bar nav .pill:not(.lime) { display: none; }
