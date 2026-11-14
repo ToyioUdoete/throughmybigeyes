@@ -2,7 +2,7 @@
 
 A Pinterest-style photo diary for [throughmybigeyes](https://www.pinterest.com/twiiinklle/).
 
-A paper-cut black-and-white vintage camera prints photos when the page opens and every time you press it. Below it, the diary shows every photo in a masonry grid; tap one to open it large.
+A vintage instant camera prints photos when the page opens and every time you press it. Then an animated "shall we?" invites you in, and scrolling walks you forward through the photos in 3D; tap any print to open it large. Visitors who set "reduce motion" get a simple photo grid instead.
 
 - Live site: https://toyioudoete.github.io/throughmybigeyes/
 - `index.html` (no build step) plus `img/my-big-eyes` (the newspaper-style eyes clipping in the title)

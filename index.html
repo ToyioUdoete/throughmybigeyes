@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>through my big eyes</title>
-  <meta name="description" content="through my big eyes: a digital diary of photos by twiiinklle." />
+  <meta name="description" content="through my big eyes: a digital diary of photos by twiiinklle. Shall we?" />
   <meta name="theme-color" content="#ffc9df" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,125 +14,147 @@
       --pink: #ffc9df;
       --pink-deep: #ff6fae;
       --lime: #c9f45b;
-      --lime-deep: #8fcf1c;
       --ink: #161616;
       --paper: #fbfaf6;
       --grey: #d9d6cf;
+      --muted: #5a4650;
       --display: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
       --body: "DM Sans", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      margin: 0; color: var(--ink); font: 17px/1.55 var(--body);
-      background-color: var(--pink);
-      /* paper grain */
+      margin: 0; color: var(--ink); font: 17px/1.55 var(--body); background-color: var(--pink);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      -webkit-font-smoothing: antialiased;
+      -webkit-font-smoothing: antialiased; overflow-x: clip;
     }
     img { display: block; max-width: 100%; }
     a { color: inherit; }
+    button { font: inherit; color: inherit; }
     :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
     .skip { position: absolute; left: 12px; top: -60px; background: var(--ink); color: #fff; padding: 10px 14px; border-radius: 10px; z-index: 99; }
     .skip:focus { top: 12px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-    /* ---------- top bar ---------- */
-    .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
-    .handle { font-family: var(--display); font-size: 22px; text-decoration: none; }
-    .bar nav { display: flex; gap: 10px; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--paper); border: 2px solid var(--ink); text-decoration: none; font-weight: 700; font-size: 15px; box-shadow: 3px 3px 0 var(--ink); transition: transform .15s ease, box-shadow .15s ease; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--paper); border: 2px solid var(--ink); text-decoration: none; font-weight: 700; font-size: 15px; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
     .pill:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
     .pill.lime { background: var(--lime); }
 
-    /* ---------- hero ---------- */
-    .hero { position: relative; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(24px, 4vw, 64px); padding: 10px clamp(20px, 4vw, 48px) 40px; max-width: 1320px; margin: 0 auto; }
-    .stage { position: relative; aspect-ratio: 1 / 1.32; }
-    .camera { position: absolute; inset: 0 0 auto 0; z-index: 3; filter: drop-shadow(10px 12px 0 rgba(22, 22, 22, .22)); cursor: pointer; }
-    .camera svg { width: 100%; height: auto; overflow: visible; }
-    .print-tray { position: absolute; left: 29%; right: 29%; top: 44%; height: 0; z-index: 2; }
-    .print {
-      position: absolute; left: 0; right: 0; top: 0; padding: 10px 10px 40px; background: var(--paper);
-      box-shadow: 6px 8px 0 rgba(22, 22, 22, .18); border-radius: 4px; transform-origin: 50% 0;
-      transition: transform 1.1s cubic-bezier(.2, .8, .2, 1);
-    }
-    .print .ph { aspect-ratio: 1; overflow: hidden; background: var(--grey); border-radius: 2px; }
-    .print img { width: 100%; height: 100%; object-fit: cover; }
-    .print span { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; font: 700 14px var(--body); color: #6b6b6b; }
+    /* ---------- top bar ---------- */
+    .bar { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
+    .handle { font-family: var(--display); font-size: 22px; text-decoration: none; }
+    .bar nav { display: flex; gap: 10px; }
 
-    .intro h1 { font-family: var(--display); font-weight: 400; font-size: clamp(64px, 9.5vw, 148px); line-height: .86; margin: 0; letter-spacing: -0.01em; }
+    /* ---------- hero ---------- */
+    .hero { position: relative; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(20px, 3vw, 48px); max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px) 40px; min-height: calc(100svh - 92px); }
+    .intro h1 { font-family: var(--display); font-weight: 400; font-size: clamp(60px, 9vw, 140px); line-height: .88; margin: 0; }
     .intro h1 .row { display: block; }
     .intro h1 .cut { display: inline-block; padding: .02em .16em .08em; margin-left: -.08em; background: var(--lime); border: 3px solid var(--ink); border-radius: 18px; transform: rotate(-3deg); box-shadow: 6px 6px 0 var(--ink); }
-    .intro h1 .eyes { display: inline-block; color: var(--paper); -webkit-text-stroke: 3px var(--ink); text-shadow: 6px 6px 0 var(--pink-deep); }
-    .intro h1 .eyes-row { display: flex; align-items: center; flex-wrap: nowrap; gap: .1em; }
-    .clip { position: relative; display: block; width: clamp(120px, 13vw, 200px); flex: 0 0 auto; transform: rotate(4deg) translateY(.06em); filter: drop-shadow(4px 5px 0 rgba(22, 22, 22, .25)); }
+    .intro h1 .eyes-row { display: flex; align-items: center; gap: .1em; }
+    .intro h1 .eyes { color: var(--paper); -webkit-text-stroke: 3px var(--ink); text-shadow: 6px 6px 0 var(--pink-deep); }
+    .clip { position: relative; flex: 0 0 auto; width: clamp(120px, 13vw, 200px); transform: rotate(4deg) translateY(.06em); filter: drop-shadow(4px 5px 0 rgba(22, 22, 22, .25)); }
     .clip img { width: 100%; height: auto; }
     .clip::before { content: ""; position: absolute; z-index: 1; top: -9px; left: 50%; width: 64px; height: 20px; transform: translateX(-50%) rotate(-6deg); background: rgba(201, 244, 91, .9); }
     .intro p { max-width: 30ch; margin: 28px 0 0; font-size: clamp(18px, 1.6vw, 21px); }
     .intro .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-    .hint { margin-top: 18px; font-size: 14px; color: #5a4650; }
+    .hint { margin-top: 16px !important; font-size: 14px !important; color: var(--muted); }
 
-    /* ---------- grid ---------- */
-    .board { max-width: 1320px; margin: 0 auto; padding: 40px clamp(14px, 3vw, 40px) 80px; }
-    .board-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 0 6px 22px; }
-    .board-head h2 { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 5vw, 60px); line-height: 1; margin: 0; }
-    .board-head p { margin: 0; color: #5a4650; }
-    .masonry { columns: 4 240px; column-gap: 16px; }
-    .pin { break-inside: avoid; margin: 0 0 16px; }
-    .pin button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; font: inherit; color: inherit; }
-    .pin .frame { display: block; position: relative; border-radius: 18px; overflow: hidden; background: var(--c, var(--grey)); }
-    .pin img { width: 100%; height: auto; transition: transform .5s ease; }
-    .pin:hover img { transform: scale(1.035); }
-    .pin .cap { display: block; padding: 8px 6px 0; font-size: 15px; font-weight: 500; }
-    .pin .tape { position: absolute; z-index: 1; top: -6px; left: 50%; width: 72px; height: 22px; transform: translateX(-50%) rotate(-4deg); background: rgba(201, 244, 91, .85); }
-    .pin:nth-child(3n) .tape { background: rgba(255, 111, 174, .7); transform: translateX(-50%) rotate(5deg); }
-    .pin:nth-child(4n+1) .tape { display: none; }
-    .js .pin { opacity: 0; transform: translateY(26px) rotate(var(--r, 0deg)); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
-    .js .pin.in { opacity: 1; transform: none; }
+    .stage { position: relative; aspect-ratio: 3 / 2.6; }
+    .camera { position: absolute; inset: 0 0 auto 0; z-index: 1; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+    .camera img { width: 100%; height: auto; aspect-ratio: 1400 / 933; mix-blend-mode: multiply; filter: grayscale(1) contrast(1.12) brightness(1.04); }
+    .flashbulb { position: absolute; left: 45%; top: 30%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 3; }
+    .flashbulb.go { animation: bulb .55s ease-out; }
+    @keyframes bulb { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(2.2); } }
+    .tray { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+    .print { position: absolute; left: 17%; top: 48%; width: 30%; padding: 3% 3% 9%; background: var(--paper); border-radius: 3px; box-shadow: 6px 9px 0 rgba(22, 22, 22, .2); transform-origin: 50% 0; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
+    .print .ph { aspect-ratio: 1; overflow: hidden; background: var(--grey); }
+    .print img { width: 100%; height: 100%; object-fit: cover; }
+    .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
+
+    /* ---------- shall we ---------- */
+    .invite { position: relative; min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 80px 20px; }
+    .shall { font-family: var(--display); font-weight: 400; font-size: clamp(84px, 17vw, 260px); line-height: .9; margin: 0; white-space: nowrap; }
+    .shall .ch { display: inline-block; transform: translateY(.6em) rotate(var(--rot, 0deg)); opacity: 0; transition: transform .9s cubic-bezier(.2, 1.4, .3, 1), opacity .4s ease; transition-delay: calc(var(--i) * 70ms); }
+    .shall .ch.sp { width: .28em; }
+    .shall .ch.q { color: var(--pink-deep); -webkit-text-stroke: 3px var(--ink); transform-origin: 50% 90%; }
+    .invite.on .shall .ch { transform: none; opacity: 1; }
+    .invite.on .shall .ch.q { animation: tilt 2.6s ease-in-out 1.2s infinite; }
+    @keyframes tilt { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(12deg); } 60% { transform: rotate(-6deg); } }
+    .swash { display: block; width: min(560px, 70vw); height: auto; margin: -.1em auto 0; overflow: visible; }
+    .swash path { stroke-dasharray: 700; stroke-dashoffset: 700; transition: stroke-dashoffset 1.2s ease .9s; }
+    .invite.on .swash path { stroke-dashoffset: 0; }
+    .invite p { max-width: 34ch; margin: 22px auto 0; font-size: clamp(18px, 1.8vw, 22px); opacity: 0; transition: opacity .8s ease 1.4s; }
+    .invite.on p { opacity: 1; }
+    .cue { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 34px; font-weight: 700; font-size: 14px; text-decoration: none; opacity: 0; transition: opacity .8s ease 1.8s; }
+    .invite.on .cue { opacity: 1; }
+    .cue svg { animation: nudge 1.6s ease-in-out infinite; }
+    @keyframes nudge { 50% { transform: translateY(6px); } }
+
+    /* ---------- the walk-through ---------- */
+    .walk { position: relative; height: calc(var(--n) * 62vh + 100vh); }
+    .room { position: sticky; top: 0; height: 100vh; overflow: hidden; perspective: 900px; perspective-origin: 50% 46%;
+      background: radial-gradient(120% 80% at 50% 110%, #e9ffb8 0%, rgba(233, 255, 184, 0) 55%), linear-gradient(180deg, var(--pink) 0%, #ffd9e8 55%, #f3ffd6 100%); }
+    .room::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 60% at 50% 50%, transparent 60%, rgba(22, 22, 22, .12) 100%); }
+    .world { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+    .frame3d { position: absolute; left: 0; top: 0; width: var(--w); margin-left: calc(var(--w) / -2); padding: 12px 12px 44px; background: var(--paper); border-radius: 4px; border: 0; cursor: zoom-in;
+      box-shadow: 10px 14px 0 rgba(22, 22, 22, .16); transform-style: preserve-3d; will-change: transform, opacity; }
+    .frame3d .ph { background: var(--c, var(--grey)); }
+    .frame3d img { width: 100%; height: auto; }
+    .frame3d .no { position: absolute; left: 14px; right: 14px; bottom: 12px; display: flex; justify-content: space-between; font: 700 13px var(--body); color: #6b6b6b; }
+    .frame3d .tape { position: absolute; top: -10px; left: 50%; width: 80px; height: 22px; transform: translateX(-50%) rotate(-4deg); background: rgba(201, 244, 91, .9); }
+    .frame3d:nth-child(3n) .tape { background: rgba(255, 111, 174, .75); transform: translateX(-50%) rotate(5deg); }
+    .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); pointer-events: none; }
+    .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; }
+    .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
+    .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; }
+    .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
+    .room-title { position: absolute; top: 22px; left: 0; right: 0; z-index: 3; text-align: center; font: 700 14px var(--body); color: var(--muted); pointer-events: none; }
+
+    /* fallback grid when motion is reduced */
+    .grid { display: none; columns: 3 220px; column-gap: 16px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+    .grid button { display: block; width: 100%; margin: 0 0 16px; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: var(--c, var(--grey)); cursor: zoom-in; break-inside: avoid; }
+    .grid img { width: 100%; height: auto; }
 
     /* ---------- lightbox ---------- */
     dialog.lb { padding: 0; border: 0; background: transparent; max-width: min(92vw, 720px); max-height: 94vh; overflow: visible; }
     dialog.lb::backdrop { background: rgba(22, 22, 22, .82); }
     .lb-card { position: relative; background: var(--paper); padding: 14px 14px 18px; border-radius: 10px; box-shadow: 10px 10px 0 var(--lime); }
-    .lb-card img { max-height: 76vh; width: auto; margin: 0 auto; border-radius: 4px; }
+    .lb-card img { max-height: 74vh; width: auto; margin: 0 auto; border-radius: 4px; }
     .lb-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 4px 0; }
     .lb-meta p { margin: 0; font-weight: 500; }
     .lb-nav { position: absolute; top: 50%; translate: 0 -50%; width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--ink); background: var(--pink); font: 700 22px var(--body); cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
     .lb-prev { left: -70px; } .lb-next { right: -70px; }
     .lb-close { position: absolute; top: -18px; right: -18px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); background: var(--lime); font: 700 20px var(--body); cursor: pointer; }
 
-    footer { text-align: center; padding: 40px 20px 60px; }
+    footer { text-align: center; padding: 90px 20px 60px; }
     footer .sign { font-family: var(--display); font-size: clamp(40px, 7vw, 84px); line-height: 1; margin: 0 0 18px; }
     footer .links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-    footer small { display: block; margin-top: 26px; color: #5a4650; }
-
-    /* camera parts */
-    .flash { position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 50; }
-    .flash.go { animation: flash .5s ease-out; }
-    @keyframes flash { 0% { opacity: .85; } 100% { opacity: 0; } }
+    footer small { display: block; margin-top: 26px; color: var(--muted); }
+    footer small a { color: var(--muted); }
 
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .stage { max-width: 460px; width: 100%; margin: 0 auto; order: 2; }
-      .intro { order: 1; }
+      .hero { grid-template-columns: 1fr; min-height: 0; }
+      .stage { max-width: 560px; width: 100%; margin: 10px auto 0; }
       .lb-prev { left: 8px; } .lb-next { right: 8px; }
       .lb-nav { top: auto; bottom: -70px; translate: none; }
+      .caption { display: none; }
     }
     @media (max-width: 520px) {
       .bar nav .pill:not(.lime) { display: none; }
-      .masonry { columns: 2 150px; column-gap: 10px; }
-      .pin { margin-bottom: 10px; }
-      .board-head { flex-direction: column; align-items: start; }
+      .shall { font-size: 22vw; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
-      .js .pin { opacity: 1; transform: none; }
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+      .walk { display: none; }
+      .grid { display: block; }
+      .shall .ch, .invite p, .cue { opacity: 1 !important; transform: none !important; }
+      .swash path { stroke-dashoffset: 0 !important; }
     }
   </style>
 </head>
 <body>
-  <a class="skip" href="#board">Skip to the photos</a>
-  <div class="flash" aria-hidden="true"></div>
+  <a class="skip" href="#walk">Skip to the photos</a>
 
   <header class="bar">
     <a class="handle" href="#top">twiiinklle</a>
@@ -148,69 +170,42 @@
         <h1 id="title"><span class="row">through</span><span class="row"><span class="cut">my big</span></span><span class="row eyes-row"><span class="eyes">eyes</span><picture class="clip"><source srcset="img/my-big-eyes.webp" type="image/webp" /><img src="img/my-big-eyes.png" alt="Black and white newspaper-style close-up of my eyes" width="634" height="280" /></picture></span></h1>
         <p>A digital diary of the little things I stop to look at. 📸 💐</p>
         <div class="actions">
-          <a class="pill lime" href="#board">See the photos</a>
+          <a class="pill lime" href="#invite">Come see</a>
           <a class="pill" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Follow on Pinterest</a>
         </div>
-        <p class="hint">Press the shutter on the camera to print another one.</p>
+        <p class="hint">Press the camera to print another one.</p>
       </div>
 
       <div class="stage">
-        <div class="print-tray" id="tray" aria-hidden="true"></div>
-        <div class="camera" id="camera" role="button" tabindex="0" aria-label="Take a photo: prints another picture from the diary">
-          <!-- paper-cut vintage instant camera, black and white -->
-          <svg viewBox="0 0 520 400" aria-hidden="true">
-            <defs>
-              <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
-                <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="t" />
-                <feDisplacementMap in="SourceGraphic" in2="t" scale="5" />
-              </filter>
-              <pattern id="leather" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#e9e6df" /><circle cx="2" cy="2" r="1.3" fill="#161616" opacity=".55" /><circle cx="5.5" cy="5.5" r="1" fill="#161616" opacity=".4" /></pattern>
-              <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="1" seed="3" /><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .14 0" /><feComposite in2="SourceGraphic" operator="in" /></filter>
-              
-            </defs>
-            <g filter="url(#rough)">
-              <!-- body layers -->
-              <rect x="40" y="70" width="440" height="300" rx="46" fill="#161616" />
-              <rect x="52" y="82" width="416" height="276" rx="38" fill="#fbfaf6" />
-              <rect x="52" y="254" width="416" height="104" rx="0" fill="#e9e6df" />
-              <rect x="52" y="320" width="416" height="38" fill="#161616" />
-              <rect x="150" y="333" width="220" height="12" rx="6" fill="#3a3a3a" />
-              <!-- top: viewfinder, flash, shutter -->
-              <rect x="70" y="100" width="90" height="56" rx="14" fill="#161616" />
-              <rect x="82" y="111" width="66" height="34" rx="9" fill="#5c5c5c" />
-              <rect x="372" y="100" width="78" height="48" rx="12" fill="#161616" />
-              <rect x="381" y="108" width="60" height="32" rx="8" fill="#fbfaf6" />
-              <g stroke="#161616" stroke-width="3"><line x1="392" y1="112" x2="392" y2="136" /><line x1="404" y1="112" x2="404" y2="136" /><line x1="416" y1="112" x2="416" y2="136" /><line x1="428" y1="112" x2="428" y2="136" /></g>
-              <g id="shutter"><rect x="398" y="48" width="56" height="30" rx="12" fill="#161616" /><rect x="406" y="40" width="40" height="18" rx="9" fill="#fbfaf6" stroke="#161616" stroke-width="5" /></g>
-              <!-- vintage lens -->
-              <circle cx="260" cy="214" r="120" fill="#161616" />
-              <circle cx="260" cy="214" r="110" fill="none" stroke="#fbfaf6" stroke-width="6" stroke-dasharray="3 7" />
-              <circle cx="260" cy="214" r="98" fill="#d9d6cf" />
-              <circle cx="260" cy="214" r="92" fill="none" stroke="#161616" stroke-width="2" />
-              <circle cx="260" cy="214" r="84" fill="#161616" />
-              <circle cx="260" cy="214" r="70" fill="#2b2b2b" stroke="#fbfaf6" stroke-width="2" stroke-opacity=".5" />
-              <circle cx="260" cy="214" r="54" fill="#0d0d0d" />
-              <circle cx="260" cy="214" r="38" fill="#1c1c1c" />
-              <path d="M222 196 A44 44 0 0 1 268 172" stroke="#fbfaf6" stroke-width="9" stroke-linecap="round" fill="none" opacity=".85" />
-              <circle cx="286" cy="236" r="6" fill="#fbfaf6" opacity=".7" />
-              <circle cx="232" cy="248" r="3" fill="#fbfaf6" opacity=".5" />
-              <!-- leatherette texture either side of the lens -->
-              <rect x="52" y="168" width="96" height="86" fill="url(#leather)" />
-              <rect x="372" y="168" width="96" height="86" fill="url(#leather)" />
-            </g>
-            <rect x="40" y="40" width="440" height="330" rx="46" filter="url(#grain)" fill="#000" opacity=".5" style="mix-blend-mode:multiply" pointer-events="none" />
-          </svg>
-        </div>
+        <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
+          <img src="https://images.unsplash.com/photo-1614707484302-4e1638af021f?w=1400&q=80&auto=format" alt="" width="1400" height="933" />
+        </button>
+        <span class="flashbulb" aria-hidden="true"></span>
+        <div class="tray" id="tray" aria-hidden="true"></div>
       </div>
     </section>
 
-    <section class="board" id="board" aria-labelledby="board-title">
-      <div class="board-head">
-        <h2 id="board-title">the diary</h2>
-        <p>Tap any photo to see it bigger.</p>
+    <section class="invite" id="invite" aria-labelledby="shall">
+      <div>
+        <h2 class="shall" id="shall" aria-label="shall we?"></h2>
+        <svg class="swash" viewBox="0 0 560 60" aria-hidden="true"><path d="M10 38 C 120 8, 220 56, 320 30 S 500 14, 550 34" fill="none" stroke="#c9f45b" stroke-width="14" stroke-linecap="round" /></svg>
+        <p>Come see the world through my eyes. Keep scrolling and walk through it with me.</p>
+        <a class="cue" href="#walk">Step inside<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg></a>
       </div>
-      <div class="masonry" id="masonry"></div>
     </section>
+
+    <section class="walk" id="walk" aria-label="The photos">
+      <div class="room" id="room">
+        <div class="progress" id="progress" aria-hidden="true"></div>
+        <p class="room-title" aria-hidden="true">through my big eyes</p>
+        <div class="world" id="world"></div>
+        <div class="hud" aria-hidden="true">
+          <p class="counter" id="counter">01<small>of 16</small></p>
+          <p class="caption" id="caption"></p>
+        </div>
+      </div>
+    </section>
+    <div class="grid" id="grid" aria-label="All photos"></div>
   </main>
 
   <footer>
@@ -219,7 +214,7 @@
       <a class="pill lime" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Pinterest @twiiinklle</a>
       <a class="pill" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener">TikTok</a>
     </div>
-    <small>All photos © throughmybigeyes.</small>
+    <small>All photos © throughmybigeyes. Camera photo from <a href="https://unsplash.com/photos/black-and-silver-polaroid-camera-K6dgVl7WKDQ" rel="noopener">Unsplash</a>.</small>
   </footer>
 
   <dialog class="lb" id="lb" aria-label="Photo viewer">
@@ -255,49 +250,24 @@
       src: `https://i.pinimg.com/736x/${hash.slice(0, 2)}/${hash.slice(2, 4)}/${hash.slice(4, 6)}/${hash}.jpg`,
       w, h, color, caption, pin: `https://www.pinterest.com/pin/${pin}/`
     }));
-
+    const N = PHOTOS.length;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("js");
+    const pad = (n) => String(n).padStart(2, "0");
 
-    // If an image can't load (e.g. offline), keep its colour block so the layout holds.
-    function makeImg(p, alt) {
+    function makeImg(p, alt, lazy) {
       const img = new Image(p.w, p.h);
-      img.src = p.src; img.alt = alt; img.loading = "lazy"; img.decoding = "async";
+      img.src = p.src; img.alt = alt; img.decoding = "async"; if (lazy) img.loading = "lazy";
       img.addEventListener("error", () => { img.style.visibility = "hidden"; });
       return img;
     }
-
-    // ---------- masonry board ----------
-    const board = document.getElementById("masonry");
-    PHOTOS.forEach((p, i) => {
-      const fig = document.createElement("figure");
-      fig.className = "pin";
-      fig.style.setProperty("--r", (i % 2 ? 2 : -2) + "deg");
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
-      const frame = document.createElement("span");
-      frame.className = "frame"; frame.style.setProperty("--c", p.color);
-      frame.innerHTML = '<span class="tape" aria-hidden="true"></span>';
-      frame.appendChild(makeImg(p, p.caption || "Photo " + (i + 1) + " from the diary"));
-      btn.appendChild(frame);
-      if (p.caption) { const c = document.createElement("span"); c.className = "cap"; c.textContent = p.caption; btn.appendChild(c); }
-      btn.addEventListener("click", () => openLb(i));
-      fig.appendChild(btn);
-      board.appendChild(fig);
-    });
-    if (!reduce && "IntersectionObserver" in window) {
-      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
-      document.querySelectorAll(".pin").forEach((el) => io.observe(el));
-    } else document.querySelectorAll(".pin").forEach((el) => el.classList.add("in"));
 
     // ---------- lightbox ----------
     const lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg"), lbCap = document.getElementById("lbCap"), lbPin = document.getElementById("lbPin");
     let cur = 0;
     function show(i) {
-      cur = (i + PHOTOS.length) % PHOTOS.length; const p = PHOTOS[cur];
+      cur = (i + N) % N; const p = PHOTOS[cur];
       lbImg.src = p.src; lbImg.width = p.w; lbImg.height = p.h; lbImg.alt = p.caption || "Photo " + (cur + 1);
-      lbCap.textContent = p.caption || (cur + 1) + " / " + PHOTOS.length; lbPin.href = p.pin;
+      lbCap.textContent = p.caption || pad(cur + 1) + " of " + N; lbPin.href = p.pin;
     }
     function openLb(i) { show(i); if (lb.showModal) lb.showModal(); else lb.setAttribute("open", ""); }
     document.getElementById("lbClose").onclick = () => lb.close();
@@ -306,33 +276,104 @@
     lb.addEventListener("click", (e) => { if (e.target === lb) lb.close(); });
     lb.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
 
-    // ---------- camera: prints slide out ----------
-    const tray = document.getElementById("tray"), camera = document.getElementById("camera"), flash = document.querySelector(".flash");
+    // ---------- hero camera: prints come out of the front slot ----------
+    const tray = document.getElementById("tray"), camera = document.getElementById("camera"), bulb = document.querySelector(".flashbulb");
     let printed = 0;
-    const slots = [{ y: 52, r: -9, x: -46 }, { y: 82, r: 7, x: 40 }, { y: 112, r: -2, x: -2 }];
+    const slots = [{ x: -62, y: 58, r: -12 }, { x: 8, y: 66, r: 6 }, { x: 74, y: 58, r: 14 }];
     function printPhoto(withFlash) {
-      const p = PHOTOS[printed % PHOTOS.length];
+      const p = PHOTOS[printed % N];
       const el = document.createElement("div");
       el.className = "print";
       const ph = document.createElement("div"); ph.className = "ph"; ph.style.background = p.color;
-      ph.appendChild(makeImg(p, "")); el.appendChild(ph);
-      const tag = document.createElement("span"); tag.textContent = "no. " + String(printed + 1).padStart(2, "0"); el.appendChild(tag);
+      ph.appendChild(makeImg(p, "", false)); el.appendChild(ph);
+      const tag = document.createElement("span"); tag.textContent = "no. " + pad(printed + 1); el.appendChild(tag);
+      el.style.transform = "translate(0, -18%) scale(.35)"; el.style.opacity = "0";
       tray.appendChild(el);
       const s = slots[printed % slots.length];
-      el.style.transform = "translate(0, -40%) rotate(0deg)";
-      requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.r}deg)`; }));
-      if (withFlash && !reduce) { flash.classList.remove("go"); void flash.offsetWidth; flash.classList.add("go"); }
+      requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = `translate(${s.x}%, ${s.y}%) rotate(${s.r}deg)`; }));
+      if (withFlash && !reduce) { bulb.classList.remove("go"); void bulb.offsetWidth; bulb.classList.add("go"); }
       printed++;
       const prints = tray.querySelectorAll(".print");
       if (prints.length > 3) prints[0].remove();
     }
     camera.addEventListener("click", () => printPhoto(true));
-    camera.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); printPhoto(true); } });
-
     if (reduce) { printPhoto(false); printPhoto(false); printPhoto(false); }
-    else {
-      [500, 1300, 2100].forEach((t, k) => setTimeout(() => printPhoto(k === 0), t));
+    else [500, 1300, 2100].forEach((t, k) => setTimeout(() => printPhoto(k === 0), t));
+
+    // ---------- "shall we?" ----------
+    const shall = document.getElementById("shall");
+    [..."shall we?"].forEach((ch, i) => {
+      const s = document.createElement("span");
+      s.className = "ch" + (ch === " " ? " sp" : "") + (ch === "?" ? " q" : "");
+      s.textContent = ch === " " ? " " : ch; s.setAttribute("aria-hidden", "true");
+      s.style.setProperty("--i", i); s.style.setProperty("--rot", (i % 2 ? 8 : -8) + "deg");
+      shall.appendChild(s);
+    });
+    const invite = document.getElementById("invite");
+    if ("IntersectionObserver" in window && !reduce) {
+      new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) invite.classList.add("on"); }), { threshold: 0.35 }).observe(invite);
+    } else invite.classList.add("on");
+
+    // ---------- fallback grid (reduced motion) ----------
+    const grid = document.getElementById("grid");
+    PHOTOS.forEach((p, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.style.setProperty("--c", p.color);
+      b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
+      b.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), true)); b.onclick = () => openLb(i); grid.appendChild(b);
+    });
+
+    // ---------- the walk-through: scroll moves you forward past the photos ----------
+    const walk = document.getElementById("walk"), world = document.getElementById("world");
+    const counter = document.getElementById("counter"), caption = document.getElementById("caption"), progress = document.getElementById("progress");
+    walk.style.setProperty("--n", N);
+    const GAP = 520;                    // depth between photos
+    const frames = PHOTOS.map((p, i) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "frame3d";
+      b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
+      const ph = document.createElement("div"); ph.className = "ph"; ph.style.setProperty("--c", p.color);
+      ph.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), i > 3)); b.appendChild(ph);
+      b.insertAdjacentHTML("beforeend", '<span class="tape" aria-hidden="true"></span><span class="no"><span>no. ' + pad(i + 1) + '</span><span>' + (p.caption || "") + "</span></span>");
+      b.onclick = () => openLb(i);
+      world.appendChild(b);
+      const side = i % 2 ? 1 : -1;
+      return { el: b, z: -(i + 1) * GAP, side, y: ((i * 37) % 9 - 4) * 1.4, rz: ((i * 53) % 9 - 4) * 1.2 };
+    });
+
+    let vw = innerWidth, vh = innerHeight;
+    function layout() {
+      vw = innerWidth; vh = innerHeight;
+      const small = vw < 700;
+      const w = small ? Math.min(vw * 0.62, 300) : Math.min(vw * 0.24, 340);
+      world.style.setProperty("--w", w + "px");
+      frames.forEach((f) => { f.x = f.side * (small ? vw * 0.2 : vw * 0.22); f.ry = -f.side * (small ? 10 : 18); });
+      update();
     }
+    function update() {
+      const r = walk.getBoundingClientRect();
+      const total = walk.offsetHeight - vh;
+      const t = Math.min(1, Math.max(0, -r.top / total));
+      const camZ = t * (N * GAP + 200) + 120;          // how far we've walked
+      let nearest = 0, best = Infinity;
+      frames.forEach((f, i) => {
+        const dz = f.z + camZ;                          // 0 = at the viewer, negative = ahead
+        const fadeIn = Math.min(1, Math.max(0, (dz + 3600) / 1200));
+        const fadeOut = Math.min(1, Math.max(0, (420 - dz) / 260));
+        const o = fadeIn * fadeOut;
+        f.el.style.opacity = o.toFixed(3);
+        f.el.style.visibility = o < 0.02 ? "hidden" : "visible";
+        f.el.style.transform = `translate3d(${f.x}px, calc(-50% + ${f.y}vh), ${dz}px) rotateY(${f.ry}deg) rotateZ(${f.rz}deg)`;
+        const d = Math.abs(dz + 260);
+        if (d < best) { best = d; nearest = i; }
+      });
+      counter.innerHTML = pad(nearest + 1) + "<small>of " + N + "</small>";
+      caption.textContent = PHOTOS[nearest].caption;
+      progress.style.transform = "scaleX(" + t + ")";
+    }
+    let ticking = false;
+    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(); ticking = false; }); } }, { passive: true });
+    addEventListener("resize", layout);
+    if (!reduce) layout();
   </script>
 </body>
 </html>
