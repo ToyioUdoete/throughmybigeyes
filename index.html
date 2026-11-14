@@ -179,7 +179,15 @@
     .am iframe { display: block; width: 100%; height: 450px; border: 0; border-radius: 14px; }
     .shelf .am-label:first-child, .movies .am-label:first-child { margin-top: 0; }
     .about-cards { grid-template-areas: "am shelf" "movies shelf"; }
-    .am { grid-area: am; } .movies { grid-area: movies; } .shelf { grid-area: shelf; }
+    .am { grid-area: am; } .movies { grid-area: movies; } .side { grid-area: shelf; }
+    .side { align-self: stretch; display: flex; flex-direction: column; gap: clamp(20px, 3vw, 36px); }
+    .pod { margin-top: auto; display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); rotate: .8deg; }
+    .pod-icon { flex: 0 0 48px; height: 48px; display: grid; place-items: center; border-radius: 12px; background: var(--lime); border: 2px solid var(--ink); }
+    .pod .am-label { margin: 0 0 2px; font-size: 13px; color: var(--muted); font-weight: 500; }
+    .pod b { font-size: 18px; line-height: 1.2; }
+    .pod-line { margin: 2px 0 6px; font-size: 15px; }
+    .pod-links { display: flex; gap: 14px; margin: 0; font-size: 14px; font-weight: 700; }
+    .pod-links a { text-decoration-color: var(--pink-deep); text-decoration-thickness: 2px; text-underline-offset: 3px; }
     .movies { padding: 22px; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); }
     .trailer { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 14px; overflow: hidden; background: #111; cursor: pointer; }
     .trailer img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
@@ -459,22 +467,35 @@
           <p class="movie-name"><b>Project Hail Mary</b><span>Watch the trailer</span></p>
         </article>
 
-        <!-- books -->
-        <article class="shelf" aria-label="Books">
-          <p class="am-label">Favourite book</p>
-          <a class="book" href="https://books.apple.com/us/book/only-big-bumbum-matters-tomorrow/id6471366980" rel="noopener">
-            <img src="https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/8e/2c/b7/8e2cb7f1-77c8-cf30-5b9a-342ed4d8baa9/9780063354517.jpg/300x450bb.jpg" alt="Cover of Only Big Bumbum Matters Tomorrow" width="150" height="226" loading="lazy" />
-            <span><b>Only Big Bumbum Matters Tomorrow</b><span>Damilare Kuku</span></span>
-          </a>
-          <p class="am-label">Also on my shelf</p>
-          <ul class="shelf-row">
-            <li><a href="https://books.apple.com/us/book/vagabonds/id1573856854" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/9a/fc/02/9afc02b7-4499-18f2-752c-fba53842012a/9780593330043.d.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>Vagabonds!</b><span>Eloghosa Osunde</span></a></li>
-            <li><a href="https://books.apple.com/us/book/a-broken-peoples-playlist/id6443079204" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication122/v4/34/df/ae/34dfae1a-6cb3-ad09-debb-7bd7fa86a186/9780063268203.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>A Broken People's Playlist</b><span>Chimeka Garricks</span></a></li>
-            <li><a href="https://books.apple.com/us/book/purple-hibiscus/id6443077446" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3b/80/74/3b8074a7-7857-48eb-9cfc-2324fe16e3d0/9781616202422.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>Purple Hibiscus</b><span>Chimamanda Ngozi Adichie</span></a></li>
-          </ul>
-          <p class="am-label">Favourite author</p>
-          <a class="author" href="https://books.apple.com/us/artist/chimamanda-ngozi-adichie/255921621" rel="noopener">Chimamanda Ngozi Adichie</a>
-        </article>
+        <div class="side">
+          <!-- books -->
+          <article class="shelf" aria-label="Books">
+            <p class="am-label">Favourite book</p>
+            <a class="book" href="https://books.apple.com/us/book/only-big-bumbum-matters-tomorrow/id6471366980" rel="noopener">
+              <img src="https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/8e/2c/b7/8e2cb7f1-77c8-cf30-5b9a-342ed4d8baa9/9780063354517.jpg/300x450bb.jpg" alt="Cover of Only Big Bumbum Matters Tomorrow" width="150" height="226" loading="lazy" />
+              <span><b>Only Big Bumbum Matters Tomorrow</b><span>Damilare Kuku</span></span>
+            </a>
+            <p class="am-label">Also on my shelf</p>
+            <ul class="shelf-row">
+              <li><a href="https://books.apple.com/us/book/vagabonds/id1573856854" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/9a/fc/02/9afc02b7-4499-18f2-752c-fba53842012a/9780593330043.d.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>Vagabonds!</b><span>Eloghosa Osunde</span></a></li>
+              <li><a href="https://books.apple.com/us/book/a-broken-peoples-playlist/id6443079204" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication122/v4/34/df/ae/34dfae1a-6cb3-ad09-debb-7bd7fa86a186/9780063268203.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>A Broken People's Playlist</b><span>Chimeka Garricks</span></a></li>
+              <li><a href="https://books.apple.com/us/book/purple-hibiscus/id6443077446" rel="noopener"><img src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3b/80/74/3b8074a7-7857-48eb-9cfc-2324fe16e3d0/9781616202422.jpg/200x300bb.jpg" alt="" width="200" height="300" loading="lazy" /><b>Purple Hibiscus</b><span>Chimamanda Ngozi Adichie</span></a></li>
+            </ul>
+            <p class="am-label">Favourite author</p>
+            <a class="author" href="https://books.apple.com/us/artist/chimamanda-ngozi-adichie/255921621" rel="noopener">Chimamanda Ngozi Adichie</a>
+          </article>
+
+          <!-- podcast -->
+          <article class="pod" aria-label="Favourite podcast">
+            <span class="pod-icon" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4" fill="#161616"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div>
+              <p class="am-label">Favourite podcast</p>
+              <b>I Said What I Said</b>
+              <p class="pod-line">Yes, I'm into gbeborun.</p>
+              <p class="pod-links"><a href="https://podcasts.apple.com/gb/podcast/i-said-what-i-said/id1276300865" rel="noopener">Apple Podcasts</a><a href="https://open.spotify.com/show/3AGe43ZNWzBplppVCmPc2b" rel="noopener">Spotify</a></p>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
