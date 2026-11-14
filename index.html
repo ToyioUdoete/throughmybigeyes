@@ -619,8 +619,8 @@
     const inviteGarden = document.createElement("div"); inviteGarden.className = "garden"; inviteGarden.setAttribute("aria-hidden", "true");
     document.getElementById("invite").prepend(inviteGarden);
     // a few more further down the page (just peeking in from the sides)
-    [["about", [["daisy", "#ffffff", -9, 6, 100, -10], ["bud", "#ff8fc0", 101, 34, 46, 0], ["tulip", "#ff6fae", -7, 78, 96, 8]]],
-     ["puzzle", [["cosmos", "#f06292", 100, 8, 92, 12], ["sprig", "", -8, 46, 96, -8]]]
+    [["about", [["daisy", "#ffffff", -9, 6, 100, -10], ["bud", "#ff8fc0", 94, 34, 46, 0], ["tulip", "#ff6fae", -7, 78, 96, 8]]],
+     ["puzzle", [["cosmos", "#f06292", 91, 8, 92, 12], ["sprig", "", -8, 46, 96, -8]]]
     ].forEach(([id, list]) => {
       const g = document.createElement("div"); g.className = "garden loose"; g.setAttribute("aria-hidden", "true");
       document.getElementById(id).prepend(g); plant(g, list);
