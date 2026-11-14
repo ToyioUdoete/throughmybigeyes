@@ -246,6 +246,8 @@
     .soon.show { opacity: 1; }
 
     .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .garden.loose { overflow: visible; }
+    .about > :not(.garden), .puzzle > :not(.garden) { position: relative; z-index: 1; }
     .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
     .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
     @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
@@ -258,7 +260,7 @@
 
 
     /* ---------- photo puzzle ---------- */
-    .puzzle { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 6vw, 80px); max-width: 1080px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 48px) 30px; }
+    .puzzle { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 6vw, 80px); max-width: 1080px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 48px) 30px; }
     .pz-text h2 { font: 400 clamp(52px, 7vw, 96px)/.9 var(--display); margin: 0 0 18px; }
     .pz-text p { max-width: 34ch; margin: 0 0 14px; font-size: clamp(18px, 1.7vw, 21px); }
     .pz-text .pz-moves { font-weight: 700; font-size: 17px; }
@@ -616,6 +618,13 @@
     plant(heroGarden, [["daisy", "#ffffff", 44, 4, 90, -12], ["bud", "#c9f45b", 50, 80, 40, 0], ["cosmos", "#ff8fc0", 93, 74, 90, 14], ["sprig", "", -2, 78, 100, -10]]);
     const inviteGarden = document.createElement("div"); inviteGarden.className = "garden"; inviteGarden.setAttribute("aria-hidden", "true");
     document.getElementById("invite").prepend(inviteGarden);
+    // a few more further down the page (just peeking in from the sides)
+    [["about", [["daisy", "#ffffff", -9, 6, 100, -10], ["bud", "#ff8fc0", 101, 34, 46, 0], ["tulip", "#ff6fae", -7, 78, 96, 8]]],
+     ["puzzle", [["cosmos", "#f06292", 100, 8, 92, 12], ["sprig", "", -8, 46, 96, -8]]]
+    ].forEach(([id, list]) => {
+      const g = document.createElement("div"); g.className = "garden loose"; g.setAttribute("aria-hidden", "true");
+      document.getElementById(id).prepend(g); plant(g, list);
+    });
     plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6]]);
 
     // ---------- about me ----------
@@ -659,7 +668,7 @@
         "I have naturally long fangs, so I got a free vampire costume this Halloween.",
         "My siblings call me Npon Eyen, meaning big eyes.",
         "My mum calls me Twinkle though, because I'm a star.",
-        "I love ice cream, pizza, pasta and yoghurt. And yes, I'm lactose intolerant.",
+        "I love ice cream, pizza, pasta and yoghurt. And yes, I'm lack-toes and told-her-aunt.",
         "I wanted to be a doctor when I was much younger. God punish Ben Carson. Still doing medical AI though."
       ];
       const card = (p, fact) => {
