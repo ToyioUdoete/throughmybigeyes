@@ -157,7 +157,7 @@
     .lib-grid img { width: 100%; height: 100%; object-fit: cover; }
     .lib-grid .dur { position: absolute; right: 5px; bottom: 4px; display: flex; align-items: center; gap: 3px; font: 600 11px -apple-system, var(--body); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
     .lib-grid .tt-tile { background: #1b1719; }
-    .lib-grid .tt-tile iframe { position: absolute; left: 0; top: 50%; width: 100%; height: 178%; translate: 0 -50%; border: 0; pointer-events: none; }
+    .lib-grid .tt-tile iframe { position: absolute; left: 50%; top: 50%; width: 150%; height: 267%; translate: -50% -50%; border: 0; pointer-events: none; }
     .lib-grid .dur { z-index: 1; }
     .tabs { position: absolute; z-index: 4; left: 12px; right: 12px; bottom: 26px; display: flex; justify-content: space-between; gap: 4px; padding: 5px; border-radius: 999px; background: rgba(60, 60, 64, .72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
     .tabs button { flex: 1; border: 0; border-radius: 999px; padding: 8px 6px; background: none; color: rgba(255, 255, 255, .8); font: 600 13px -apple-system, var(--body); cursor: pointer; }
@@ -622,14 +622,28 @@
       const mount = (b) => {
         if (b.querySelector("iframe")) return;
         const f = document.createElement("iframe");
-        f.src = "https://www.tiktok.com/player/v1/" + b.dataset.tt + "?controls=0&play_button=0&progress_bar=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&native_context_menu=0&autoplay=0";
-        f.title = ""; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
+        f.src = "https://www.tiktok.com/player/v1/" + b.dataset.tt + "?controls=0&play_button=0&progress_bar=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&native_context_menu=0&autoplay=1";
+        f.title = ""; f.tabIndex = -1; f.allow = "autoplay"; f.setAttribute("aria-hidden", "true");
         b.prepend(f);
       };
       if (!("IntersectionObserver" in window)) return libGrid.querySelectorAll(".tt-tile").forEach(mount);
       tileIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { mount(e.target); tileIO.unobserve(e.target); } }), { root, rootMargin: "120px 0px" });
       libGrid.querySelectorAll(".tt-tile").forEach((b) => tileIO.observe(b));
     }
+    // grid players start muted and stop on their first frame, so tiles look like still thumbnails
+    const ttSend = (w, type) => w.postMessage({ type, "x-tiktok-player": true }, "*");
+    addEventListener("message", (e) => {
+      if (!/tiktok\.com$/.test(new URL(e.origin).hostname)) return;
+      let d = e.data; if (typeof d === "string") { try { d = JSON.parse(d); } catch (_) { return; } }
+      if (!d || !d["x-tiktok-player"]) return;
+      const tile = [...libGrid.querySelectorAll(".tt-tile iframe")].find((f) => f.contentWindow === e.source);
+      if (!tile) return;
+      if (d.type === "onPlayerReady") ttSend(e.source, "mute");
+      if ((d.type === "onStateChange" && d.value === 1) || d.type === "onCurrentTime") {
+        if (tile.dataset.held) return; tile.dataset.held = "1";
+        ttSend(e.source, "mute"); setTimeout(() => ttSend(e.source, "pause"), 250);
+      }
+    });
     function renderGrid() {
       list = ITEMS.filter((it) => filter === "all" || it.type === filter);
       libGrid.innerHTML = "";
