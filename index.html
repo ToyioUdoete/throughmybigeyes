@@ -70,7 +70,7 @@
     .camera { position: absolute; inset: 0 0 auto 0; z-index: 1; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; mix-blend-mode: multiply; transition: transform .2s ease; }
     .camera:active { transform: scale(.985); }
     .camera img { display: block; width: 100%; height: auto; filter: brightness(1.08) contrast(1.05); }
-    .flashbulb { position: absolute; left: 4%; top: 2%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 4; }
+    .flashbulb { position: absolute; left: 22%; top: 8%; width: 22%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 4; }
     .flashbulb.go { animation: bulb .55s ease-out; }
     @keyframes bulb { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(2.2); } }
     .tray { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
@@ -206,23 +206,23 @@
       <h2 class="room-title" id="specs-title">through my big eyes</h2>
       <div class="garden" id="garden" aria-hidden="true"></div>
       <div class="specs-wrap">
-        <svg class="specs" id="specs" viewBox="0 0 1000 440" role="button" tabindex="0" aria-label="Open this photo">
+        <svg class="specs" id="specs" viewBox="0 0 1000 430" role="button" tabindex="0" aria-label="Open this photo">
           <defs>
-            <clipPath id="lensL"><rect x="70" y="70" width="380" height="300" rx="140" /></clipPath>
-            <clipPath id="lensR"><rect x="550" y="70" width="380" height="300" rx="140" /></clipPath>
-            <clipPath id="lenses"><rect x="70" y="70" width="380" height="300" rx="140" /><rect x="550" y="70" width="380" height="300" rx="140" /></clipPath>
+            <clipPath id="lensL"><rect x="70" y="56" width="380" height="334" rx="150" /></clipPath>
+            <clipPath id="lensR"><rect x="550" y="56" width="380" height="334" rx="150" /></clipPath>
+            <clipPath id="lenses"><rect x="70" y="56" width="380" height="334" rx="150" /><rect x="550" y="56" width="380" height="334" rx="150" /></clipPath>
             <linearGradient id="acetate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a3a" /><stop offset=".18" stop-color="#121212" /><stop offset="1" stop-color="#050505" /></linearGradient>
             <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55" /><stop offset=".45" stop-color="#fff" stop-opacity=".08" /><stop offset="1" stop-color="#fff" stop-opacity="0" /></linearGradient>
             <linearGradient id="lidShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0d0d" /><stop offset="1" stop-color="#2a2226" /></linearGradient>
           </defs>
           <!-- what you see through the lenses -->
           <g clip-path="url(#lenses)">
-            <rect x="60" y="60" width="880" height="320" fill="#f3efe8" />
-            <image class="pic" id="picA" x="60" y="40" width="880" height="360" preserveAspectRatio="xMidYMid slice" href="" />
-            <image class="pic" id="picB" x="60" y="40" width="880" height="360" preserveAspectRatio="xMidYMid slice" href="" opacity="0" />
+            <rect x="60" y="50" width="880" height="350" fill="#f3efe8" />
+            <g class="pic" id="picA"><image x="70" y="56" width="380" height="334" preserveAspectRatio="xMidYMid slice" href="" /><image x="550" y="56" width="380" height="334" preserveAspectRatio="xMidYMid slice" href="" /></g>
+            <g class="pic" id="picB" opacity="0"><image x="70" y="56" width="380" height="334" preserveAspectRatio="xMidYMid slice" href="" /><image x="550" y="56" width="380" height="334" preserveAspectRatio="xMidYMid slice" href="" /></g>
             <!-- eyelids for the blink -->
-            <g clip-path="url(#lensL)"><rect class="lid top" x="60" y="60" width="400" height="162" fill="url(#lidShade)" /><rect class="lid bottom" x="60" y="218" width="400" height="162" fill="url(#lidShade)" /></g>
-            <g clip-path="url(#lensR)"><rect class="lid top" x="540" y="60" width="400" height="162" fill="url(#lidShade)" /><rect class="lid bottom" x="540" y="218" width="400" height="162" fill="url(#lidShade)" /></g>
+            <g clip-path="url(#lensL)"><rect class="lid top" x="60" y="46" width="400" height="180" fill="url(#lidShade)" /><rect class="lid bottom" x="60" y="222" width="400" height="180" fill="url(#lidShade)" /></g>
+            <g clip-path="url(#lensR)"><rect class="lid top" x="540" y="46" width="400" height="180" fill="url(#lidShade)" /><rect class="lid bottom" x="540" y="222" width="400" height="180" fill="url(#lidShade)" /></g>
             <!-- glass reflections -->
             <path d="M110 150 C 140 100, 210 86, 290 92 L 270 118 C 210 116, 160 130, 132 168 Z" fill="url(#sheen)" />
             <path d="M590 150 C 620 100, 690 86, 770 92 L 750 118 C 690 116, 640 130, 612 168 Z" fill="url(#sheen)" />
@@ -231,8 +231,8 @@
           </g>
           <!-- frame -->
           <g fill="none" stroke="url(#acetate)" stroke-width="40">
-            <rect x="70" y="70" width="380" height="300" rx="140" />
-            <rect x="550" y="70" width="380" height="300" rx="140" />
+            <rect x="70" y="56" width="380" height="334" rx="150" />
+            <rect x="550" y="56" width="380" height="334" rx="150" />
           </g>
           <path d="M466 168 C 486 140, 514 140, 534 168" fill="none" stroke="url(#acetate)" stroke-width="30" stroke-linecap="round" />
           <path d="M52 140 L 10 128" stroke="#111" stroke-width="22" stroke-linecap="round" />
@@ -413,7 +413,7 @@
       caption.textContent = PHOTOS[current].caption;
       specs.setAttribute("aria-label", "Open photo " + (current + 1) + (PHOTOS[current].caption ? ": " + PHOTOS[current].caption : ""));
     }
-    function setPic(el, i) { el.setAttribute("href", PHOTOS[i].src); }
+    function setPic(el, i) { el.querySelectorAll("image").forEach((im) => im.setAttribute("href", PHOTOS[i].src)); }
     setPic(front, 0); preload(0); preload(1); label();
 
     function blinkTo(i) {
