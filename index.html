@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#ffc9df" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --pink: #ffc9df;
@@ -18,6 +18,7 @@
       --paper: #fbfaf6;
       --grey: #d9d6cf;
       --muted: #5a4650;
+      --script: "Allura", "Brush Script MT", cursive;
       --display: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
       --body: "DM Sans", system-ui, sans-serif;
     }
@@ -42,7 +43,7 @@
 
     /* ---------- top bar ---------- */
     .bar { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
-    .handle { font-family: var(--display); font-size: 22px; text-decoration: none; }
+    .handle { font-family: var(--script); font-size: 46px; line-height: 1; text-decoration: none; }
     .bar nav { display: flex; gap: 10px; }
 
     /* ---------- hero ---------- */
@@ -52,21 +53,27 @@
     .intro h1 .cut { display: inline-block; padding: .02em .16em .08em; margin-left: -.08em; background: var(--lime); border: 3px solid var(--ink); border-radius: 18px; transform: rotate(-3deg); box-shadow: 6px 6px 0 var(--ink); }
     .intro h1 .eyes-row { display: flex; align-items: center; gap: .1em; }
     .intro h1 .eyes { color: var(--paper); -webkit-text-stroke: 3px var(--ink); text-shadow: 6px 6px 0 var(--pink-deep); }
-    .clip { position: relative; flex: 0 0 auto; width: clamp(120px, 13vw, 200px); transform: rotate(4deg) translateY(.06em); filter: drop-shadow(4px 5px 0 rgba(22, 22, 22, .25)); }
+    .clip { position: relative; flex: 0 0 auto; width: clamp(120px, 13vw, 200px); transform-origin: 50% 0; transform: rotate(4deg) translateY(.06em); filter: drop-shadow(4px 5px 0 rgba(22, 22, 22, .25)); animation: clip-drop 1s cubic-bezier(.2, 1.3, .4, 1) .3s both, clip-sway 4.5s ease-in-out 1.4s infinite; transition: filter .25s ease; }
+    .clip:hover { filter: drop-shadow(8px 10px 0 rgba(22, 22, 22, .25)); animation-play-state: paused; }
+    @keyframes clip-drop { 0% { opacity: 0; transform: translateY(-120%) rotate(-22deg); } 60% { opacity: 1; } 100% { opacity: 1; transform: rotate(4deg) translateY(.06em); } }
+    @keyframes clip-sway { 0%, 100% { transform: rotate(4deg) translateY(.06em); } 50% { transform: rotate(-1.5deg) translateY(.06em); } }
+    .clip::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .45) 50%, transparent 65%) -150% 0 / 250% 100% no-repeat; mix-blend-mode: soft-light; animation: clip-shine 4.5s ease-in-out 1.4s infinite; pointer-events: none; }
+    @keyframes clip-shine { 0%, 40% { background-position: -150% 0; } 70%, 100% { background-position: 150% 0; } }
     .clip img { width: 100%; height: auto; }
     .clip::before { content: ""; position: absolute; z-index: 1; top: -9px; left: 50%; width: 64px; height: 20px; transform: translateX(-50%) rotate(-6deg); background: rgba(201, 244, 91, .9); }
     .intro p { max-width: 30ch; margin: 28px 0 0; font-size: clamp(18px, 1.6vw, 21px); }
     .intro .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .hint { margin-top: 16px !important; font-size: 14px !important; color: var(--muted); }
 
-    .stage { position: relative; aspect-ratio: 3 / 2.6; }
-    .camera { position: absolute; inset: 0 0 auto 0; z-index: 1; display: block; mix-blend-mode: multiply; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
-    .camera img { width: 100%; height: auto; aspect-ratio: 1400 / 933; filter: grayscale(1) contrast(1.12) brightness(1.04); }
-    .flashbulb { position: absolute; left: 49%; top: 23%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 3; }
+    .stage { position: relative; aspect-ratio: 3 / 2.9; }
+    .camera { position: absolute; inset: 0 0 auto 0; z-index: 3; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .2s ease; }
+    .camera:active { transform: scale(.985); }
+    .camera svg { display: block; width: 100%; height: auto; }
+    .flashbulb { position: absolute; left: 4%; top: 2%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 4; }
     .flashbulb.go { animation: bulb .55s ease-out; }
     @keyframes bulb { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(2.2); } }
     .tray { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-    .print { position: absolute; left: 17%; top: 48%; width: 30%; padding: 3% 3% 9%; background: var(--paper); border-radius: 3px; box-shadow: 6px 9px 0 rgba(22, 22, 22, .2); transform-origin: 50% 0; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
+    .print { position: absolute; left: 32%; top: 30%; width: 30%; padding: 3% 3% 9%; background: var(--paper); border-radius: 3px; box-shadow: 6px 9px 0 rgba(22, 22, 22, .2); transform-origin: 50% 0; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
     .print .ph { aspect-ratio: 1; overflow: hidden; background: var(--grey); }
     .print img { width: 100%; height: 100%; object-fit: cover; }
     .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
@@ -108,7 +115,7 @@
     .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
     .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; }
     .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
-    .room-title { position: absolute; top: 22px; left: 0; right: 0; z-index: 3; text-align: center; font: 700 14px var(--body); color: var(--muted); pointer-events: none; }
+    .room-title { position: absolute; top: 18px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(40px, 4.6vw, 64px)/1 var(--script); color: var(--ink); pointer-events: none; }
 
     /* fallback grid when motion is reduced */
     .grid { display: none; columns: 3 220px; column-gap: 16px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
@@ -178,7 +185,62 @@
 
       <div class="stage">
         <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
-          <img src="https://images.unsplash.com/photo-1614707484302-4e1638af021f?w=1400&q=80&auto=format" alt="" width="1400" height="933" />
+          <svg viewBox="0 0 600 400" aria-hidden="true">
+            <defs>
+              <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" /><stop offset=".55" stop-color="#f6f5f2" /><stop offset="1" stop-color="#dedbd5" /></linearGradient>
+              <linearGradient id="bodyEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".10" /><stop offset=".08" stop-color="#000" stop-opacity="0" /><stop offset=".92" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".12" /></linearGradient>
+              <linearGradient id="grip" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9e7e2" /><stop offset=".5" stop-color="#f7f6f3" /><stop offset="1" stop-color="#dcd9d3" /></linearGradient>
+              <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f4f4" /><stop offset=".35" stop-color="#b9bcc0" /><stop offset=".55" stop-color="#eef0f2" /><stop offset=".8" stop-color="#9fa3a8" /><stop offset="1" stop-color="#d8dadd" /></linearGradient>
+              <linearGradient id="metal2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2e4e6" /><stop offset=".5" stop-color="#8d9196" /><stop offset="1" stop-color="#cfd2d5" /></linearGradient>
+              <radialGradient id="glass" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#3b3f63" /><stop offset=".35" stop-color="#1d2036" /><stop offset=".7" stop-color="#0b0c14" /><stop offset="1" stop-color="#050507" /></radialGradient>
+              <radialGradient id="glassTint" cx=".6" cy=".7" r=".5"><stop offset="0" stop-color="#7a4fb0" stop-opacity=".45" /><stop offset="1" stop-color="#7a4fb0" stop-opacity="0" /></radialGradient>
+              <linearGradient id="flash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfdfb" /><stop offset="1" stop-color="#d9d7cf" /></linearGradient>
+              <linearGradient id="shutter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" /><stop offset="1" stop-color="#a9acb0" /></linearGradient>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="14" /></filter>
+            </defs>
+            <!-- shadow -->
+            <ellipse cx="300" cy="352" rx="250" ry="18" fill="#161616" opacity=".28" filter="url(#soft)" />
+            <!-- top controls -->
+            <rect x="372" y="50" width="34" height="12" rx="5" fill="url(#metal2)" />
+            <ellipse cx="465" cy="58" rx="46" ry="11" fill="url(#metal2)" />
+            <ellipse cx="465" cy="50" rx="30" ry="9" fill="url(#shutter)" stroke="#9a9da1" stroke-width="1" />
+            <!-- body -->
+            <rect x="34" y="58" width="532" height="282" rx="38" fill="url(#body)" />
+            <rect x="34" y="58" width="532" height="282" rx="38" fill="url(#bodyEdge)" />
+            <rect x="35.5" y="59.5" width="529" height="279" rx="36.5" fill="none" stroke="#ffffff" stroke-width="3" opacity=".9" />
+            <rect x="34" y="58" width="532" height="282" rx="38" fill="none" stroke="#c9c6bf" stroke-width="1.5" />
+            <path d="M60 318 H540" stroke="#cfccc5" stroke-width="1.5" />
+            <!-- grip -->
+            <rect x="452" y="88" width="94" height="226" rx="26" fill="url(#grip)" stroke="#d3d0ca" stroke-width="1.2" />
+            <g stroke="#cfccc5" stroke-width="2" stroke-linecap="round" opacity=".8"><path d="M478 120 V282" /><path d="M492 116 V286" /><path d="M506 116 V286" /><path d="M520 120 V282" /></g>
+            <!-- flash and lamp -->
+            <rect x="70" y="86" width="92" height="40" rx="8" fill="#d5d2cb" />
+            <rect x="74" y="90" width="84" height="32" rx="6" fill="url(#flash)" />
+            <g stroke="#c2bfb7" stroke-width="1.4"><path d="M82 94 V118" /><path d="M92 94 V118" /><path d="M102 94 V118" /><path d="M112 94 V118" /><path d="M122 94 V118" /><path d="M132 94 V118" /><path d="M142 94 V118" /><path d="M150 94 V118" /></g>
+            <circle cx="184" cy="106" r="9" fill="#2a1b12" /><circle cx="184" cy="106" r="5" fill="#a5481c" opacity=".85" /><circle cx="182" cy="104" r="1.8" fill="#fff" opacity=".7" />
+            <!-- microphone holes -->
+            <g fill="#bdb9b2"><circle cx="400" cy="300" r="2" /><circle cx="408" cy="300" r="2" /><circle cx="416" cy="300" r="2" /><circle cx="404" cy="293" r="2" /><circle cx="412" cy="293" r="2" /></g>
+            <!-- lens -->
+            <circle cx="268" cy="206" r="124" fill="#d9d6d0" />
+            <circle cx="268" cy="206" r="118" fill="url(#metal)" />
+            <circle cx="268" cy="206" r="108" fill="#26282c" />
+            <circle cx="268" cy="206" r="104" fill="url(#metal2)" />
+            <circle cx="268" cy="206" r="96" fill="#141416" />
+            <circle cx="268" cy="206" r="92" fill="none" stroke="#3a3c42" stroke-width="2" />
+            <g fill="#e6e6e6" opacity=".55" font-family="Arial, sans-serif" font-size="9" letter-spacing="2"><text x="268" y="126" text-anchor="middle">OPTICAL ZOOM</text></g>
+            <circle cx="268" cy="206" r="74" fill="#0b0b0d" />
+            <circle cx="268" cy="206" r="64" fill="url(#glass)" />
+            <circle cx="268" cy="206" r="64" fill="url(#glassTint)" />
+            <circle cx="268" cy="206" r="40" fill="none" stroke="#5c5f86" stroke-width="1.5" opacity=".5" />
+            <circle cx="268" cy="206" r="22" fill="#050507" />
+            <path d="M226 178 A52 52 0 0 1 270 150" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".7" />
+            <path d="M222 196 A48 48 0 0 1 226 184" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".45" />
+            <circle cx="300" cy="236" r="7" fill="#ffffff" opacity=".35" />
+            <circle cx="290" cy="186" r="3" fill="#ffffff" opacity=".6" />
+            <!-- small front label -->
+            <rect x="72" y="292" width="58" height="10" rx="3" fill="#dcd9d2" />
+          </svg>
+
         </button>
         <span class="flashbulb" aria-hidden="true"></span>
         <div class="tray" id="tray" aria-hidden="true"></div>
@@ -214,7 +276,7 @@
       <a class="pill lime" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Pinterest @twiiinklle</a>
       <a class="pill" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener">TikTok</a>
     </div>
-    <small>All photos © throughmybigeyes. Camera photo from <a href="https://unsplash.com/photos/black-and-silver-polaroid-camera-K6dgVl7WKDQ" rel="noopener">Unsplash</a>.</small>
+    <small>All photos © throughmybigeyes.</small>
   </footer>
 
   <dialog class="lb" id="lb" aria-label="Photo viewer">
@@ -279,7 +341,7 @@
     // ---------- hero camera: prints come out of the front slot ----------
     const tray = document.getElementById("tray"), camera = document.getElementById("camera"), bulb = document.querySelector(".flashbulb");
     let printed = 0;
-    const slots = [{ x: -62, y: 58, r: -12 }, { x: 8, y: 66, r: 6 }, { x: 74, y: 58, r: 14 }];
+    const slots = [{ x: -78, y: 74, r: -12 }, { x: 0, y: 86, r: 4 }, { x: 80, y: 74, r: 13 }];
     function printPhoto(withFlash) {
       const p = PHOTOS[printed % N];
       const el = document.createElement("div");
@@ -287,7 +349,7 @@
       const ph = document.createElement("div"); ph.className = "ph"; ph.style.background = p.color;
       ph.appendChild(makeImg(p, "", false)); el.appendChild(ph);
       const tag = document.createElement("span"); tag.textContent = "no. " + pad(printed + 1); el.appendChild(tag);
-      el.style.transform = "translate(0, -18%) scale(.35)"; el.style.opacity = "0";
+      el.style.transform = "translate(0, 0) scale(.9)"; el.style.opacity = "1";
       tray.appendChild(el);
       const s = slots[printed % slots.length];
       requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = `translate(${s.x}%, ${s.y}%) rotate(${s.r}deg)`; }));
