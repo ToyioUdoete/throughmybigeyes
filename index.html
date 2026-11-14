@@ -623,7 +623,7 @@
         if (b.querySelector("iframe")) return;
         const f = document.createElement("iframe");
         f.src = "https://www.tiktok.com/player/v1/" + b.dataset.tt + "?controls=0&play_button=0&progress_bar=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&native_context_menu=0&autoplay=1";
-        f.title = ""; f.tabIndex = -1; f.allow = "autoplay"; f.setAttribute("aria-hidden", "true");
+        f.title = ""; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
         b.prepend(f);
       };
       if (!("IntersectionObserver" in window)) return libGrid.querySelectorAll(".tt-tile").forEach(mount);
