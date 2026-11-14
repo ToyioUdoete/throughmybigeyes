@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#ffc9df" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --pink: #ffc9df;
@@ -18,7 +18,7 @@
       --paper: #fbfaf6;
       --grey: #d9d6cf;
       --muted: #5a4650;
-      --script: "Allura", "Brush Script MT", cursive;
+      --script: "Mrs Saint Delafield", "Brush Script MT", cursive;
       --display: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
       --body: "DM Sans", system-ui, sans-serif;
     }
@@ -43,11 +43,12 @@
 
     /* ---------- top bar ---------- */
     .bar { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); }
-    .handle { font-family: var(--script); font-size: 46px; line-height: 1; text-decoration: none; }
+    .handle { font-family: var(--script); font-size: 54px; line-height: .9; text-decoration: none; padding-top: 6px; }
     .bar nav { display: flex; gap: 10px; }
 
     /* ---------- hero ---------- */
     .hero { position: relative; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(20px, 3vw, 48px); max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px) 40px; min-height: calc(100svh - 92px); }
+    .hero > .intro, .hero > .stage, .invite > div:not(.garden) { position: relative; z-index: 1; }
     .intro h1 { font-family: var(--display); font-weight: 400; font-size: clamp(60px, 9vw, 140px); line-height: .88; margin: 0; }
     .intro h1 .row { display: block; }
     .intro h1 .cut { display: inline-block; padding: .02em .16em .08em; margin-left: -.08em; background: var(--lime); border: 3px solid var(--ink); border-radius: 18px; transform: rotate(-3deg); box-shadow: 6px 6px 0 var(--ink); }
@@ -65,10 +66,10 @@
     .intro .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
     .hint { margin-top: 16px !important; font-size: 14px !important; color: var(--muted); }
 
-    .stage { position: relative; aspect-ratio: 3 / 2.9; }
-    .camera { position: absolute; inset: 0 0 auto 0; z-index: 3; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .2s ease; }
+    .stage { position: relative; aspect-ratio: 1 / 1.05; max-height: 82vh; justify-self: center; width: 100%; }
+    .camera { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; mix-blend-mode: multiply; transition: transform .2s ease; }
     .camera:active { transform: scale(.985); }
-    .camera svg { display: block; width: 100%; height: auto; }
+    .camera img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 58% 22%; filter: grayscale(.15) brightness(1.13) contrast(1.08); }
     .flashbulb { position: absolute; left: 4%; top: 2%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0)); opacity: 0; pointer-events: none; z-index: 4; }
     .flashbulb.go { animation: bulb .55s ease-out; }
     @keyframes bulb { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(2.2); } }
@@ -97,25 +98,33 @@
     .cue svg { animation: nudge 1.6s ease-in-out infinite; }
     @keyframes nudge { 50% { transform: translateY(6px); } }
 
-    /* ---------- the walk-through ---------- */
-    .walk { position: relative; height: calc(var(--n) * 62vh + 100vh); }
-    .room { position: sticky; top: 0; height: 100vh; overflow: hidden; perspective: 900px; perspective-origin: 50% 46%;
-      background: radial-gradient(120% 80% at 50% 110%, #e9ffb8 0%, rgba(233, 255, 184, 0) 55%), linear-gradient(180deg, var(--pink) 0%, #ffd9e8 55%, #f3ffd6 100%); }
-    .room::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 60% at 50% 50%, transparent 60%, rgba(22, 22, 22, .12) 100%); }
-    .world { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
-    .frame3d { position: absolute; left: 0; top: 0; width: var(--w); margin-left: calc(var(--w) / -2); padding: 12px 12px 44px; background: var(--paper); border-radius: 4px; border: 0; cursor: zoom-in;
-      box-shadow: 10px 14px 0 rgba(22, 22, 22, .16); transform-style: preserve-3d; will-change: transform, opacity; }
-    .frame3d .ph { background: var(--c, var(--grey)); }
-    .frame3d img { width: 100%; height: auto; }
-    .frame3d .no { position: absolute; left: 14px; right: 14px; bottom: 12px; display: flex; justify-content: space-between; font: 700 13px var(--body); color: #6b6b6b; }
-    .frame3d .tape { position: absolute; top: -10px; left: 50%; width: 80px; height: 22px; transform: translateX(-50%) rotate(-4deg); background: rgba(201, 244, 91, .9); }
-    .frame3d:nth-child(3n) .tape { background: rgba(255, 111, 174, .75); transform: translateX(-50%) rotate(5deg); }
+    /* ---------- through the glass ---------- */
+    .lensview { position: relative; height: calc(var(--n) * 85vh + 100vh); }
+    .lens-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: grid; place-items: center;
+      background: radial-gradient(90% 70% at 50% 55%, #ffe3ef 0%, var(--pink) 60%, #f9b6d2 100%); }
+    .glass { position: relative; z-index: 2; width: min(66vh, 84vw); aspect-ratio: 1; border-radius: 50%; cursor: zoom-in; border: 0; padding: 0; background: #1a1a1a;
+      box-shadow: 0 0 0 10px #f3f1ec, 0 0 0 12px #cfcac1, 0 0 0 24px #e9e6df, 0 0 0 25px #bdb8ae, 18px 28px 0 26px rgba(22, 22, 22, .14); }
+    .glass .shot { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; opacity: 0; will-change: opacity, filter, transform; }
+    .glass .shot img { width: 100%; height: 100%; object-fit: cover; }
+    .glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+      background:
+        radial-gradient(60% 40% at 30% 18%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 70%),
+        radial-gradient(18% 10% at 72% 80%, rgba(255, 255, 255, .25), rgba(255, 255, 255, 0) 70%),
+        radial-gradient(closest-side, rgba(0, 0, 0, 0) 72%, rgba(0, 0, 0, .35) 100%);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .55), inset 0 0 40px rgba(0, 0, 0, .25); }
+    .glass .glint { position: absolute; z-index: 3; left: 18%; top: 10%; width: 46%; height: 18%; border-radius: 50%; border-top: 3px solid rgba(255, 255, 255, .7); transform: rotate(-22deg); pointer-events: none; }
+    .ticks { position: absolute; z-index: 1; width: calc(min(66vh, 84vw) + 96px); aspect-ratio: 1; border-radius: 50%; pointer-events: none; }
+    .ticks svg { width: 100%; height: 100%; }
+    .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
+    .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
+    @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
     .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); pointer-events: none; }
-    .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; }
+    .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; margin: 0; }
     .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
-    .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; }
+    .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; margin: 0; }
     .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
-    .room-title { position: absolute; top: 18px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(40px, 4.6vw, 64px)/1 var(--script); color: var(--ink); pointer-events: none; }
+    .room-title { position: absolute; top: 14px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
 
     /* fallback grid when motion is reduced */
     .grid { display: none; columns: 3 220px; column-gap: 16px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
@@ -153,7 +162,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
-      .walk { display: none; }
+      .lensview { display: none; }
       .grid { display: block; }
       .shall .ch, .invite p, .cue { opacity: 1 !important; transform: none !important; }
       .swash path { stroke-dashoffset: 0 !important; }
@@ -185,62 +194,7 @@
 
       <div class="stage">
         <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
-          <svg viewBox="0 0 600 400" aria-hidden="true">
-            <defs>
-              <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" /><stop offset=".55" stop-color="#f6f5f2" /><stop offset="1" stop-color="#dedbd5" /></linearGradient>
-              <linearGradient id="bodyEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".10" /><stop offset=".08" stop-color="#000" stop-opacity="0" /><stop offset=".92" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".12" /></linearGradient>
-              <linearGradient id="grip" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9e7e2" /><stop offset=".5" stop-color="#f7f6f3" /><stop offset="1" stop-color="#dcd9d3" /></linearGradient>
-              <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f4f4" /><stop offset=".35" stop-color="#b9bcc0" /><stop offset=".55" stop-color="#eef0f2" /><stop offset=".8" stop-color="#9fa3a8" /><stop offset="1" stop-color="#d8dadd" /></linearGradient>
-              <linearGradient id="metal2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2e4e6" /><stop offset=".5" stop-color="#8d9196" /><stop offset="1" stop-color="#cfd2d5" /></linearGradient>
-              <radialGradient id="glass" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#3b3f63" /><stop offset=".35" stop-color="#1d2036" /><stop offset=".7" stop-color="#0b0c14" /><stop offset="1" stop-color="#050507" /></radialGradient>
-              <radialGradient id="glassTint" cx=".6" cy=".7" r=".5"><stop offset="0" stop-color="#7a4fb0" stop-opacity=".45" /><stop offset="1" stop-color="#7a4fb0" stop-opacity="0" /></radialGradient>
-              <linearGradient id="flash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfdfb" /><stop offset="1" stop-color="#d9d7cf" /></linearGradient>
-              <linearGradient id="shutter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" /><stop offset="1" stop-color="#a9acb0" /></linearGradient>
-              <filter id="soft" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="14" /></filter>
-            </defs>
-            <!-- shadow -->
-            <ellipse cx="300" cy="352" rx="250" ry="18" fill="#161616" opacity=".28" filter="url(#soft)" />
-            <!-- top controls -->
-            <rect x="372" y="50" width="34" height="12" rx="5" fill="url(#metal2)" />
-            <ellipse cx="465" cy="58" rx="46" ry="11" fill="url(#metal2)" />
-            <ellipse cx="465" cy="50" rx="30" ry="9" fill="url(#shutter)" stroke="#9a9da1" stroke-width="1" />
-            <!-- body -->
-            <rect x="34" y="58" width="532" height="282" rx="38" fill="url(#body)" />
-            <rect x="34" y="58" width="532" height="282" rx="38" fill="url(#bodyEdge)" />
-            <rect x="35.5" y="59.5" width="529" height="279" rx="36.5" fill="none" stroke="#ffffff" stroke-width="3" opacity=".9" />
-            <rect x="34" y="58" width="532" height="282" rx="38" fill="none" stroke="#c9c6bf" stroke-width="1.5" />
-            <path d="M60 318 H540" stroke="#cfccc5" stroke-width="1.5" />
-            <!-- grip -->
-            <rect x="452" y="88" width="94" height="226" rx="26" fill="url(#grip)" stroke="#d3d0ca" stroke-width="1.2" />
-            <g stroke="#cfccc5" stroke-width="2" stroke-linecap="round" opacity=".8"><path d="M478 120 V282" /><path d="M492 116 V286" /><path d="M506 116 V286" /><path d="M520 120 V282" /></g>
-            <!-- flash and lamp -->
-            <rect x="70" y="86" width="92" height="40" rx="8" fill="#d5d2cb" />
-            <rect x="74" y="90" width="84" height="32" rx="6" fill="url(#flash)" />
-            <g stroke="#c2bfb7" stroke-width="1.4"><path d="M82 94 V118" /><path d="M92 94 V118" /><path d="M102 94 V118" /><path d="M112 94 V118" /><path d="M122 94 V118" /><path d="M132 94 V118" /><path d="M142 94 V118" /><path d="M150 94 V118" /></g>
-            <circle cx="184" cy="106" r="9" fill="#2a1b12" /><circle cx="184" cy="106" r="5" fill="#a5481c" opacity=".85" /><circle cx="182" cy="104" r="1.8" fill="#fff" opacity=".7" />
-            <!-- microphone holes -->
-            <g fill="#bdb9b2"><circle cx="400" cy="300" r="2" /><circle cx="408" cy="300" r="2" /><circle cx="416" cy="300" r="2" /><circle cx="404" cy="293" r="2" /><circle cx="412" cy="293" r="2" /></g>
-            <!-- lens -->
-            <circle cx="268" cy="206" r="124" fill="#d9d6d0" />
-            <circle cx="268" cy="206" r="118" fill="url(#metal)" />
-            <circle cx="268" cy="206" r="108" fill="#26282c" />
-            <circle cx="268" cy="206" r="104" fill="url(#metal2)" />
-            <circle cx="268" cy="206" r="96" fill="#141416" />
-            <circle cx="268" cy="206" r="92" fill="none" stroke="#3a3c42" stroke-width="2" />
-            <g fill="#e6e6e6" opacity=".55" font-family="Arial, sans-serif" font-size="9" letter-spacing="2"><text x="268" y="126" text-anchor="middle">OPTICAL ZOOM</text></g>
-            <circle cx="268" cy="206" r="74" fill="#0b0b0d" />
-            <circle cx="268" cy="206" r="64" fill="url(#glass)" />
-            <circle cx="268" cy="206" r="64" fill="url(#glassTint)" />
-            <circle cx="268" cy="206" r="40" fill="none" stroke="#5c5f86" stroke-width="1.5" opacity=".5" />
-            <circle cx="268" cy="206" r="22" fill="#050507" />
-            <path d="M226 178 A52 52 0 0 1 270 150" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".7" />
-            <path d="M222 196 A48 48 0 0 1 226 184" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".45" />
-            <circle cx="300" cy="236" r="7" fill="#ffffff" opacity=".35" />
-            <circle cx="290" cy="186" r="3" fill="#ffffff" opacity=".6" />
-            <!-- small front label -->
-            <rect x="72" y="292" width="58" height="10" rx="3" fill="#dcd9d2" />
-          </svg>
-
+          <img src="https://images.pexels.com/photos/15631397/pexels-photo-15631397/free-photo-of-hand-holding-digital-camera-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" width="1200" height="1800" />
         </button>
         <span class="flashbulb" aria-hidden="true"></span>
         <div class="tray" id="tray" aria-hidden="true"></div>
@@ -256,11 +210,13 @@
       </div>
     </section>
 
-    <section class="walk" id="walk" aria-label="The photos">
-      <div class="room" id="room">
+    <section class="lensview" id="walk" aria-label="The photos">
+      <div class="lens-stage" id="stage">
         <div class="progress" id="progress" aria-hidden="true"></div>
         <p class="room-title" aria-hidden="true">through my big eyes</p>
-        <div class="world" id="world"></div>
+        <div class="garden" id="garden" aria-hidden="true"></div>
+        <div class="ticks" id="ticks" aria-hidden="true"></div>
+        <button class="glass" id="glass" type="button" aria-label="Open this photo"><span class="glint" aria-hidden="true"></span></button>
         <div class="hud" aria-hidden="true">
           <p class="counter" id="counter">01<small>of 16</small></p>
           <p class="caption" id="caption"></p>
@@ -276,7 +232,7 @@
       <a class="pill lime" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Pinterest @twiiinklle</a>
       <a class="pill" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener">TikTok</a>
     </div>
-    <small>All photos © throughmybigeyes.</small>
+    <small>All photos © throughmybigeyes. Camera photo from <a href="https://www.pexels.com/photo/hand-holding-digital-camera-on-white-background-15631397/" rel="noopener">Pexels</a>.</small>
   </footer>
 
   <dialog class="lb" id="lb" aria-label="Photo viewer">
@@ -384,58 +340,93 @@
       b.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), true)); b.onclick = () => openLb(i); grid.appendChild(b);
     });
 
-    // ---------- the walk-through: scroll moves you forward past the photos ----------
-    const walk = document.getElementById("walk"), world = document.getElementById("world");
+    // ---------- flowers ----------
+    const FLOWERS = {
+      daisy: (c) => '<svg viewBox="-60 -60 120 170"><path d="M0 40 C 4 70, -6 90, 2 110" stroke="#7fb82a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M1 82 C 18 70, 30 72, 38 64 C 26 84, 12 86, 1 86Z" fill="#9fd13b"/>' +
+        Array.from({ length: 14 }, (_, k) => `<ellipse cx="0" cy="-30" rx="9" ry="26" fill="${c}" stroke="#e6dfd2" stroke-width="1.2" transform="rotate(${k * 360 / 14})"/>`).join("") +
+        '<circle r="15" fill="#f7c948"/><circle r="15" fill="none" stroke="#e0a92a" stroke-width="2" stroke-dasharray="2 4"/></svg>',
+      cosmos: (c) => '<svg viewBox="-60 -60 120 170"><path d="M0 40 C -6 72, 6 92, -2 110" stroke="#7fb82a" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+        Array.from({ length: 8 }, (_, k) => `<path d="M0 -6 C -16 -22, -14 -48, 0 -52 C 14 -48, 16 -22, 0 -6Z" fill="${c}" transform="rotate(${k * 45})"/>`).join("") +
+        '<circle r="11" fill="#c2185b"/><circle r="6" fill="#ffd54f"/></svg>',
+      tulip: (c) => '<svg viewBox="-60 -70 120 180"><path d="M0 10 C 2 50, -4 80, 0 108" stroke="#7fb82a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M0 70 C -26 54, -30 30, -26 14 C -14 34, -6 50, 0 62Z" fill="#9fd13b"/>' +
+        `<path d="M-24 -30 C -26 0, -14 16, 0 16 C 14 16, 26 0, 24 -30 C 16 -18, 10 -22, 6 -40 C 2 -26, -2 -26, -6 -40 C -10 -22, -16 -18, -24 -30Z" fill="${c}"/><path d="M-6 -40 C -2 -20, 2 -20, 6 -40" stroke="rgba(0,0,0,.15)" stroke-width="2" fill="none"/></svg>`,
+      sprig: () => '<svg viewBox="-60 -80 120 190"><path d="M0 100 C 0 40, 4 0, 0 -70" stroke="#7fb82a" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+        [-50, -24, 2, 28, 54].map((y, k) => `<ellipse cx="${k % 2 ? 16 : -16}" cy="${y}" rx="15" ry="7" fill="${k % 2 ? "#c9f45b" : "#9fd13b"}" transform="rotate(${k % 2 ? -30 : 30} ${k % 2 ? 16 : -16} ${y})"/>`).join("") + "</svg>",
+      bud: (c) => '<svg viewBox="-40 -40 80 80">' + Array.from({ length: 5 }, (_, k) => `<circle cx="0" cy="-14" r="12" fill="${c}" transform="rotate(${k * 72})"/>`).join("") + '<circle r="7" fill="#fff6c7"/></svg>'
+    };
+    function plant(container, list) {
+      list.forEach(([kind, color, x, y, size, rot, speed]) => {
+        const f = document.createElement("div");
+        f.className = "flower";
+        f.style.cssText = `left:${x}%;top:${y}%;--s:${size}px;--r:${rot}deg;--d:${6 + (size % 5)}s`;
+        f.dataset.speed = speed || 0;
+        f.innerHTML = FLOWERS[kind](color);
+        container.appendChild(f);
+      });
+    }
+    // garden around the glass: [kind, colour, left%, top%, size px, rotation, parallax speed]
+    const garden = document.getElementById("garden");
+    plant(garden, [
+      ["daisy", "#ffffff", 4, 8, 150, -14, 60], ["tulip", "#ff6fae", 13, 52, 120, 8, 120], ["sprig", "", 2, 62, 140, -6, 40],
+      ["bud", "#c9f45b", 22, 18, 54, 0, 150], ["cosmos", "#ff8fc0", 6, 30, 110, 10, 90], ["bud", "#ffffff", 26, 78, 46, 0, 70],
+      ["cosmos", "#f06292", 82, 10, 130, -8, 100], ["daisy", "#ffffff", 86, 54, 160, 12, 50], ["sprig", "", 92, 30, 130, 8, 130],
+      ["tulip", "#ff6fae", 74, 70, 110, -10, 80], ["bud", "#ff8fc0", 76, 34, 50, 0, 160], ["bud", "#c9f45b", 70, 88, 44, 0, 60]
+    ]);
+    // a few in the hero and the invite, for personality
+    const heroGarden = document.createElement("div"); heroGarden.className = "garden"; heroGarden.setAttribute("aria-hidden", "true");
+    document.querySelector(".hero").prepend(heroGarden);
+    plant(heroGarden, [["daisy", "#ffffff", 44, 4, 90, -12], ["bud", "#c9f45b", 50, 80, 40, 0], ["cosmos", "#ff8fc0", 93, 74, 90, 14], ["sprig", "", -2, 78, 100, -10]]);
+    const inviteGarden = document.createElement("div"); inviteGarden.className = "garden"; inviteGarden.setAttribute("aria-hidden", "true");
+    document.getElementById("invite").prepend(inviteGarden);
+    plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6]]);
+
+    // focus-ring ticks around the glass
+    document.getElementById("ticks").innerHTML = '<svg viewBox="-100 -100 200 200">' +
+      Array.from({ length: 60 }, (_, k) => `<line x1="0" y1="-97" x2="0" y2="${k % 5 ? -93 : -89}" stroke="#161616" stroke-width="${k % 5 ? .6 : 1.2}" opacity=".55" transform="rotate(${k * 6})"/>`).join("") + "</svg>";
+
+    // ---------- through the glass: each photo racks into focus, then out ----------
+    const walk = document.getElementById("walk"), glass = document.getElementById("glass"), ticks = document.getElementById("ticks");
     const counter = document.getElementById("counter"), caption = document.getElementById("caption"), progress = document.getElementById("progress");
     walk.style.setProperty("--n", N);
-    const GAP = 520;                    // depth between photos
-    const frames = PHOTOS.map((p, i) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "frame3d";
-      b.setAttribute("aria-label", "Open photo " + (i + 1) + (p.caption ? ": " + p.caption : ""));
-      const ph = document.createElement("div"); ph.className = "ph"; ph.style.setProperty("--c", p.color);
-      ph.appendChild(makeImg(p, p.caption || "Photo " + (i + 1), false)); b.appendChild(ph);
-      b.insertAdjacentHTML("beforeend", '<span class="tape" aria-hidden="true"></span><span class="no"><span>no. ' + pad(i + 1) + '</span><span>' + (p.caption || "") + "</span></span>");
-      b.onclick = () => openLb(i);
-      world.appendChild(b);
-      const side = i % 2 ? 1 : -1;
-      return { el: b, z: -(i + 1) * GAP, side, y: ((i * 37) % 9 - 4) * 1.4, rz: ((i * 53) % 9 - 4) * 1.2 };
+    const shots = PHOTOS.map((p, i) => {
+      const s = document.createElement("span");
+      s.className = "shot"; s.style.background = p.color;
+      s.appendChild(makeImg(p, "", false));
+      glass.insertBefore(s, glass.firstChild);
+      return s;
     });
-
-    let vw = innerWidth, vh = innerHeight;
-    function layout() {
-      vw = innerWidth; vh = innerHeight;
-      const small = vw < 700;
-      const w = small ? Math.min(vw * 0.62, 300) : Math.min(vw * 0.24, 340);
-      world.style.setProperty("--w", w + "px");
-      frames.forEach((f) => { f.x = f.side * (small ? vw * 0.2 : vw * 0.22); f.ry = -f.side * (small ? 10 : 18); });
-      update();
-    }
+    let current = 0;
+    glass.addEventListener("click", () => openLb(current));
     function update() {
       const r = walk.getBoundingClientRect();
-      const total = walk.offsetHeight - vh;
+      const total = walk.offsetHeight - innerHeight;
       const t = Math.min(1, Math.max(0, -r.top / total));
-      const camZ = t * (N * GAP + 200) + 120;          // how far we've walked
-      let nearest = 0, best = Infinity;
-      frames.forEach((f, i) => {
-        const dz = f.z + camZ;                          // 0 = at the viewer, negative = ahead
-        const fadeIn = Math.min(1, Math.max(0, (dz + 3600) / 1200));
-        const fadeOut = Math.min(1, Math.max(0, (420 - dz) / 260));
-        const o = fadeIn * fadeOut;
-        f.el.style.opacity = o.toFixed(3);
-        f.el.style.visibility = o < 0.02 ? "hidden" : "visible";
-        f.el.style.transform = `translate3d(${f.x}px, calc(-50% + ${f.y}vh), ${dz}px) rotateY(${f.ry}deg) rotateZ(${f.rz}deg)`;
-        const d = Math.abs(dz + 260);
-        if (d < best) { best = d; nearest = i; }
+      const pos = t * N;                                   // 0..N
+      let best = Infinity;
+      shots.forEach((s, i) => {
+        const d = pos - (i + 0.5);                         // <0 coming, >0 leaving
+        const a = Math.abs(d);
+        const o = Math.max(0, Math.min(1, 1 - (a - 0.22) * 2.6));
+        const blur = Math.max(0, a - 0.12) * 34;
+        const scale = d < 0 ? 1 + Math.min(0.3, -d * 0.35) : 1 - Math.min(0.1, d * 0.12);
+        s.style.opacity = o.toFixed(3);
+        s.style.visibility = o < 0.01 ? "hidden" : "visible";
+        s.style.filter = blur > 0.3 ? `blur(${blur.toFixed(1)}px)` : "none";
+        s.style.transform = `scale(${scale.toFixed(3)})`;
+        s.style.zIndex = String(100 - Math.round(a * 10));
+        if (a < best) { best = a; current = i; }
       });
-      counter.innerHTML = pad(nearest + 1) + "<small>of " + N + "</small>";
-      caption.textContent = PHOTOS[nearest].caption;
+      counter.innerHTML = pad(current + 1) + "<small>of " + N + "</small>";
+      caption.textContent = PHOTOS[current].caption;
+      glass.setAttribute("aria-label", "Open photo " + (current + 1) + (PHOTOS[current].caption ? ": " + PHOTOS[current].caption : ""));
       progress.style.transform = "scaleX(" + t + ")";
+      ticks.style.transform = "rotate(" + (t * 300).toFixed(1) + "deg)";
+      garden.querySelectorAll(".flower").forEach((f) => { f.style.translate = "0 " + (-(t - 0.5) * f.dataset.speed * 2).toFixed(1) + "px"; });
     }
     let ticking = false;
     addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(); ticking = false; }); } }, { passive: true });
-    addEventListener("resize", layout);
-    if (!reduce) layout();
+    addEventListener("resize", update);
+    if (!reduce) update();
   </script>
 </body>
 </html>
