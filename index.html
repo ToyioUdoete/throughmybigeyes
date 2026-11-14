@@ -208,6 +208,18 @@
     .soon { position: absolute; left: 50%; bottom: -30px; translate: -50% 0; white-space: nowrap; font-size: 13px; color: var(--muted); opacity: 0; transition: opacity .2s ease; }
     .soon.show { opacity: 1; }
 
+    .garden { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
+    .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
+    @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+    .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); pointer-events: none; }
+    .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; margin: 0; }
+    .counter small { font: 700 14px var(--body); color: var(--muted); margin-left: 6px; }
+    .caption { max-width: 40ch; text-align: right; font-weight: 500; min-height: 1.5em; margin: 0; }
+    .progress { position: absolute; left: 0; top: 0; height: 4px; width: 100%; z-index: 3; transform-origin: 0 50%; transform: scaleX(0); background: var(--ink); }
+    .room-title { position: absolute; top: 34px; left: 0; right: 0; z-index: 3; margin: 0; text-align: center; font: 400 clamp(48px, 5.4vw, 80px)/1 var(--script); color: var(--ink); pointer-events: none; }
+
+
     /* ---------- lightbox ---------- */
     dialog.lb { padding: 0; border: 0; background: transparent; max-width: min(92vw, 720px); max-height: 94vh; overflow: visible; }
     dialog.lb::backdrop { background: rgba(22, 22, 22, .82); }
