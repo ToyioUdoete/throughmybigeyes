@@ -87,7 +87,7 @@
     .print img { width: 100%; height: 100%; object-fit: cover; }
     .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
     .print.guest span { bottom: 1%; font: 400 clamp(20px, 2.6vw, 30px)/1 var(--script); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6%; }
-    .stage-col { position: relative; z-index: 1; display: grid; justify-items: center; }
+    .stage-col { position: relative; display: grid; justify-items: center; } /* no z-index: it would stop the camera blending into the pink */
     .yours { position: relative; z-index: 3; width: min(100%, 420px); margin-top: clamp(16px, 2.6vw, 32px); padding: 20px 22px 22px; background: var(--paper); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 6px 6px 0 var(--ink); rotate: 1.5deg; }
     .yours[hidden] { display: none; }
     .yours .tape { position: absolute; top: -14px; left: 50%; width: 104px; height: 28px; translate: -50% 0; rotate: -3deg; background: rgba(255, 111, 174, .85); }
