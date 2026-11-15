@@ -270,6 +270,11 @@
     .about > :not(.garden), .puzzle > :not(.garden) { position: relative; z-index: 1; }
     .flower { position: absolute; width: var(--s); height: auto; transform: rotate(var(--r)); }
     .flower svg { display: block; width: 100%; height: auto; overflow: visible; animation: sway var(--d, 7s) ease-in-out infinite alternate; transform-origin: 50% 90%; }
+    .gem svg { transform-origin: 50% 50%; animation-name: rock; filter: drop-shadow(3px 4px 0 rgba(22, 22, 22, .22)); }
+    @keyframes rock { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+    .gem .glint { transform-box: fill-box; transform-origin: 50% 50%; animation: glint 3.4s ease-in-out var(--g, 0s) infinite; }
+    @keyframes glint { 0%, 55%, 100% { transform: scale(0); } 70% { transform: scale(1.15) rotate(20deg); } 85% { transform: scale(.4); } }
+    .gem .glint.on { animation: twinkle 2.6s ease-in-out var(--g, 0s) infinite; }
     @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
     .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 22px clamp(20px, 4vw, 48px); pointer-events: none; }
     .counter { font-family: var(--display); font-size: clamp(28px, 3.4vw, 44px); line-height: 1; margin: 0; }
@@ -670,13 +675,71 @@
         [-50, -24, 2, 28, 54].map((y, k) => `<ellipse cx="${k % 2 ? 16 : -16}" cy="${y}" rx="15" ry="7" fill="${k % 2 ? "#c9f45b" : "#9fd13b"}" transform="rotate(${k % 2 ? -30 : 30} ${k % 2 ? 16 : -16} ${y})"/>`).join("") + "</svg>",
       bud: (c) => '<svg viewBox="-40 -40 80 80">' + Array.from({ length: 5 }, (_, k) => `<circle cx="0" cy="-14" r="12" fill="${c}" transform="rotate(${k * 72})"/>`).join("") + '<circle r="7" fill="#fff6c7"/></svg>'
     };
+    // ---------- gems: bedazzled rhinestones in pinks, greens and clear crystal ----------
+    // DECOR picks what decorates the page. Set it to "flowers" to go back to the flowers.
+    const DECOR = "gems";
+    const GEMS = (() => {
+      const P = (pts) => pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+      const LIGHT = -2.3; // light comes from the top left
+      const shade = (cx, cy, k) => {
+        const a = Math.atan2(cy, cx), s = Math.cos(a - LIGHT) * k;
+        return s > 0 ? `rgba(255,255,255,${(0.1 + s * 0.68).toFixed(2)})` : `rgba(22,22,22,${(-s * 0.42).toFixed(2)})`;
+      };
+      // a faceted stone from its outline: a flat "table" in the middle, facets fanning out to the edge
+      function cut(outline, color, table = 0.48) {
+        const n = outline.length, inner = outline.map(([x, y]) => [x * table, y * table - 3]);
+        let f = "";
+        for (let i = 0; i < n; i++) {
+          const j = (i + 1) % n, o1 = outline[i], o2 = outline[j], t1 = inner[i], t2 = inner[j];
+          const c1 = [(o1[0] + o2[0] + t2[0]) / 3, (o1[1] + o2[1] + t2[1]) / 3], c2 = [(o1[0] + t1[0] + t2[0]) / 3, (o1[1] + t1[1] + t2[1]) / 3];
+          f += `<polygon points="${P([o1, o2, t2])}" fill="${shade(c1[0], c1[1], 1)}"/><polygon points="${P([o1, t2, t1])}" fill="${shade(c2[0], c2[1], .7)}"/>`;
+        }
+        return `<svg viewBox="-56 -56 112 112"><g class="stone"><polygon points="${P(outline)}" fill="${color}"/>${f}` +
+          `<polygon points="${P(inner)}" fill="${color}"/><polygon points="${P(inner)}" fill="rgba(255,255,255,.28)"/>` +
+          `<polygon points="${P(outline)}" fill="none" stroke="#161616" stroke-width="2.6" stroke-linejoin="round"/>` +
+          `<polygon points="${P(inner)}" fill="none" stroke="rgba(22,22,22,.28)" stroke-width="1.2" stroke-linejoin="round"/></g>` +
+          `<path class="glint" d="M-20 -46 L-17 -35 L-6 -32 L-17 -29 L-20 -18 L-23 -29 L-34 -32 L-23 -35 Z" fill="#fff" stroke="#161616" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+      }
+      const ring = (n, f) => Array.from({ length: n }, (_, i) => f((i / n) * Math.PI * 2 - Math.PI / 2));
+      const shapes = {
+        round: () => ring(12, (a) => [Math.cos(a) * 46, Math.sin(a) * 46]),
+        heart: () => ring(30, (a) => { const t = a + Math.PI / 2; return [44 * Math.pow(Math.sin(t), 3), -(36 * Math.cos(t) - 14 * Math.cos(2 * t) - 6 * Math.cos(3 * t) - 2 * Math.cos(4 * t)) - 4]; }),
+        drop: () => ring(14, (a) => { const t = a + Math.PI / 2; return [30 * Math.sin(t) * (1 - Math.cos(t)) / 1.3 * .9, -46 * Math.cos(t) + 4]; }),
+        marquise: () => ring(16, (a) => { const t = Math.sin(a); return [Math.sign(Math.cos(a)) * 30 * (1 - t * t) ** .75, t * 50]; }),
+        square: () => [[-34, -46], [34, -46], [46, -34], [46, 34], [34, 46], [-34, 46], [-46, 34], [-46, -34]]
+      };
+      const spark = (c) => `<svg viewBox="-56 -56 112 112"><path class="glint on" d="M0 -50 L9 -9 L50 0 L9 9 L0 50 L-9 9 L-50 0 L-9 -9 Z" fill="${c}" stroke="#161616" stroke-width="3" stroke-linejoin="round"/></svg>`;
+      return { spark, ...Object.fromEntries(Object.entries(shapes).map(([k, f]) => [k, (c) => cut(f(), c, k === "square" ? .56 : .48)])) };
+    })();
+    // the flower spots, re-dressed as stones
+    const AS_GEM = { daisy: ["round", .82], cosmos: ["heart", .8], tulip: ["drop", .8], sprig: ["marquise", .78], bud: ["square", 1] };
+    const GEM_COLOR = { "#ffffff": "#eef8ff", "#ff8fc0": "#ff9fcb", "#ff6fae": "#ff6fae", "#f06292": "#e8458f", "#c9f45b": "#c9f45b", "": "#7fd34e" };
     function plant(container, list) {
       list.forEach(([kind, color, x, y, size, rot, speed]) => {
         const f = document.createElement("div");
-        f.className = "flower";
-        f.style.cssText = `left:${x}%;top:${y}%;--s:${size}px;--r:${rot}deg;--d:${6 + (size % 5)}s`;
         f.dataset.speed = speed || 0;
-        f.innerHTML = FLOWERS[kind](color);
+        if (DECOR === "gems") {
+          const [g, k] = kind === "spark" ? ["spark", 1] : AS_GEM[kind];
+          size = Math.round(size * k);
+          f.className = "flower gem";
+          f.innerHTML = GEMS[g](GEM_COLOR[color] || color);
+          f.style.cssText = `left:${x}%;top:${y}%;--s:${size}px;--r:${rot}deg;--d:${5 + (size % 4)}s;--g:${((x * 7 + y * 3) % 40) / 10}s`;
+          // little rhinestones stuck on beside the bigger stones
+          if (g !== "spark" && size > 40) {
+            const side = x > 50 ? -1 : 1;
+            [[side * 2.6, 9, .3, "round", "#eef8ff"], [side * 4.2, 2, .22, "round", GEM_COLOR[color] || color], [side * 1.2, -4, .18, "square", "#c9f45b"]].forEach(([dx, dy, k2, g2, c2], n) => {
+              const m = document.createElement("div");
+              m.className = "flower gem"; m.dataset.speed = speed || 0; m.innerHTML = GEMS[g2](c2);
+              m.style.cssText = `left:calc(${x}% + ${dx * 10}px);top:calc(${y}% + ${dy * size / 10}px + ${size * .45}px);--s:${Math.round(size * k2)}px;--r:${n * 20}deg;--d:${4 + n}s;--g:${n * 1.1 + 0.4}s`;
+              container.appendChild(m);
+            });
+          }
+        } else {
+          if (kind === "spark") return;
+          f.className = "flower";
+          f.innerHTML = FLOWERS[kind](color);
+          f.style.cssText = `left:${x}%;top:${y}%;--s:${size}px;--r:${rot}deg;--d:${6 + (size % 5)}s`;
+        }
         container.appendChild(f);
       });
     }
@@ -684,22 +747,23 @@
     const garden = document.getElementById("garden");
     plant(garden, [
       ["daisy", "#ffffff", 86, 2, 130, 12, 50], ["sprig", "", 93, 64, 120, 8, 80], ["bud", "#c9f45b", 72, 4, 46, 0, 120],
-      ["cosmos", "#ff8fc0", 2, 82, 100, 10, 90], ["bud", "#ffffff", 34, 90, 40, 0, 70], ["tulip", "#ff6fae", 60, 86, 100, -10, 60]
+      ["cosmos", "#ff8fc0", 2, 82, 100, 10, 90], ["bud", "#ffffff", 34, 90, 40, 0, 70], ["tulip", "#ff6fae", 60, 86, 100, -10, 60],
+      ["spark", "#ffffff", 80, 30, 26, 0, 100], ["spark", "#c9f45b", 14, 70, 22, 0, 40]
     ]);
     // a few in the hero and the invite, for personality
     const heroGarden = document.createElement("div"); heroGarden.className = "garden"; heroGarden.setAttribute("aria-hidden", "true");
     document.querySelector(".hero").prepend(heroGarden);
-    plant(heroGarden, [["daisy", "#ffffff", 44, 4, 90, -12], ["bud", "#c9f45b", 50, 80, 40, 0], ["cosmos", "#ff8fc0", 93, 74, 90, 14], ["sprig", "", -2, 78, 100, -10]]);
+    plant(heroGarden, [["daisy", "#ffffff", 44, 4, 90, -12], ["bud", "#c9f45b", 50, 80, 40, 0], ["cosmos", "#ff8fc0", 93, 74, 90, 14], ["sprig", "", -2, 78, 100, -10], ["spark", "#ffffff", 52, 12, 24, 0], ["spark", "#c9f45b", 86, 60, 20, 0]]);
     const inviteGarden = document.createElement("div"); inviteGarden.className = "garden"; inviteGarden.setAttribute("aria-hidden", "true");
     document.getElementById("invite").prepend(inviteGarden);
     // a few more further down the page (just peeking in from the sides)
-    [["about", [["daisy", "#ffffff", -9, 6, 100, -10], ["bud", "#ff8fc0", 94, 34, 46, 0], ["tulip", "#ff6fae", -7, 78, 96, 8]]],
+    [["about", [["daisy", "#ffffff", -9, 6, 100, -10], ["bud", "#ff8fc0", 94, 34, 46, 0], ["tulip", "#ff6fae", -7, 78, 96, 8], ["spark", "#ffffff", 97, 52, 22, 0]]],
      ["puzzle", [["cosmos", "#f06292", 91, 8, 92, 12], ["sprig", "", -8, 46, 96, -8]]]
     ].forEach(([id, list]) => {
       const g = document.createElement("div"); g.className = "garden loose"; g.setAttribute("aria-hidden", "true");
       document.getElementById(id).prepend(g); plant(g, list);
     });
-    plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6]]);
+    plant(inviteGarden, [["tulip", "#ff6fae", 8, 14, 110, -12], ["daisy", "#ffffff", 84, 10, 120, 10], ["bud", "#c9f45b", 14, 74, 50, 0], ["cosmos", "#f06292", 80, 70, 100, -8], ["sprig", "", 92, 40, 100, 6], ["spark", "#ffffff", 22, 34, 26, 0], ["spark", "#c9f45b", 72, 24, 22, 0]]);
 
     // ---------- about me ----------
     // Paste a shared Apple Music playlist link here to show it in the Apple Music card.
