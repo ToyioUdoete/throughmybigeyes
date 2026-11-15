@@ -4,8 +4,8 @@
 // Photos and the visitor log are stored in a free Supabase project. Paste its two values here
 // (Supabase dashboard → Project Settings → API). Both are safe to be public: the database rules
 // (chakam-setup.sql) only let visitors add photos and log visits, never read the log or change anything.
-const CHAKAM_URL = "";   // e.g. "https://abcdefghijklm.supabase.co"
-const CHAKAM_KEY = "";   // the "publishable" (or "anon") key
+const CHAKAM_URL = "https://dlrpfnwkhowpbrutbzyj.supabase.co";   // e.g. "https://abcdefghijklm.supabase.co"
+const CHAKAM_KEY = "sb_publishable_G1lilVK08aJPsr1uj-ovaA_rra5MhvM";   // the "publishable" (or "anon") key
 
 window.Chakam = (() => {
   const ready = !!(CHAKAM_URL && CHAKAM_KEY);
