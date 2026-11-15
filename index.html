@@ -86,6 +86,14 @@
     .print .ph { aspect-ratio: 1; overflow: hidden; background: var(--grey); }
     .print img { width: 100%; height: 100%; object-fit: cover; }
     .print span { position: absolute; left: 0; right: 0; bottom: 3.5%; text-align: center; font: 700 13px var(--body); color: #6b6b6b; }
+    .print.guest span { bottom: 1%; font: 400 clamp(20px, 2.6vw, 30px)/1 var(--script); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6%; }
+    .stage-col { position: relative; z-index: 1; display: grid; justify-items: center; }
+    .yours { position: relative; z-index: 3; width: min(100%, 420px); margin-top: clamp(16px, 2.6vw, 32px); padding: 20px 22px 22px; background: var(--paper); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 6px 6px 0 var(--ink); rotate: 1.5deg; }
+    .yours[hidden] { display: none; }
+    .yours .tape { position: absolute; top: -14px; left: 50%; width: 104px; height: 28px; translate: -50% 0; rotate: -3deg; background: rgba(255, 111, 174, .85); }
+    .yours h2 { margin: 0; font: 400 clamp(46px, 5vw, 60px)/1 var(--script); }
+    .yours p { margin: 4px 0 16px; font-size: 16px; }
+    .yours-btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
     .news-btn { background: #ff8a3d; color: #fff; animation: nudge-news 4s ease-in-out 1.5s infinite; }
     .news-btn .live { position: relative; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid var(--ink); }
@@ -367,12 +375,24 @@
         <p class="hint">Press the camera to print another one.</p>
       </div>
 
-      <div class="stage">
-        <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kodak_Pixpro.jpg/1280px-Kodak_Pixpro.jpg" alt="" width="1280" height="887" />
-        </button>
-        <span class="flashbulb" aria-hidden="true"></span>
-        <div class="tray" id="tray" aria-hidden="true"></div>
+      <div class="stage-col">
+        <div class="stage">
+          <button class="camera" id="camera" type="button" aria-label="Take a photo: prints another picture from the diary">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kodak_Pixpro.jpg/1280px-Kodak_Pixpro.jpg" alt="" width="1280" height="887" />
+          </button>
+          <span class="flashbulb" aria-hidden="true"></span>
+          <div class="tray" id="tray" aria-hidden="true"></div>
+        </div>
+        <!-- friends add their own photos (chakam.js) -->
+        <aside class="yours" id="yours" hidden aria-labelledby="yoursTitle">
+          <span class="tape" aria-hidden="true"></span>
+          <h2 id="yoursTitle">your turn!</h2>
+          <p id="yoursText">Snap a photo and my camera prints it, then it goes up on the chakam wall with everyone else's.</p>
+          <div class="yours-btns">
+            <button class="pill lime" id="addYours" type="button">📸 Add yours</button>
+            <a class="pill" href="chakam.html">See the wall</a>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -521,6 +541,7 @@
     <div class="links">
       <a class="pill lime" href="https://www.pinterest.com/twiiinklle/" rel="noopener">Pinterest @twiiinklle</a>
       <a class="pill" href="https://www.tiktok.com/@throughmybigeyes" rel="noopener">TikTok</a>
+      <a class="pill" href="chakam.html" id="footWall" hidden>The chakam wall</a>
     </div>
     <small>All photos © throughmybigeyes. Camera photo by Catboy69 on <a href="https://commons.wikimedia.org/wiki/File:Kodak_Pixpro.jpg" rel="noopener">Wikimedia Commons</a> (CC0).</small>
   </footer>
@@ -537,6 +558,7 @@
 
   <script src="data.js"></script>
   <script src="song.js"></script>
+  <script src="chakam.js"></script>
   <script>
     // Photos uploaded to Pinterest by twiiinklle (newest first). The list lives in data.js.
     const PHOTOS = TMBE.photos.map(([hash, w, h, color, pin, caption, t, desc]) => ({
@@ -589,9 +611,36 @@
       const prints = tray.querySelectorAll(".print");
       if (prints.length > 3) prints[0].remove();
     }
+    // a friend's photo, printed with their name on it
+    function printGuest(g) {
+      const el = document.createElement("div");
+      el.className = "print guest";
+      const ph = document.createElement("div"); ph.className = "ph";
+      const img = new Image(); img.src = g.src; img.alt = ""; ph.appendChild(img); el.appendChild(ph);
+      const tag = document.createElement("span"); tag.textContent = g.name; el.appendChild(tag);
+      el.style.transform = "translate(0, 0) scale(.3)"; el.style.opacity = "0";
+      tray.appendChild(el);
+      requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = "translate(0%, 40%) rotate(-3deg) scale(1.12)"; }));
+      if (!reduce) { bulb.classList.remove("go"); void bulb.offsetWidth; bulb.classList.add("go"); }
+      const prints = tray.querySelectorAll(".print");
+      if (prints.length > 3) prints[0].remove();
+    }
     camera.addEventListener("click", () => printPhoto(true));
     if (reduce) { printPhoto(false); printPhoto(false); printPhoto(false); }
     else [500, 1300, 2100].forEach((t, k) => setTimeout(() => printPhoto(k === 0), t));
+
+    // ---------- add yours: friends snap a photo, the camera prints it, it goes on the chakam wall ----------
+    if (Chakam.ready) {
+      const yours = document.getElementById("yours");
+      yours.hidden = false; document.getElementById("footWall").hidden = false;
+      document.getElementById("addYours").addEventListener("click", () => Chakam.open((g) => {
+        document.querySelector(".stage").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+        setTimeout(() => printGuest(g), reduce ? 0 : 500);
+        document.getElementById("yoursTitle").textContent = "yay, " + g.name + "!";
+        document.getElementById("yoursText").textContent = "That's you, fresh out of my camera. You're on the chakam wall now.";
+        document.getElementById("addYours").textContent = "📸 Add another";
+      }));
+    }
 
     // ---------- "shall we?" ----------
     const shall = document.getElementById("shall");
